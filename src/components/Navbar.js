@@ -137,53 +137,48 @@ const Navbar = () => {
       </div>
       {user && (
         <div
-          className={`md:hidden px-4 transition-all duration-300 origin-top ${mobileOpen ? 'max-h-[420px] opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4 pointer-events-none'}`}
+          className={`md:hidden bg-primary-black/95 border-b border-dark-gray transition-all duration-300 origin-top ${mobileOpen ? 'max-h-60 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4 pointer-events-none'}`}
         >
-          <div className="pb-6">
-            <div className="rounded-3xl bg-primary-black/75 backdrop-blur-xl border border-off-white/10 shadow-[0_20px_45px_-25px_rgba(0,0,0,0.75)] overflow-hidden">
-              <div className="px-5 py-4 flex items-center gap-3 border-b border-off-white/12">
-                <div className="w-10 h-10 bg-off-white text-primary-black font-semibold rounded-full flex items-center justify-center">
-                  {user.emailOrMobile.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-[11px] uppercase tracking-[0.28em] text-light-gray/60">Signed in</span>
-                  <span className="text-sm text-off-white/90 font-medium">{getFirstName(user.emailOrMobile)}</span>
-                </div>
+          <div className="px-4 py-4 space-y-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 bg-off-white text-primary-black font-semibold rounded-full flex items-center justify-center">
+                {user.emailOrMobile.charAt(0).toUpperCase()}
               </div>
-              <div className="flex flex-col">
-                {navLinks.map((link, index) => (
-                  <Link
-                    key={link.label}
-                    to={link.to}
-                    className={`flex items-center gap-3 px-5 py-3 text-off-white/80 transition-colors hover:text-off-white hover:bg-off-white/5 ${index !== 0 ? 'border-t border-off-white/10' : ''}`}
-                  >
-                    <span className="w-2 h-2 rounded-full bg-off-white/80 shadow-[0_0_10px_rgba(255,255,255,0.35)]"></span>
-                    <span className="text-sm font-medium tracking-wide">{link.label}</span>
-                  </Link>
-                ))}
+              <div className="flex flex-col leading-tight">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-light-gray/60">Signed in</span>
+                <span className="text-sm text-off-white font-medium">{getFirstName(user.emailOrMobile)}</span>
               </div>
-              <div className="px-5 py-4 border-t border-off-white/12">
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-off-white/20 text-off-white/80 font-medium py-2.5 hover:bg-off-white/10 hover:text-off-white transition-colors"
+            </div>
+            <div className="grid gap-3 border-t border-dark-gray/60 pt-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className="block px-4 py-2 rounded-lg border border-dark-gray/60 text-light-gray/80 hover:text-off-white hover:border-off-white transition-colors"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                    <polyline points="10 17 15 12 10 7" />
-                    <line x1="15" y1="12" x2="3" y2="12" />
-                  </svg>
-                  Logout
-                </button>
-              </div>
+                  {link.label}
+                </Link>
+              ))}
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-500 text-red-400 bg-secondary-black/60 backdrop-blur-[80px] hover:bg-red-500/10 transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                  <polyline points="10 17 15 12 10 7" />
+                  <line x1="15" y1="12" x2="3" y2="12" />
+                </svg>
+                Logout
+              </button>
             </div>
           </div>
         </div>
