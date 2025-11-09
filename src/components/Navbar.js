@@ -48,6 +48,12 @@ const Navbar = () => {
         { to: '/portfolio', label: 'Portfolio' },
       ];
 
+  const mobileLinkDescriptions = {
+    Home: 'Session dashboard & updates',
+    Market: 'Live market coverage',
+    Portfolio: 'Track your holdings'
+  };
+
   return (
     <nav className={`sticky top-0 z-40 bg-gradient-bg border-b border-dark-gray backdrop-blur-lg transition-all duration-1000 ${isVisible ? 'animate-slideInLeft' : 'opacity-0'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,31 +143,64 @@ const Navbar = () => {
       </div>
       {user && (
         <div
-          className={`md:hidden bg-primary-black/95 border-b border-dark-gray transition-all duration-300 origin-top ${mobileOpen ? 'max-h-60 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4 pointer-events-none'}`}
+          className={`md:hidden overflow-hidden transition-all duration-500 origin-top ${mobileOpen ? 'max-h-[640px] opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4 pointer-events-none'}`}
         >
-          <div className="px-4 py-4 space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 bg-off-white text-primary-black font-semibold rounded-full flex items-center justify-center">
-                {user.emailOrMobile.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex flex-col leading-tight">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-light-gray/60">Signed in</span>
-                <span className="text-sm text-off-white font-medium">{getFirstName(user.emailOrMobile)}</span>
+          <div className="px-5 pb-6 pt-5 bg-gradient-to-b from-primary-black/95 via-primary-black/92 to-primary-black/98 backdrop-blur-2xl border-b border-dark-gray/60">
+            <div className="relative overflow-hidden rounded-3xl border border-dark-gray/40 bg-secondary-black/40 shadow-[0_20px_45px_rgba(0,0,0,0.3)]">
+              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-purple-500/20 blur-3xl"></div>
+              <div className="absolute -left-12 bottom-0 h-32 w-32 rounded-full bg-cyan-400/10 blur-2xl"></div>
+              <div className="relative flex items-center gap-4 px-5 py-6">
+                <div className="w-12 h-12 rounded-2xl bg-off-white text-primary-black font-semibold flex items-center justify-center shadow-[0_10px_30px_rgba(255,255,255,0.15)]">
+                  {user.emailOrMobile.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1">
+                  <div className="text-[10px] uppercase tracking-[0.4em] text-light-gray/60">Signed in as</div>
+                  <div className="text-lg text-off-white font-semibold leading-tight">
+                    {getFirstName(user.emailOrMobile)}
+                  </div>
+                  <div className="text-xs text-light-gray/60 mt-1 truncate">{user.emailOrMobile}</div>
+                </div>
+                <div className="hidden xs:flex flex-col items-end text-right text-[10px] uppercase tracking-[0.35em] text-light-gray/50">
+                  <span>Session</span>
+                  <span className="text-off-white/80 text-lg tracking-normal">Live</span>
+                </div>
               </div>
             </div>
-            <div className="grid gap-3 border-t border-dark-gray/60 pt-4">
+
+            <div className="mt-6 grid gap-3">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   to={link.to}
-                  className="block px-4 py-2 rounded-lg border border-dark-gray/60 text-light-gray/80 hover:text-off-white hover:border-off-white transition-colors"
+                  className="group relative flex items-center justify-between gap-4 rounded-2xl border border-dark-gray/50 bg-primary-black/60 px-4 py-4 transition-all duration-200 hover:border-off-white/50 hover:bg-secondary-black/40"
                 >
-                  {link.label}
+                  <div>
+                    <div className="text-off-white font-semibold text-base">{link.label}</div>
+                    <div className="text-xs text-light-gray/60 mt-1 uppercase tracking-[0.25em]">
+                      {mobileLinkDescriptions[link.label] ?? 'Explore'}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-light-gray/60 group-hover:text-off-white transition-colors">
+                    <span className="text-[11px] uppercase tracking-[0.4em]">Go</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </Link>
               ))}
+            </div>
+
+            <div className="mt-6">
               <button
                 onClick={handleLogout}
-                className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-500 text-red-400 bg-secondary-black/60 backdrop-blur-[80px] hover:bg-red-500/10 transition-colors"
+                className="flex w-full items-center justify-center gap-3 rounded-2xl border border-red-500/70 bg-red-500/10 px-5 py-3 text-red-300 transition-all duration-200 hover:bg-red-500/20"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
