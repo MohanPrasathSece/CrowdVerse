@@ -63,10 +63,6 @@ const marketThumbnails = [
 
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [timestamp] = useState(() => ({
-    date: new Date().toLocaleDateString(),
-    time: new Date().toLocaleTimeString(),
-  }));
 
   useEffect(() => {
     setIsVisible(true);
