@@ -95,7 +95,7 @@ const Portfolio = () => (
           <div>
             <h2 className="text-2xl font-semibold">Current Positions</h2>
             <p className="text-sm text-light-gray/70">
-              Updated hourly with live snapshots to keep allocations in sync with market movements.
+              Updated hourly with live price feeds to keep allocations in sync with market movements.
             </p>
           </div>
           <div className="text-xs uppercase tracking-[0.25em] text-light-gray/60">

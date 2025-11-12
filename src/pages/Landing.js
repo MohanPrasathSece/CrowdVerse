@@ -67,7 +67,7 @@ const Landing = () => {
               },
               {
                 title: 'Indian Equities Core',
-                description: 'Real-time coverage of NSE leaders with snapshots tuned for long-only, swing, and intraday outlooks.',
+                description: 'Real-time coverage of NSE leaders tuned for long-only, swing, and intraday outlooks.',
                 symbol: 'IN'
               },
               {

@@ -6,7 +6,7 @@ import Crypto from './Crypto';
 const comparisonCards = [
   {
     title: 'Equity vs Crypto Momentum',
-    subtitle: 'Normalized 7-day performance snapshot',
+    subtitle: 'Normalized 7-day performance view',
     series: [
       {
         name: 'NIFTY 50',
@@ -81,7 +81,7 @@ const Dashboard = () => {
               Market Overview
             </div>
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-off-white tracking-tight">
-              Live Equity & Crypto Snapshot
+              Live Equity & Crypto Overview
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-light-gray/80 leading-relaxed max-w-2xl">
               Quick read on benchmark indices and digital assets to orient your trading session before diving into detailed screens.
@@ -90,7 +90,7 @@ const Dashboard = () => {
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-light-gray/70">
               <span className="flex items-center gap-2">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-400"></span>
-                Live snapshot captured moments ago
+                Live data captured moments ago
               </span>
               <span className="hidden sm:block text-light-gray/40">•</span>
               <span className="uppercase tracking-[0.25em] text-light-gray/60">{currentDate}</span>
