@@ -25,8 +25,13 @@ const IntelligencePanel = ({ asset, assetName }) => {
     let cancelled = false;
     const fetchData = async () => {
       try {
-        const recent = await getComments(asset, 1, 8);
-        const recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
+        let recentComments = [];
+        try {
+          const recent = await getComments(asset, 1, 8);
+          recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
+        } catch (_) {
+          recentComments = [];
+        }
         const payloadName = assetName || asset;
         const resp = await getAISummary(payloadName, recentComments, [], '');
         if (cancelled) return;
@@ -49,8 +54,13 @@ const IntelligencePanel = ({ asset, assetName }) => {
     setData(null);
     const run = async () => {
       try {
-        const recent = await getComments(asset, 1, 8);
-        const recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
+        let recentComments = [];
+        try {
+          const recent = await getComments(asset, 1, 8);
+          recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
+        } catch (_) {
+          recentComments = [];
+        }
         const payloadName = assetName || asset;
         const resp = await getAISummary(payloadName, recentComments, [], '', true);
         setData(resp.data);
