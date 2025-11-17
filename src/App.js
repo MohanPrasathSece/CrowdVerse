@@ -12,6 +12,7 @@ import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import Home from './pages/Home';
 import PrivateRoute from './components/PrivateRoute';
+import Asset from './pages/Asset';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/asset/:symbol" element={<Asset />} />
               <Route
                 path="/home"
                 element={

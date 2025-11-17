@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getCryptoMarkets } from '../utils/api';
 
 const Crypto = () => {
@@ -73,6 +74,13 @@ const Crypto = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-off-white"></div>
             <span>Loading cryptocurrencies...</span>
           </div>
+
+        {/* Discoverability Hint */}
+        <div className="mb-6">
+          <div className="border border-dark-gray/60 rounded-xl bg-secondary-black/50 px-4 py-3 text-sm text-light-gray/80">
+            Open any crypto card to access polls, community comments, and the AI intelligence panel.
+          </div>
+        </div>
         </div>
       </div>
     );
@@ -134,9 +142,11 @@ const Crypto = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredCrypto.map((coin, index) => (
-          <div
+          <Link
+            to={`/asset/${coin.symbol}`}
+            state={{ name: coin.name }}
             key={coin.id ?? coin.rank}
-            className="bg-gradient-bg border border-dark-gray rounded-2xl p-6 hover-enlarge transition-all animate-fadeIn"
+            className="bg-gradient-bg border border-dark-gray rounded-2xl p-6 hover-enlarge transition-all animate-fadeIn block"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-start justify-between mb-6">
@@ -179,26 +189,15 @@ const Crypto = () => {
               </div>
             </div>
 
-            {/* Crypto-specific indicators */}
-            <div className="mt-4 flex justify-between items-center text-xs">
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-light-gray">Live</span>
+            {/* Feature CTA Row */}
+            <div className="mt-4 pt-3 border-t border-dark-gray/50 flex items-center justify-between text-[12px] text-light-gray/70">
+              <div className="flex items-center gap-3">
+                <span className="px-2 py-1 rounded bg-primary-black/50 border border-dark-gray/60">Vote</span>
+                <span className="px-2 py-1 rounded bg-primary-black/50 border border-dark-gray/60">Comments</span>
               </div>
-              <div className="text-light-gray">
-                {coin.symbol === 'BTC' && 'Leader'}
-                {coin.symbol === 'ETH' && 'Smart Contracts'}
-                {coin.symbol === 'SOL' && 'High Throughput'}
-                {coin.symbol === 'DOGE' && 'Meme Coin'}
-                {coin.symbol === 'ADA' && 'Research-Driven'}
-                {coin.symbol === 'XRP' && 'Banking'}
-                {coin.symbol === 'DOT' && 'Interoperability'}
-                {coin.symbol === 'AVAX' && 'Scalable'}
-                {coin.symbol === 'LINK' && 'Oracle'}
-                {coin.symbol === 'MATIC' && 'Layer 2'}
-              </div>
+              <div className="uppercase tracking-[0.2em]">Open →</div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

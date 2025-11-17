@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getStockMarkets } from '../utils/api';
 
 const Stocks = () => {
@@ -95,6 +96,13 @@ const Stocks = () => {
           </div>
         </div>
 
+        {/* Discoverability Hint */}
+        <div className="mb-6">
+          <div className="border border-dark-gray/60 rounded-xl bg-secondary-black/50 px-4 py-3 text-sm text-light-gray/80">
+            Open any stock card to access polls, community comments, and the AI intelligence panel.
+          </div>
+        </div>
+
         {/* Market Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate-slideInLeft">
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
@@ -117,9 +125,11 @@ const Stocks = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredStocks.map((stock, index) => (
-          <div
+          <Link
+            to={`/asset/${stock.symbol}`}
+            state={{ name: stock.name }}
             key={stock.rank}
-            className="bg-gradient-bg border border-dark-gray rounded-2xl p-6 hover-enlarge transition-all animate-fadeIn"
+            className="bg-gradient-bg border border-dark-gray rounded-2xl p-6 hover-enlarge transition-all animate-fadeIn block"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-start justify-between mb-6">
@@ -158,7 +168,16 @@ const Stocks = () => {
                 <span className="text-off-white font-medium">{formatCurrency(stock.prevClose)}</span>
               </div>
             </div>
-          </div>
+
+            {/* Feature CTA Row */}
+            <div className="mt-4 pt-3 border-t border-dark-gray/50 flex items-center justify-between text-[12px] text-light-gray/70">
+              <div className="flex items-center gap-3">
+                <span className="px-2 py-1 rounded bg-primary-black/50 border border-dark-gray/60">Vote</span>
+                <span className="px-2 py-1 rounded bg-primary-black/50 border border-dark-gray/60">Comments</span>
+              </div>
+              <div className="uppercase tracking-[0.2em]">Open →</div>
+            </div>
+          </Link>
         ))}
       </div>
 
