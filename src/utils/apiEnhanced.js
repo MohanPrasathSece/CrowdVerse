@@ -29,8 +29,8 @@ export const getMyIntent = (asset) => API.get(`/assets/${asset}/intent/me`);
 export const getComments = (asset, page = 1, limit = 20) =>
   API.get(`/assets/${asset}/comments`, { params: { page, limit } });
 export const addComment = (asset, text) => API.post(`/assets/${asset}/comments`, { text });
-export const editComment = (id, text) => API.patch(`/comments/${id}`, { text });
-export const deleteComment = (id) => API.delete(`/comments/${id}`);
+export const editComment = (id, text) => API.patch(`/assets/comments/${id}`, { text });
+export const deleteComment = (id) => API.delete(`/assets/comments/${id}`);
 
 export const getAISummary = (assetName, recentComments = [], recentNews = [], marketSentiment = '') =>
   API.post('/ai-summary', { asset_name: assetName, recent_comments: recentComments, recent_news: recentNews, market_sentiment: marketSentiment });

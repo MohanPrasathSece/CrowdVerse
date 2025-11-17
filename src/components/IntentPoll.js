@@ -32,8 +32,12 @@ const IntentPoll = ({ asset, onRefreshRef }) => {
     fetchStats();
     (async () => {
       try {
-        const { data } = await getMyIntent(asset);
-        if (!cancelled) setMyIntent(data?.action || null);
+        if (user) {
+          const { data } = await getMyIntent(asset);
+          if (!cancelled) setMyIntent(data?.action || null);
+        } else {
+          setMyIntent(null);
+        }
       } catch (_) {}
     })();
 
@@ -43,7 +47,7 @@ const IntentPoll = ({ asset, onRefreshRef }) => {
       clearInterval(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asset]);
+  }, [asset, user]);
 
   const handleVote = async (action) => {
     if (!user) return alert('Login required');

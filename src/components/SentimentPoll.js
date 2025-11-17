@@ -30,12 +30,16 @@ const SentimentPoll = ({ asset, onRefreshRef }) => {
   useEffect(() => {
     let cancelled = false;
     fetchStats();
-    (async () => {
-      try {
-        const { data } = await getMySentiment(asset);
-        if (!cancelled) setMyVote(data?.sentiment || null);
-      } catch (_) {}
-    })();
+    if (user) {
+      (async () => {
+        try {
+          const { data } = await getMySentiment(asset);
+          if (!cancelled) setMyVote(data?.sentiment || null);
+        } catch (_) {}
+      })();
+    } else {
+      setMyVote(null);
+    }
 
     // auto refresh every 15s
     const id = setInterval(fetchStats, 15000);
@@ -44,7 +48,7 @@ const SentimentPoll = ({ asset, onRefreshRef }) => {
       clearInterval(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asset]);
+  }, [asset, user]);
 
   const handleVote = async (sentiment) => {
     if (!user) return alert('Login required');

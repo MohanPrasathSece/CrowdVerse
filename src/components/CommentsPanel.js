@@ -10,6 +10,15 @@ const CommentsPanel = ({ asset }) => {
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [page] = useState(1);
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState('');
+  const [deletingId, setDeletingId] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: '', type }), 2000);
+  };
 
   const load = async () => {
     try {
@@ -45,23 +54,36 @@ const CommentsPanel = ({ asset }) => {
     }
   };
 
-  const onEdit = async (id) => {
+  const onEdit = (id) => {
     const existing = items.find((i) => i._id === id);
-    const next = prompt('Edit comment:', existing?.text || '');
-    if (next == null) return;
+    setEditingId(id);
+    setEditText(existing?.text || '');
+  };
+
+  const submitEdit = async () => {
+    if (!editingId) return;
     try {
-      await editComment(id, next);
+      await editComment(editingId, editText);
+      setEditingId(null);
+      setEditText('');
       load();
+      showToast('Comment updated');
     } catch (e) {
       alert('Failed to edit');
     }
   };
 
-  const onDelete = async (id) => {
-    if (!window.confirm('Delete this comment?')) return;
+  const onDelete = (id) => {
+    setDeletingId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
     try {
-      await deleteComment(id);
-      setItems((arr) => arr.filter((x) => x._id !== id));
+      await deleteComment(deletingId);
+      setItems((arr) => arr.filter((x) => x._id !== deletingId));
+      setDeletingId(null);
+      showToast('Comment deleted');
     } catch (e) {
       alert('Failed to delete');
     }
@@ -112,6 +134,50 @@ const CommentsPanel = ({ asset }) => {
           <div className="text-light-gray/70 text-sm">No comments yet. Be the first to share.</div>
         )}
       </div>
+
+      {editingId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setEditingId(null)} />
+          <div className="relative z-10 w-full max-w-lg mx-auto rounded-2xl border border-dark-gray bg-primary-black p-5">
+            <div className="text-off-white font-semibold mb-3">Edit Comment</div>
+            <textarea
+              className="w-full h-32 p-3 rounded-lg bg-secondary-black border border-dark-gray text-off-white focus:outline-none focus:ring-2 focus:ring-off-white/40"
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+            />
+            <div className="mt-4 flex justify-end gap-2 text-sm">
+              <button onClick={() => setEditingId(null)} className="px-3 py-2 rounded-lg border border-dark-gray text-light-gray hover:text-off-white">Cancel</button>
+              <button onClick={submitEdit} className="px-3 py-2 rounded-lg border border-off-white/60 hover:bg-off-white hover:text-primary-black">Save</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deletingId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setDeletingId(null)} />
+          <div className="relative z-10 w-full max-w-md mx-auto rounded-2xl border border-dark-gray bg-primary-black p-5">
+            <div className="text-off-white font-semibold mb-2">Delete Comment</div>
+            <div className="text-light-gray mb-4">Are you sure you want to delete this comment? This action cannot be undone.</div>
+            <div className="flex justify-end gap-2 text-sm">
+              <button onClick={() => setDeletingId(null)} className="px-3 py-2 rounded-lg border border-dark-gray text-light-gray hover:text-off-white">Cancel</button>
+              <button onClick={confirmDelete} className="px-3 py-2 rounded-lg border border-red-500 text-red-300 hover:bg-red-600/10">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {toast.show && (
+        <div className="fixed top-4 right-4 z-[60]">
+          <div className={`px-4 py-2 rounded-xl border text-sm shadow-lg transition-all ${
+            toast.type === 'success'
+              ? 'border-emerald-500/60 bg-emerald-600/10 text-emerald-300'
+              : 'border-red-500/60 bg-red-600/10 text-red-300'
+          }`}>
+            {toast.message}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
