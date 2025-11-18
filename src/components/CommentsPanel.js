@@ -14,7 +14,7 @@ const CommentsPanel = ({ asset }) => {
   const [deletingId, setDeletingId] = useState(null);
   const [showAll, setShowAll] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
 
   const getFirstName = (value = '') => {
     if (!value) return 'Anonymous';
