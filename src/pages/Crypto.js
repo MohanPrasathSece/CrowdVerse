@@ -97,7 +97,7 @@ const Crypto = () => {
   return (
     <div className="animate-fadeIn">
       <div className="mb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+          <div id="cryptocurrency-market" className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
             <h2 className="text-3xl font-bold text-off-white mb-2 animate-slideInLeft">
               Cryptocurrency Market

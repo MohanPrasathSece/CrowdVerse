@@ -11,6 +11,8 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import Home from './pages/Home';
+import Stocks from './pages/Stocks';
+import Crypto from './pages/Crypto';
 import PrivateRoute from './components/PrivateRoute';
 import Asset from './pages/Asset';
 
@@ -32,6 +34,22 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Home />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/stocks"
+                element={
+                  <PrivateRoute>
+                    <Stocks />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/crypto"
+                element={
+                  <PrivateRoute>
+                    <Crypto />
                   </PrivateRoute>
                 }
               />

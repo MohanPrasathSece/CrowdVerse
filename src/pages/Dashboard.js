@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Stocks from './Stocks';
 import Crypto from './Crypto';
 
@@ -41,10 +41,31 @@ const comparisonCards = [
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('stocks');
   const [isVisible, setIsVisible] = useState(false);
-
+  const location = useLocation();
+  
   useEffect(() => {
     setIsVisible(true);
-  }, []);
+    // Check if we have state from navigation (from Home page CTA buttons)
+    if (location.state?.activeView) {
+      setActiveTab(location.state.activeView);
+    }
+  }, [location.state]);
+
+  // Separate useEffect for scrolling when activeTab changes
+  useEffect(() => {
+    if (location.state?.activeView && activeTab === location.state.activeView) {
+      // Scroll to the appropriate section after content is rendered
+      setTimeout(() => {
+        const elementId = activeTab === 'stocks' 
+          ? 'global-equities-snapshot' 
+          : 'cryptocurrency-market';
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 800); // Longer delay to ensure content is fully rendered
+    }
+  }, [activeTab, location.state]);
 
   const currentTime = new Date().toLocaleTimeString();
   const currentDate = new Date().toLocaleDateString();

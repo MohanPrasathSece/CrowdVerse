@@ -11,7 +11,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
     if (!txt) return '';
     let s = String(txt);
     s = s.replace(/^\s*#{1,6}\s*/g, '');
-    s =     s = s.replace(/^\s*(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\s*[:-]?\s*/i, '');
+    s = s.replace(/^\s*(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\s*[:-]?\s*/i, '');
     // Remove common markdown emphasis markers
     s = s.replace(/\*\*(.*?)\*\*/g, '$1'); // **bold**
     s = s.replace(/\*(.*?)\*/g, '$1');       // *italic*
