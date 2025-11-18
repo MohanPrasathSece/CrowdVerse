@@ -10,11 +10,16 @@ const IntelligencePanel = ({ asset, assetName }) => {
   const clean = (txt) => {
     if (!txt) return '';
     let s = String(txt);
+    // Remove all HTML tags first
+    s = s.replace(/<[^>]*>/g, '');
     // Remove markdown headers (including ### pattern)
     s = s.replace(/^\s*#{1,6}\s*/g, '');
     // Remove section headers with various formats (more aggressive)
     s = s.replace(/^\s*(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\s*[:-]?\s*/gi, '');
-    // Remove headers with HTML tags or special formatting
+    // Remove specific unwanted phrases completely
+    s = s.replace(/(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\s+(No\s+recent\s+(news\s+headlines|comments|data|sentiment)\s+provided\.?)/gi, '');
+    s = s.replace(/No\s+recent\s+(news\s+headlines|comments|data|sentiment)\s+provided\.?/gi, '');
+    // Remove headers with HTML tags or special formatting (backup)
     s = s.replace(/<[^>]*>(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)<\/[^>]*>/gi, '');
     s = s.replace(/\*\*(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\*\*/gi, '');
     s = s.replace(/\*(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\*/gi, '');

@@ -133,12 +133,12 @@ const Stocks = () => {
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-start justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-off-white text-primary-black w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg animate-pulse">
+              <div className="flex items-start space-x-3">
+                <div className="bg-off-white text-primary-black w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 mt-1">
                   #{stock.rank}
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-off-white mb-1">{stock.name}</h3>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-xl font-bold text-off-white mb-1 leading-tight line-clamp-3" title={stock.name}>{stock.name}</h3>
                   <p className="text-base text-light-gray font-medium">{stock.symbol}</p>
                 </div>
               </div>
