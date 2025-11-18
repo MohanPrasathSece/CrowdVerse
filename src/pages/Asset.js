@@ -13,6 +13,7 @@ const Asset = () => {
   const state = location.state || {};
   const assetSymbol = (symbol || '').toUpperCase();
   const assetName = useMemo(() => state.name || assetSymbol, [state.name, assetSymbol]);
+  const marketType = state.marketType || 'stocks'; // Default to stocks if not specified
 
   const refreshRefs = useRef({});
 
@@ -45,7 +46,7 @@ const Asset = () => {
               <div className="text-sm text-light-gray/70">{assetSymbol}</div>
             </div>
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/dashboard', { state: { activeView: marketType } })}
               className="px-4 py-2 rounded-lg border border-dark-gray text-light-gray hover:text-off-white hover:bg-secondary-black/60 transition-all"
             >
               ← Back

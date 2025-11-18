@@ -137,7 +137,7 @@ const Crypto = () => {
         {filteredCrypto.map((coin, index) => (
           <Link
             to={`/asset/${coin.symbol}`}
-            state={{ name: coin.name }}
+            state={{ name: coin.name, marketType: 'crypto' }}
             key={coin.id ?? coin.rank}
             className="bg-gradient-bg border border-dark-gray rounded-2xl p-6 hover-enlarge transition-all animate-fadeIn block"
             style={{ animationDelay: `${index * 0.1}s` }}

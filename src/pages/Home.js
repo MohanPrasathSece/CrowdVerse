@@ -51,6 +51,7 @@ const marketThumbnails = [
     background:
       'linear-gradient(135deg, rgba(255,178,68,0.55), rgba(30,30,30,0.6)), url(https://images.unsplash.com/photo-1640172478435-451ac951cb9b?auto=format&fit=crop&w=800&q=80)',
     to: '/dashboard',
+    state: { activeView: 'crypto' },
   },
   {
     title: 'Macro Signals Monitor',
@@ -94,6 +95,7 @@ const Home = () => {
             <Link
               key={item.title}
               to={item.to}
+              state={item.state}
               className="relative overflow-hidden rounded-2xl border border-dark-gray/60 h-40 sm:h-44 flex items-end p-5 bg-center bg-cover hover-enlarge transition-transform"
               style={{ backgroundImage: item.background }}
             >

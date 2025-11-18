@@ -127,7 +127,7 @@ const Stocks = () => {
         {filteredStocks.map((stock, index) => (
           <Link
             to={`/asset/${stock.symbol}`}
-            state={{ name: stock.name }}
+            state={{ name: stock.name, marketType: 'stocks' }}
             key={stock.rank}
             className="bg-gradient-bg border border-dark-gray rounded-2xl p-6 hover-enlarge transition-all animate-fadeIn block"
             style={{ animationDelay: `${index * 0.1}s` }}
