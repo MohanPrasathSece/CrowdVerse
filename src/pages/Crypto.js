@@ -74,13 +74,6 @@ const Crypto = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-off-white"></div>
             <span>Loading cryptocurrencies...</span>
           </div>
-
-        {/* Discoverability Hint */}
-        <div className="mb-6">
-          <div className="border border-dark-gray/60 rounded-xl bg-secondary-black/50 px-4 py-3 text-sm text-light-gray/80">
-            Open any crypto card to access polls, community comments, and the AI intelligence panel.
-          </div>
-        </div>
         </div>
       </div>
     );

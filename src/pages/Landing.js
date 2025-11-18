@@ -28,13 +28,13 @@ const Landing = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-6 hero-cta-wrap">
               <Link
                 to="/signup"
-                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 bg-off-white text-primary-black font-medium rounded-lg hover:bg-white transition-colors hero-cta-primary text-sm sm:text-base"
+                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 bg-off-white text-primary-black font-medium rounded-lg hover:bg-white transition-colors hero-cta-primary text-xs sm:text-sm md:text-base min-w-[140px] sm:min-w-0 whitespace-nowrap"
               >
                 Start Trading
               </Link>
               <Link
                 to="/login"
-                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 border border-dark-gray/50 text-off-white rounded-lg hover:border-dark-gray transition-colors hero-cta-secondary text-sm sm:text-base"
+                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 border border-dark-gray/50 text-off-white rounded-lg hover:border-dark-gray transition-colors hero-cta-secondary text-xs sm:text-sm md:text-base min-w-[140px] sm:min-w-0 whitespace-nowrap"
               >
                 Sign In
               </Link>

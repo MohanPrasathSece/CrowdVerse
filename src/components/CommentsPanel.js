@@ -15,6 +15,15 @@ const CommentsPanel = ({ asset }) => {
   const [deletingId, setDeletingId] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
+  const getFirstName = (value = '') => {
+    if (!value) return 'Anonymous';
+    if (value.includes('@')) {
+      const [namePart] = value.split('@');
+      return namePart.split(/[^a-zA-Z]+/).filter(Boolean)[0] || namePart;
+    }
+    return value.split(' ')[0];
+  };
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
     setTimeout(() => setToast({ show: false, message: '', type }), 2000);
@@ -118,7 +127,7 @@ const CommentsPanel = ({ asset }) => {
         {items.map((c) => (
           <div key={c._id} className="p-3 border border-dark-gray/50 rounded-xl bg-primary-black/50">
             <div className="text-xs text-light-gray/60 flex items-center justify-between">
-              <span>{c.user?.emailOrMobile || 'Anonymous'}</span>
+              <span>{getFirstName(c.user?.emailOrMobile)}</span>
               <span>{new Date(c.createdAt).toLocaleString()}</span>
             </div>
             <div className="text-sm text-off-white mt-2 whitespace-pre-wrap">{c.text}</div>
