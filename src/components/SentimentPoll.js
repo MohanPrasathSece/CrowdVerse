@@ -112,7 +112,7 @@ const SentimentPoll = ({ asset, onRefreshRef }) => {
 
       <div className="mt-4 space-y-3">
         <div>
-          <div className="flex items-center justify-between text-xs text-light-gray/70 mb-1">
+          <div className="flex items-center justify-between text-sm text-light-gray/70 mb-1">
             <span>Bullish</span>
             <span className="text-off-white/90">{stats.bullish.toFixed(1)}%</span>
           </div>
@@ -124,7 +124,7 @@ const SentimentPoll = ({ asset, onRefreshRef }) => {
           </div>
         </div>
         <div>
-          <div className="flex items-center justify-between text-xs text-light-gray/70 mb-1">
+          <div className="flex items-center justify-between text-sm text-light-gray/70 mb-1">
             <span>Bearish</span>
             <span className="text-off-white/90">{stats.bearish.toFixed(1)}%</span>
           </div>

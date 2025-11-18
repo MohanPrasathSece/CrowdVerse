@@ -10,9 +10,6 @@ const Landing = () => {
         <div className="hero-orb absolute -top-32 -left-24 w-80 h-80 sm:w-[420px] sm:h-[420px]" aria-hidden="true"></div>
         <div className="hero-orb-secondary absolute bottom-[-20%] right-[-10%] w-[360px] h-[360px] sm:w-[480px] sm:h-[480px]" aria-hidden="true"></div>
         <div className="hero-grid absolute inset-0 opacity-30" aria-hidden="true"></div>
-        <div className="absolute top-[18%] right-[4%] hidden lg:block" aria-hidden="true">
-          <div className="hero-arc"></div>
-        </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="relative max-w-4xl mx-auto text-center space-y-10 px-6 sm:px-10 py-4 sm:py-12 md:py-16 hero-panel">

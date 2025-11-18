@@ -126,7 +126,7 @@ const IntentPoll = ({ asset, onRefreshRef }) => {
 
       <div className="mt-4 space-y-3">
         <div>
-          <div className="flex items-center justify-between text-xs text-light-gray/70 mb-1">
+          <div className="flex items-center justify-between text-sm text-light-gray/70 mb-1">
             <span>Buy</span>
             <span className="text-off-white/90">{stats.buy.toFixed(1)}%</span>
           </div>
@@ -138,7 +138,7 @@ const IntentPoll = ({ asset, onRefreshRef }) => {
           </div>
         </div>
         <div>
-          <div className="flex items-center justify-between text-xs text-light-gray/70 mb-1">
+          <div className="flex items-center justify-between text-sm text-light-gray/70 mb-1">
             <span>Sell</span>
             <span className="text-off-white/90">{stats.sell.toFixed(1)}%</span>
           </div>
@@ -150,7 +150,7 @@ const IntentPoll = ({ asset, onRefreshRef }) => {
           </div>
         </div>
         <div>
-          <div className="flex items-center justify-between text-xs text-light-gray/70 mb-1">
+          <div className="flex items-center justify-between text-sm text-light-gray/70 mb-1">
             <span>Hold</span>
             <span className="text-off-white/90">{stats.hold.toFixed(1)}%</span>
           </div>

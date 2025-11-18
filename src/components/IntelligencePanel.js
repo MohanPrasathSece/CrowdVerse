@@ -10,13 +10,21 @@ const IntelligencePanel = ({ asset, assetName }) => {
   const clean = (txt) => {
     if (!txt) return '';
     let s = String(txt);
+    // Remove markdown headers (including ### pattern)
     s = s.replace(/^\s*#{1,6}\s*/g, '');
-    s = s.replace(/^\s*(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\s*[:-]?\s*/i, '');
+    // Remove section headers with various formats (more aggressive)
+    s = s.replace(/^\s*(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\s*[:-]?\s*/gi, '');
+    // Remove headers with HTML tags or special formatting
+    s = s.replace(/<[^>]*>(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)<\/[^>]*>/gi, '');
+    s = s.replace(/\*\*(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\*\*/gi, '');
+    s = s.replace(/\*(###?\s*)?(Global\s+News\s+Summary|Community\s+Comments\s+Summary|Market\s+Sentiment\s+Summary|Final\s+(AI\s+)?Takeaway)\*/gi, '');
     // Remove common markdown emphasis markers
     s = s.replace(/\*\*(.*?)\*\*/g, '$1'); // **bold**
     s = s.replace(/\*(.*?)\*/g, '$1');       // *italic*
     s = s.replace(/__(.*?)__/g, '$1');        // __bold__
     s = s.replace(/_(.*?)_/g, '$1');          // _italic_
+    // Clean up extra whitespace and newlines
+    s = s.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ').replace(/\n\s*\n/g, '\n');
     return s.trim();
   };
 
@@ -91,33 +99,33 @@ const IntelligencePanel = ({ asset, assetName }) => {
         <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
           <div className="mb-3 flex items-center gap-2 text-light-gray/70">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
-            <div className="text-[11px] uppercase tracking-[0.25em]">Global News Summary</div>
+            <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Global News Summary</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-relaxed">{clean(data.global_news_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.global_news_summary) || '—'}</div>
         </div>
 
         <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
           <div className="mb-3 flex items-center gap-2 text-light-gray/70">
             <span className="inline-block w-2 h-2 rounded-full bg-sky-400" />
-            <div className="text-[11px] uppercase tracking-[0.25em]">Community Comments Summary</div>
+            <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Community Comments Summary</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-relaxed">{clean(data.user_comments_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.user_comments_summary) || '—'}</div>
         </div>
 
         <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
           <div className="mb-3 flex items-center gap-2 text-light-gray/70">
             <span className="inline-block w-2 h-2 rounded-full bg-amber-400" />
-            <div className="text-[11px] uppercase tracking-[0.25em]">Market Sentiment Summary</div>
+            <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Market Sentiment Summary</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-relaxed">{clean(data.market_sentiment_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.market_sentiment_summary) || '—'}</div>
         </div>
 
         <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
           <div className="mb-3 flex items-center gap-2 text-light-gray/70">
             <span className="inline-block w-2 h-2 rounded-full bg-fuchsia-400" />
-            <div className="text-[11px] uppercase tracking-[0.25em]">Final AI Takeaway</div>
+            <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Final AI Takeaway</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-relaxed">{clean(data.final_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.final_summary) || '—'}</div>
         </div>
       </div>
     </div>

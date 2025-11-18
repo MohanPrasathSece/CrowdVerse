@@ -9,11 +9,12 @@ const CommentsPanel = ({ asset }) => {
   const [error, setError] = useState('');
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [page] = useState(1);
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState('');
   const [deletingId, setDeletingId] = useState(null);
+  const [showAll, setShowAll] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [page, setPage] = useState(1);
 
   const getFirstName = (value = '') => {
     if (!value) return 'Anonymous';
@@ -124,13 +125,13 @@ const CommentsPanel = ({ asset }) => {
       </form>
 
       <div className="space-y-3">
-        {items.map((c) => (
+        {(showAll ? items : items.slice(0, 3)).map((c) => (
           <div key={c._id} className="p-3 border border-dark-gray/50 rounded-xl bg-primary-black/50">
             <div className="text-xs text-light-gray/60 flex items-center justify-between">
               <span>{getFirstName(c.user?.emailOrMobile)}</span>
               <span>{new Date(c.createdAt).toLocaleString()}</span>
             </div>
-            <div className="text-sm text-off-white mt-2 whitespace-pre-wrap">{c.text}</div>
+            <div className="text-base sm:text-lg text-off-white mt-2 whitespace-pre-wrap leading-relaxed">{c.text}</div>
             {user && String(user._id) === String(c.user?._id || c.user) && (
               <div className="mt-2 flex gap-3 text-xs text-light-gray/70">
                 <button onClick={() => onEdit(c._id)} className="hover:text-off-white">Edit</button>
@@ -141,6 +142,14 @@ const CommentsPanel = ({ asset }) => {
         ))}
         {items.length === 0 && (
           <div className="text-light-gray/70 text-sm">No comments yet. Be the first to share.</div>
+        )}
+        {items.length > 3 && (
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="w-full py-2 text-center text-sm text-off-white/80 hover:text-off-white border border-dark-gray/50 rounded-lg hover:border-dark-gray transition-all"
+          >
+            {showAll ? 'Show Less' : `View All Comments (${items.length})`}
+          </button>
         )}
       </div>
 

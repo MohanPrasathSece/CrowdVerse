@@ -106,19 +106,19 @@ const Stocks = () => {
         {/* Market Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate-slideInLeft">
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
-            <div className="text-sm text-light-gray mb-1">Market Cap</div>
+            <div className="text-base text-light-gray mb-1">Market Cap</div>
             <div className="text-2xl font-bold text-off-white">₹285.7L Cr</div>
-            <div className="text-green-400 text-sm">+2.1% today</div>
+            <div className="text-base text-green-400">+2.1% today</div>
           </div>
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
-            <div className="text-sm text-light-gray mb-1">Total Volume</div>
+            <div className="text-base text-light-gray mb-1">Total Volume</div>
             <div className="text-2xl font-bold text-off-white">₹45.2K Cr</div>
-            <div className="text-blue-400 text-sm">Active trading</div>
+            <div className="text-base text-blue-400">Active trading</div>
           </div>
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
-            <div className="text-sm text-light-gray mb-1">Gainers/Losers</div>
+            <div className="text-base text-light-gray mb-1">Gainers/Losers</div>
             <div className="text-2xl font-bold text-off-white">7:3</div>
-            <div className="text-green-400 text-sm">Bullish trend</div>
+            <div className="text-base text-green-400">Bullish trend</div>
           </div>
         </div>
       </div>
@@ -139,32 +139,32 @@ const Stocks = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-off-white mb-1">{stock.name}</h3>
-                  <p className="text-sm text-light-gray font-medium">{stock.symbol}</p>
+                  <p className="text-base text-light-gray font-medium">{stock.symbol}</p>
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-2xl font-bold text-off-white mb-1">{formatCurrency(stock.price)}</div>
                 {stock.change !== null ? (
-                  <div className={`text-sm font-medium ${stock.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  <div className={`text-base font-medium ${stock.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)}%
                   </div>
                 ) : (
-                  <div className="text-sm font-medium text-light-gray">—</div>
+                  <div className="text-base font-medium text-light-gray">—</div>
                 )}
               </div>
             </div>
             
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2 border-b border-dark-gray">
-                <span className="text-light-gray text-sm">Open</span>
+                <span className="text-light-gray text-base">Open</span>
                 <span className="text-off-white font-medium">{formatCurrency(stock.open)}</span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-dark-gray">
-                <span className="text-light-gray text-sm">High / Low</span>
+                <span className="text-light-gray text-base">High / Low</span>
                 <span className="text-off-white font-medium">{formatCurrency(stock.high)} / {formatCurrency(stock.low)}</span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-light-gray text-sm">Prev Close</span>
+                <span className="text-light-gray text-base">Prev Close</span>
                 <span className="text-off-white font-medium">{formatCurrency(stock.prevClose)}</span>
               </div>
             </div>
