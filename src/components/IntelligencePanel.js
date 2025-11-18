@@ -37,19 +37,31 @@ const IntelligencePanel = ({ asset, assetName }) => {
     let cancelled = false;
     const fetchData = async () => {
       try {
-        let recentComments = [];
-        try {
-          const recent = await getComments(asset, 1, 8);
-          recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
-        } catch (_) {
-          recentComments = [];
-        }
+        // Try to get cached intelligence data first
         const payloadName = assetName || asset;
-        const resp = await getAISummary(payloadName, recentComments, [], '');
+        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/ai-summary/intelligence/${payloadName}`);
+        const data = await resp.json();
+        
         if (cancelled) return;
-        setData(resp.data);
+        setData(data);
       } catch (e) {
-        setError('Failed to load intelligence panel');
+        console.error('Failed to load cached intelligence data:', e);
+        // Fallback to AI generation if cache fails
+        try {
+          let recentComments = [];
+          try {
+            const recent = await getComments(asset, 1, 8);
+            recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
+          } catch (_) {
+            recentComments = [];
+          }
+          const payloadName = assetName || asset;
+          const resp = await getAISummary(payloadName, recentComments, [], '');
+          if (cancelled) return;
+          setData(resp.data);
+        } catch (fallbackError) {
+          setError('Failed to load intelligence panel');
+        }
       } finally {
         if (!cancelled) setLoading(false);
         setRefreshing(false);

@@ -49,9 +49,9 @@ const Stocks = () => {
     (stock.symbol ?? '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const formatCurrency = (value) =>
+  const formatCurrency = (value, symbol = '₹') =>
     typeof value === 'number'
-      ? `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      ? `${symbol}${value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
       : '—';
 
   if (loading) {
