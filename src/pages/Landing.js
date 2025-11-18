@@ -15,7 +15,7 @@ const Landing = () => {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="relative max-w-4xl mx-auto text-center space-y-10 px-6 sm:px-10 py-12 sm:py-16 hero-panel">
+          <div className="relative max-w-4xl mx-auto text-center space-y-10 px-6 sm:px-10 py-6 sm:py-12 md:py-16 hero-panel">
             <div className="flex justify-center" aria-hidden="true">
               <span className="hero-accent-line"></span>
             </div>

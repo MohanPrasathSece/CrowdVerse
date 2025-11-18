@@ -96,19 +96,19 @@ const CommentsPanel = ({ asset }) => {
     <div className="border border-dark-gray/60 rounded-2xl p-4 bg-secondary-black/40 space-y-4">
       <h3 className="text-off-white font-semibold">Community Comments</h3>
 
-      <form onSubmit={onSubmit} className="flex gap-2">
+      <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2">
         <input
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={user ? 'Share your thoughts...' : 'Login to comment'}
           disabled={!user || submitting}
-          className="flex-1 px-3 py-2 rounded-lg bg-primary-black border border-dark-gray text-off-white focus:outline-none focus:ring-2 focus:ring-off-white/40"
+          className="flex-1 px-3 py-2 rounded-lg bg-primary-black border border-dark-gray text-off-white focus:outline-none focus:ring-2 focus:ring-off-white/40 text-sm"
         />
         <button
           type="submit"
           disabled={!user || submitting}
-          className="px-4 py-2 rounded-lg border border-off-white/60 text-xs uppercase tracking-[0.2em] hover:bg-off-white hover:text-primary-black transition-all"
+          className="w-full sm:w-auto px-4 py-2 rounded-lg border border-off-white/60 text-xs uppercase tracking-[0.2em] hover:bg-off-white hover:text-primary-black transition-all whitespace-nowrap"
         >
           Post
         </button>
