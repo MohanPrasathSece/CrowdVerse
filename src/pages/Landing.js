@@ -5,7 +5,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-primary-black">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-44 pb-24 sm:pt-44 sm:pb-28 md:pt-48 lg:pt-40 xl:pt-36 2xl:pt-32">
+      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28 md:pt-48 lg:pt-40 xl:pt-36 2xl:pt-32">
         <div className="absolute inset-0 hero-gradient pointer-events-none" aria-hidden="true"></div>
         <div className="hero-orb absolute -top-32 -left-24 w-80 h-80 sm:w-[420px] sm:h-[420px]" aria-hidden="true"></div>
         <div className="hero-orb-secondary absolute bottom-[-20%] right-[-10%] w-[360px] h-[360px] sm:w-[480px] sm:h-[480px]" aria-hidden="true"></div>
@@ -15,7 +15,7 @@ const Landing = () => {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="relative max-w-4xl mx-auto text-center space-y-10 px-6 sm:px-10 py-6 sm:py-12 md:py-16 hero-panel">
+          <div className="relative max-w-4xl mx-auto text-center space-y-10 px-6 sm:px-10 py-4 sm:py-12 md:py-16 hero-panel">
             <div className="flex justify-center" aria-hidden="true">
               <span className="hero-accent-line"></span>
             </div>
@@ -28,13 +28,13 @@ const Landing = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-6 hero-cta-wrap">
               <Link
                 to="/signup"
-                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 bg-off-white text-primary-black font-medium rounded-lg hover:bg-white transition-colors hero-cta-primary text-xs sm:text-sm md:text-base min-w-[140px] sm:min-w-0 whitespace-nowrap"
+                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 bg-off-white text-primary-black font-medium rounded-lg hover:bg-white transition-colors hero-cta-primary text-sm sm:text-base"
               >
                 Start Trading
               </Link>
               <Link
                 to="/login"
-                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 border border-dark-gray/50 text-off-white rounded-lg hover:border-dark-gray transition-colors hero-cta-secondary text-xs sm:text-sm md:text-base min-w-[140px] sm:min-w-0 whitespace-nowrap"
+                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 border border-dark-gray/50 text-off-white rounded-lg hover:border-dark-gray transition-colors hero-cta-secondary text-sm sm:text-base"
               >
                 Sign In
               </Link>

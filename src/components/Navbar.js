@@ -61,11 +61,23 @@ const Navbar = () => {
 
           {!hideNavLinks && (
             <nav className="hidden md:flex flex-1 justify-center items-center space-x-6 text-sm uppercase tracking-[0.25em] text-light-gray/70">
-              {navLinks.map((link) => (
-                <Link key={link.label} to={link.to} className="hover:text-off-white transition-colors">
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.to || 
+                                (link.to === '/dashboard' && location.pathname.startsWith('/dashboard'));
+                return (
+                  <Link 
+                    key={link.label} 
+                    to={link.to} 
+                    className={`transition-all ${
+                      isActive 
+                        ? 'text-off-white font-semibold' 
+                        : 'hover:text-off-white'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
           )}
 
@@ -125,7 +137,7 @@ const Navbar = () => {
                 {!isSignupPage && (
                   <Link
                     to="/signup"
-                    className="px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base bg-off-white text-primary-black rounded-xl hover:bg-white font-semibold transition-all hover-lift shadow-lg"
+                    className="px-3 py-2 text-xs sm:px-6 sm:py-3 sm:text-base bg-off-white text-primary-black rounded-xl hover:bg-white font-semibold transition-all hover-lift shadow-lg whitespace-nowrap"
                   >
                     Sign Up
                   </Link>
@@ -145,25 +157,33 @@ const Navbar = () => {
             </div>
 
             <div className="mt-4 flex flex-col">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  className="flex items-center justify-between px-3 py-4 text-base font-semibold text-off-white/90 hover:text-white border-b border-dark-gray/50 last:border-b-0"
-                >
-                  <span>{link.label}</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5 text-light-gray/60"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.to || 
+                                (link.to === '/dashboard' && location.pathname.startsWith('/dashboard'));
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    className={`flex items-center justify-between px-3 py-4 text-base font-semibold border-b border-dark-gray/50 last:border-b-0 transition-all ${
+                      isActive 
+                        ? 'text-off-white bg-off-white/10 border-l-2 border-l-off-white' 
+                        : 'text-off-white/90 hover:text-white'
+                    }`}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              ))}
+                    <span>{link.label}</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5 text-light-gray/60"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                );
+              })}
             </div>
 
             <button
