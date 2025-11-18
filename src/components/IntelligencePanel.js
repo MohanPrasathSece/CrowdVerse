@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getAISummary, getComments } from '../utils/apiEnhanced';
 
 const IntelligencePanel = ({ asset, assetName }) => {
   const [data, setData] = useState(null);
@@ -38,14 +39,29 @@ const IntelligencePanel = ({ asset, assetName }) => {
       try {
         // Try to get cached intelligence data first
         const payloadName = assetName || asset;
-        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/ai-summary/intelligence/${payloadName}`);
+        const resp = await fetch(`https://crowdverse-backend.onrender.com/api/ai-summary/intelligence/${payloadName}`);
         const data = await resp.json();
         
         if (cancelled) return;
         setData(data);
       } catch (e) {
-        console.error('Failed to load intelligence data:', e);
-        setError('Failed to load intelligence panel');
+        console.error('Failed to load cached intelligence data:', e);
+        // Fallback to AI generation if cache fails
+        try {
+          let recentComments = [];
+          try {
+            const recent = await getComments(asset, 1, 8);
+            recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
+          } catch (_) {
+            recentComments = [];
+          }
+          const payloadName = assetName || asset;
+          const resp = await getAISummary(payloadName, recentComments, [], '');
+          if (cancelled) return;
+          setData(resp.data);
+        } catch (fallbackError) {
+          setError('Failed to load intelligence panel');
+        }
       } finally {
         if (!cancelled) setLoading(false);
         setRefreshing(false);
@@ -56,18 +72,24 @@ const IntelligencePanel = ({ asset, assetName }) => {
   }, [asset, assetName]);
 
   const onRefresh = () => {
-    if (refreshing || loading) return;
     setRefreshing(true);
+    setLoading(true);
     setError('');
-    
+    setData(null);
     const run = async () => {
       try {
+        let recentComments = [];
+        try {
+          const recent = await getComments(asset, 1, 8);
+          recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
+        } catch (_) {
+          recentComments = [];
+        }
         const payloadName = assetName || asset;
-        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/ai-summary/intelligence/${payloadName}`);
-        const data = await resp.json();
-        setData(data);
+        const resp = await getAISummary(payloadName, recentComments, [], '', true);
+        setData(resp.data);
       } catch (e) {
-        setError('Failed to refresh intelligence panel');
+        setError('Failed to load intelligence panel');
       } finally {
         setLoading(false);
         setRefreshing(false);
