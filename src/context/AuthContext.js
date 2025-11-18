@@ -12,7 +12,21 @@ export const AuthProvider = ({ children }) => {
     const userData = localStorage.getItem('user');
     
     if (token && userData) {
-      setUser(JSON.parse(userData));
+      try {
+        const parsedUser = JSON.parse(userData);
+        // Validate user data has required fields
+        if (parsedUser && parsedUser.emailOrMobile) {
+          setUser(parsedUser);
+        } else {
+          // Clear invalid user data
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+      } catch (error) {
+        // Clear corrupted user data
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     }
     setLoading(false);
   }, []);
