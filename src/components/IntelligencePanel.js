@@ -94,6 +94,12 @@ const IntelligencePanel = ({ asset, assetName }) => {
         user_comments_summary: 'Developer community excited about scalability improvements. Investors concerned about competition from other L1s but confident in network effects.',
         market_sentiment_summary: 'Bullish at 64%. Staking ratio reaches 28%. Gas fees trending lower post-upgrade.',
         final_summary: 'Ethereum\'s upgrades strengthen its position as the leading smart contract platform. Monitor DeFi growth and staking yields.'
+      },
+      'SOL': {
+        global_news_summary: 'Solana achieves record throughput with 65,000 TPS during peak usage. Major DeFi protocols migrate to Solana attracted by low fees and high speed. Breakpoint conference showcases ecosystem growth.',
+        user_comments_summary: 'Solana community shows enthusiasm with discussions about network performance and ecosystem growth. Developers praise developer experience and tooling improvements.',
+        market_sentiment_summary: 'Market sentiment shows 82.3% bullish vs 17.7% bearish. Price action shows strong momentum with key resistance at $120.',
+        final_summary: 'Solana demonstrates impressive technical performance with growing ecosystem adoption. Consider exposure for high-growth DeFi and NFT sectors.'
       }
     };
     
@@ -124,7 +130,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
       try {
         // Try to get cached intelligence data first
         const payloadName = assetName || asset;
-        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'https://crowdverse-backend.onrender.com'}/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}&_v=2.0`);
+        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'https://crowdverse-backend.onrender.com'}/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}&_v=3.0`);
         const data = await resp.json();
         
         // Debug: Log what we received
@@ -135,39 +141,15 @@ const IntelligencePanel = ({ asset, assetName }) => {
         });
         
         if (cancelled) return;
-        // Check if data is generic fallback or empty
-        const isGeneric = data.global_news_summary?.includes('Community commentary is limited') ||
-                         data.global_news_summary?.includes('Treat sentiment signals cautiously') ||
-                         data.global_news_summary?.includes('assume mixed-to-neutral conditions') ||
-                         data.global_news_summary?.includes('build a plan for');
         
-        const isEmpty = !data || [
-          data.global_news_summary,
-          data.user_comments_summary,
-          data.market_sentiment_summary,
-          data.final_summary,
-        ].every((v) => !v || String(v).trim() === '' || String(v).trim() === '—' || isGeneric);
-
-        console.log(`[IntelligencePanel] ${payloadName} - Is generic: ${isGeneric}, Is empty: ${isEmpty}`);
-
-        if (!isEmpty) {
+        // ALWAYS use database data if it exists, regardless of content
+        if (data && data.global_news_summary) {
+          console.log(`[IntelligencePanel] ${payloadName} - Using database data directly`);
           setData(ensureFilled(data));
         } else {
-          // Fallback to on-demand AI generation if cached/intelligence data is empty
-          try {
-            let recentComments = [];
-            try {
-              const recent = await getComments(asset, 1, 8);
-              recentComments = (recent.data || []).map((c) => `${c.user?.emailOrMobile || 'User'}: ${c.text}`);
-            } catch (_) {
-              recentComments = [];
-            }
-            const fallbackResp = await getAISummary(payloadName, recentComments, [], '');
-            if (!cancelled) setData(ensureFilled(fallbackResp.data));
-          } catch (fallbackErr) {
-            // As a last resort, show client-only fallback
-            if (!cancelled) setData(ensureFilled({}));
-          }
+          console.log(`[IntelligencePanel] ${payloadName} - No data found, using fallback`);
+          // Only use fallback if absolutely no data exists
+          if (!cancelled) setData(ensureFilled({}));
         }
       } catch (e) {
         console.error('Failed to load cached intelligence data:', e);
