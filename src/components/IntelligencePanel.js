@@ -124,16 +124,31 @@ const IntelligencePanel = ({ asset, assetName }) => {
       try {
         // Try to get cached intelligence data first
         const payloadName = assetName || asset;
-        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'https://crowdverse-backend.onrender.com'}/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}`);
+        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'https://crowdverse-backend.onrender.com'}/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}&_v=2.0`);
         const data = await resp.json();
         
+        // Debug: Log what we received
+        console.log(`[IntelligencePanel] ${payloadName} - Data received:`, {
+          newsLength: data.global_news_summary?.length || 0,
+          isGeneric: data.global_news_summary?.includes('Community commentary is limited'),
+          preview: data.global_news_summary?.substring(0, 50) + '...'
+        });
+        
         if (cancelled) return;
+        // Check if data is generic fallback or empty
+        const isGeneric = data.global_news_summary?.includes('Community commentary is limited') ||
+                         data.global_news_summary?.includes('Treat sentiment signals cautiously') ||
+                         data.global_news_summary?.includes('assume mixed-to-neutral conditions') ||
+                         data.global_news_summary?.includes('build a plan for');
+        
         const isEmpty = !data || [
           data.global_news_summary,
           data.user_comments_summary,
           data.market_sentiment_summary,
           data.final_summary,
-        ].every((v) => !v || String(v).trim() === '' || String(v).trim() === '—');
+        ].every((v) => !v || String(v).trim() === '' || String(v).trim() === '—' || isGeneric);
+
+        console.log(`[IntelligencePanel] ${payloadName} - Is generic: ${isGeneric}, Is empty: ${isEmpty}`);
 
         if (!isEmpty) {
           setData(ensureFilled(data));
