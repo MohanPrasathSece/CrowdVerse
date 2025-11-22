@@ -124,7 +124,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
       try {
         // Try to get cached intelligence data first
         const payloadName = assetName || asset;
-        const resp = await fetch(`/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}`);
+        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'https://crowdverse-backend.onrender.com'}/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}`);
         const data = await resp.json();
         
         if (cancelled) return;
