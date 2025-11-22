@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { getAISummary, getComments } from '../utils/apiEnhanced';
 
 const IntelligencePanel = ({ asset, assetName }) => {
@@ -36,7 +36,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
     return s.trim();
   };
 
-  const ensureFilled = (payload) => {
+  const ensureFilled = useCallback((payload) => {
     const a = String(assetName || asset || 'the asset').toUpperCase();
     const safe = (s, def) => {
       const cleaned = clean(s || '');
@@ -116,7 +116,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
       generated_at: p.generated_at || new Date().toISOString(),
       data_points: p.data_points || { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 },
     };
-  };
+  }, [assetName, asset]);
 
   useEffect(() => {
     let cancelled = false;
@@ -124,7 +124,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
       try {
         // Try to get cached intelligence data first
         const payloadName = assetName || asset;
-        const resp = await fetch(`https://crowdverse-backend.onrender.com/api/ai-summary/intelligence/${payloadName}`);
+        const resp = await fetch(`/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}`);
         const data = await resp.json();
         
         if (cancelled) return;
@@ -179,7 +179,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
     };
     fetchData();
     return () => { cancelled = true; };
-  }, [asset, assetName]);
+  }, [asset, assetName, ensureFilled]);
 
   const onRefresh = () => {
     setRefreshing(true);

@@ -121,6 +121,7 @@ const Stocks = () => {
             <div className="text-base text-green-400">Bullish trend</div>
           </div>
         </div>
+
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">

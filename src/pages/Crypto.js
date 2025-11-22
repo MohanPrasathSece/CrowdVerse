@@ -108,7 +108,7 @@ const Crypto = () => {
           </div>
         </div>
 
-        {/* Crypto Market Stats */}
+        {/* Market Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 animate-slideInLeft">
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
             <div className="text-sm text-light-gray mb-1">Total Market Cap</div>
@@ -131,6 +131,7 @@ const Crypto = () => {
             <div className="text-green-400 text-sm">Greed</div>
           </div>
         </div>
+
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">

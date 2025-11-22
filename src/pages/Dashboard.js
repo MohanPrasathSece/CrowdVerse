@@ -203,6 +203,7 @@ const Dashboard = () => {
           </div>
         </div>
 
+
         {/* Tabs */}
         <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
           <div className="flex flex-col sm:flex-row sm:space-x-1 bg-secondary-black p-1 rounded-xl mb-8 border border-dark-gray max-w-md hover-glow">
