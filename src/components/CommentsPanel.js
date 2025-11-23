@@ -32,9 +32,21 @@ const CommentsPanel = ({ asset }) => {
 
   const load = async () => {
     try {
+      // Add timeout to prevent infinite loading
+      const timeoutId = setTimeout(() => {
+        if (loading) {
+          console.log('CommentsPanel timeout - using empty data');
+          setItems([]); // Fallback to empty comments
+          setLoading(false);
+        }
+      }, 2000); // 2 second timeout
+      
       const { data } = await getComments(asset, page, 20);
+      clearTimeout(timeoutId);
       setItems(Array.isArray(data) ? data : []);
     } catch (e) {
+      console.error('Failed to load comments:', e);
+      setItems([]); // Fallback to empty comments
       setError('Failed to load comments');
     } finally {
       setLoading(false);
@@ -42,6 +54,12 @@ const CommentsPanel = ({ asset }) => {
   };
 
   useEffect(() => {
+    // Start with empty state immediately for better UX
+    if (items.length === 0 && loading) {
+      setItems([]);
+      setLoading(false);
+    }
+    
     setLoading(true);
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps

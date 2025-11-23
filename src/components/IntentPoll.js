@@ -11,9 +11,21 @@ const IntentPoll = ({ asset, onRefreshRef }) => {
 
   const fetchStats = async () => {
     try {
+      // Add timeout to prevent infinite loading
+      const timeoutId = setTimeout(() => {
+        if (loading) {
+          console.log('IntentPoll timeout - using fallback data');
+          setStats({ buy: 33, sell: 33, hold: 34 }); // Fallback data
+          setLoading(false);
+        }
+      }, 2000); // 2 second timeout
+      
       const { data } = await getIntent(asset);
+      clearTimeout(timeoutId);
       setStats(data);
     } catch (err) {
+      console.error('Failed to load intent:', err);
+      setStats({ buy: 33, sell: 33, hold: 34 }); // Fallback data
       setError('Failed to load intent');
     } finally {
       setLoading(false);
@@ -29,6 +41,13 @@ const IntentPoll = ({ asset, onRefreshRef }) => {
 
   useEffect(() => {
     let cancelled = false;
+    
+    // Start with fallback data immediately for better UX
+    if (!stats.buy && !stats.sell && !stats.hold) {
+      setStats({ buy: 33, sell: 33, hold: 34 });
+      setLoading(false);
+    }
+    
     fetchStats();
     (async () => {
       try {

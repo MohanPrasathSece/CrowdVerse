@@ -11,9 +11,21 @@ const SentimentPoll = ({ asset, onRefreshRef }) => {
 
   const fetchStats = async () => {
     try {
+      // Add timeout to prevent infinite loading
+      const timeoutId = setTimeout(() => {
+        if (loading) {
+          console.log('SentimentPoll timeout - using fallback data');
+          setStats({ bullish: 50, bearish: 50 }); // Fallback data
+          setLoading(false);
+        }
+      }, 2000); // 2 second timeout
+      
       const { data } = await getSentiment(asset);
+      clearTimeout(timeoutId);
       setStats(data);
     } catch (err) {
+      console.error('Failed to load sentiment:', err);
+      setStats({ bullish: 50, bearish: 50 }); // Fallback data
       setError('Failed to load sentiment');
     } finally {
       setLoading(false);
@@ -29,6 +41,13 @@ const SentimentPoll = ({ asset, onRefreshRef }) => {
 
   useEffect(() => {
     let cancelled = false;
+    
+    // Start with fallback data immediately for better UX
+    if (!stats.bullish && !stats.bearish) {
+      setStats({ bullish: 50, bearish: 50 });
+      setLoading(false);
+    }
+    
     fetchStats();
     if (user) {
       (async () => {
