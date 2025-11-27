@@ -32,17 +32,7 @@ const CommentsPanel = ({ asset }) => {
 
   const load = async () => {
     try {
-      // Add timeout to prevent infinite loading
-      const timeoutId = setTimeout(() => {
-        if (loading) {
-          console.log('CommentsPanel timeout - using empty data');
-          setItems([]); // Fallback to empty comments
-          setLoading(false);
-        }
-      }, 2000); // 2 second timeout
-      
       const { data } = await getComments(asset, page, 20);
-      clearTimeout(timeoutId);
       setItems(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error('Failed to load comments:', e);
@@ -59,7 +49,7 @@ const CommentsPanel = ({ asset }) => {
       setItems([]);
       setLoading(false);
     }
-    
+
     setLoading(true);
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -205,11 +195,10 @@ const CommentsPanel = ({ asset }) => {
 
       {toast.show && (
         <div className="fixed top-4 right-4 z-[60]">
-          <div className={`px-4 py-2 rounded-xl border text-sm shadow-lg transition-all ${
-            toast.type === 'success'
+          <div className={`px-4 py-2 rounded-xl border text-sm shadow-lg transition-all ${toast.type === 'success'
               ? 'border-emerald-500/60 bg-emerald-600/10 text-emerald-300'
               : 'border-red-500/60 bg-red-600/10 text-red-300'
-          }`}>
+            }`}>
             {toast.message}
           </div>
         </div>

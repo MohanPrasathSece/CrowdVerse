@@ -1,11 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { getAISummary, getComments } from '../utils/apiEnhanced';
+import React, { useState, useCallback } from 'react';
 
 const IntelligencePanel = ({ asset, assetName }) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
 
   // Stock-specific intelligence data - moved outside to be accessible
   const stockIntelligence = {
@@ -186,140 +182,47 @@ const IntelligencePanel = ({ asset, assetName }) => {
     return s.trim();
   };
 
-  const ensureFilled = useCallback((payload) => {
+  // Initialize data immediately from frontend stockIntelligence object
+  React.useEffect(() => {
     const a = String(assetName || asset || 'the asset').toUpperCase();
-    
+
     // Try to map full names to symbols first
     let symbolKey = nameToSymbol[a] || a;
-    
-    const safe = (s, def) => {
-      const cleaned = clean(s || '');
-      if (!cleaned) return def;
-      if (cleaned.length < 12) return def;
-      return cleaned;
-    };
-    
+
     // Check if we have specific intelligence for this asset
     const specificData = stockIntelligence[symbolKey];
-    const fallback = specificData || {
-      global_news_summary: `No major recent headlines specifically flagged for ${a}. Consider macro context, sector flows, and any regulatory or earnings catalysts that could influence momentum.`,
-      user_comments_summary: `Community commentary for ${a} appears limited. Treat any sentiment reads cautiously and pair with price/volume behavior to avoid bias.`,
-      market_sentiment_summary: `Assume mixed-to-neutral sentiment for ${a} when explicit data is sparse. Watch for breakouts above resistance or failures at key levels to validate direction.`,
-      final_summary: `Build a plan for ${a}: define invalidation levels, size appropriately, and track news triggers. Stay flexible until stronger catalysts or consensus emerge.`,
-    };
-    
-    const p = payload || {};
-    return {
-      global_news_summary: safe(p.global_news_summary, fallback.global_news_summary),
-      user_comments_summary: safe(p.user_comments_summary, fallback.user_comments_summary),
-      market_sentiment_summary: safe(p.market_sentiment_summary, fallback.market_sentiment_summary),
-      final_summary: safe(p.final_summary, fallback.final_summary),
-      analysis_provider: p.analysis_provider || (specificData ? 'client-stock-data' : 'client-fallback'),
-      generated_at: p.generated_at || new Date().toISOString(),
-      data_points: p.data_points || { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 },
-    };
-  }, [assetName, asset]);
 
-  useEffect(() => {
-    let cancelled = false;
-    let timeoutId;
-    const fetchData = async () => {
-      try {
-        const payloadName = assetName || asset;
-        const a = String(payloadName || 'the asset').toUpperCase();
-        
-        // Try to map full names to symbols first
-        let symbolKey = nameToSymbol[a] || a;
-        
-        // Check if we have instant client-side data first
-        if (stockIntelligence[symbolKey]) {
-          console.log(`[IntelligencePanel] ${payloadName} -> ${symbolKey} - Using instant client-side data`);
-          setData(ensureFilled(stockIntelligence[symbolKey]));
-          setLoading(false);
-          setRefreshing(false);
-          return;
-        }
-        
-        // Set a timeout to prevent infinite loading
-        timeoutId = setTimeout(() => {
-          if (!cancelled) {
-            console.log(`[IntelligencePanel] ${payloadName} - Timeout, using fallback`);
-            setData(ensureFilled({}));
-            setLoading(false);
-            setRefreshing(false);
-          }
-        }, 3000); // 3 second timeout
-        
-        // Try to get cached intelligence data from API (only if no client-side data)
-        console.log(`[IntelligencePanel] ${payloadName} -> ${symbolKey} - Fetching from API...`);
-        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'https://crowdverse-backend.onrender.com'}/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}&_v=3.0`);
-        const data = await resp.json();
-        
-        // Clear timeout if we got response
-        clearTimeout(timeoutId);
-        
-        if (cancelled) return;
-        
-        if (data && data.global_news_summary) {
-          console.log(`[IntelligencePanel] ${payloadName} - Using database data`);
-          setData(ensureFilled(data));
-        } else {
-          console.log(`[IntelligencePanel] ${payloadName} - No data found, using fallback`);
-          if (!cancelled) setData(ensureFilled({}));
-        }
-      } catch (e) {
-        clearTimeout(timeoutId);
-        console.error('Failed to load intelligence data:', e);
-        // Always have fallback ready
-        if (!cancelled) setData(ensureFilled({}));
-      } finally {
-        if (!cancelled) {
-          clearTimeout(timeoutId);
-          setLoading(false);
-          setRefreshing(false);
-        }
-      }
-    };
-    
-    fetchData();
-    return () => { 
-      cancelled = true;
-      clearTimeout(timeoutId);
-    };
-  }, [asset, assetName, ensureFilled]);
+    if (specificData) {
+      console.log(`[IntelligencePanel] ${assetName || asset} -> ${symbolKey} - Using frontend static data`);
+      setData({
+        global_news_summary: specificData.global_news_summary,
+        user_comments_summary: specificData.user_comments_summary,
+        market_sentiment_summary: specificData.market_sentiment_summary,
+        final_summary: specificData.final_summary,
+        analysis_provider: 'frontend-static-data',
+        generated_at: new Date().toISOString(),
+        data_points: { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 }
+      });
+    } else {
+      console.log(`[IntelligencePanel] ${assetName || asset} - No static data found, using fallback`);
+      setData({
+        global_news_summary: `No major recent headlines specifically flagged for ${a}. Consider macro context, sector flows, and any regulatory or earnings catalysts that could influence momentum.`,
+        user_comments_summary: `Community commentary for ${a} appears limited. Treat any sentiment reads cautiously and pair with price/volume behavior to avoid bias.`,
+        market_sentiment_summary: `Assume mixed-to-neutral sentiment for ${a} when explicit data is sparse. Watch for breakouts above resistance or failures at key levels to validate direction.`,
+        final_summary: `Build a plan for ${a}: define invalidation levels, size appropriately, and track news triggers. Stay flexible until stronger catalysts or consensus emerge.`,
+        analysis_provider: 'frontend-fallback',
+        generated_at: new Date().toISOString(),
+        data_points: { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 }
+      });
+    }
+  }, [asset, assetName]);
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    setLoading(true);
-    setError('');
-    const run = async () => {
-      try {
-        const payloadName = assetName || asset;
-        const resp = await fetch(`${process.env.REACT_APP_API_URL || 'https://crowdverse-backend.onrender.com'}/api/ai-summary/intelligence/${payloadName}?_t=${Date.now()}&_v=3.0`);
-        const data = await resp.json();
-        setData(ensureFilled(data));
-      } catch (e) {
-        console.error('Refresh failed:', e);
-        setData(ensureFilled({}));
-      } finally {
-        setLoading(false);
-        setRefreshing(false);
-      }
-    };
-    run();
-  };
-
-  if (loading) return <div className="text-light-gray animate-pulse">Loading intelligence...</div>;
-  if (error) return <div className="text-red-400">{error}</div>;
-  if (!data) return null;
+  if (!data) return <div className="text-light-gray animate-pulse">Loading intelligence...</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-off-white font-semibold text-lg">Quick Intelligence Panel</h3>
-        <button onClick={onRefresh} disabled={refreshing} className={`px-3 py-1.5 rounded-lg border text-light-gray hover:text-off-white ${refreshing ? 'opacity-60 cursor-not-allowed' : 'border-dark-gray hover:bg-secondary-black/60'}`}>
-          {refreshing ? 'Refreshing…' : 'Refresh'}
-        </button>
       </div>
 
       {/* Two-column spacious cards, all visible */}
