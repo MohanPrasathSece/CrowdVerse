@@ -185,12 +185,16 @@ const IntelligencePanel = ({ asset, assetName }) => {
   // Initialize data immediately from frontend stockIntelligence object
   React.useEffect(() => {
     const a = String(assetName || asset || 'the asset').toUpperCase();
+    console.log(`[IntelligencePanel] Processing asset: "${a}" from assetName="${assetName}" asset="${asset}"`);
 
     // Try to map full names to symbols first
     let symbolKey = nameToSymbol[a] || a;
+    console.log(`[IntelligencePanel] Mapped "${a}" to "${symbolKey}"`);
 
     // Check if we have specific intelligence for this asset
     const specificData = stockIntelligence[symbolKey];
+    console.log(`[IntelligencePanel] Available symbols:`, Object.keys(stockIntelligence));
+    console.log(`[IntelligencePanel] Data found for ${symbolKey}:`, !!specificData);
 
     if (specificData) {
       console.log(`[IntelligencePanel] ${assetName || asset} -> ${symbolKey} - Using frontend static data`);
@@ -207,7 +211,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
       console.log(`[IntelligencePanel] ${assetName || asset} - No static data found, using fallback`);
       setData({
         global_news_summary: `No major recent headlines specifically flagged for ${a}. Consider macro context, sector flows, and any regulatory or earnings catalysts that could influence momentum.`,
-        user_comments_summary: `Community commentary for ${a} appears limited. Treat any sentiment reads cautiously and pair with price/volume behavior to avoid bias.`,
+        user_comments_summary: `Community commentary for ${a} appears limited. Treat sentiment signals cautiously and pair with price/volume behavior to avoid bias.`,
         market_sentiment_summary: `Assume mixed-to-neutral sentiment for ${a} when explicit data is sparse. Watch for breakouts above resistance or failures at key levels to validate direction.`,
         final_summary: `Build a plan for ${a}: define invalidation levels, size appropriately, and track news triggers. Stay flexible until stronger catalysts or consensus emerge.`,
         analysis_provider: 'frontend-fallback',
