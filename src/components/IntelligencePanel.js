@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
 const IntelligencePanel = ({ asset, assetName }) => {
   const [data, setData] = useState(null);
@@ -219,7 +219,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
         data_points: { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 }
       });
     }
-  }, [asset, assetName]);
+  }, [asset, assetName, nameToSymbol, stockIntelligence]);
 
   if (!data) return <div className="text-light-gray animate-pulse">Loading intelligence...</div>;
 
