@@ -12,10 +12,10 @@ const IntelligencePanel = ({ asset, assetName }) => {
       final_summary: 'TCS remains a defensive IT play with strong cash flows. Consider accumulation on dips below ₹3,900 for long-term portfolio stability.'
     },
     'RELIANCE': {
-      global_news_summary: 'Reliance Industries expands its green energy portfolio with ₹75,000 crore investment in solar manufacturing. Retail division shows robust Q3 growth with 18% YoY increase in footfalls.',
-      user_comments_summary: 'Community excited about Jio\'s 5G rollout progress and Reliance Retail\'s international expansion. Concerns about high debt levels for capital-intensive projects.',
-      market_sentiment_summary: 'Strong bullish sentiment at 78%. Stock trading above 200-day moving average. FII holding increased by 2.3% in latest quarter.',
-      final_summary: 'Reliance offers diversified exposure across energy, retail, and telecom. Position for long-term growth while monitoring debt metrics.'
+      global_news_summary: 'Reliance Industries reports strong Q3 FY24 performance with consolidated revenue up 15% YoY to ₹2.4 lakh crore. Retail division shows robust growth with 18% YoY increase in footfalls across 18,000+ stores. JioMart expansion accelerates with grocery delivery reaching 200+ cities. Green energy portfolio advances with ₹75,000 crore investment in solar manufacturing and gigafactory plans. Oil-to-chemicals segment maintains margins despite volatile crude prices.',
+      user_comments_summary: 'Community excitement evident with 850+ comments discussing Jio\'s 5G rollout progress reaching 400+ cities. Investors focus on retail international expansion plans with first UK store launch. Technical discussions emphasize Reliance\'s competitive moat in integrated energy-retail-telecom model. Concerns expressed about high debt levels for capital-intensive green energy projects. Analyst community debates valuation relative to global peers.',
+      market_sentiment_summary: 'Market sentiment for Reliance shows 78% bullish vs 22% bearish based on 350+ votes. Stock trading 8% above 200-day moving average with strong technical momentum. FII holding increased by 2.3% in latest quarter. Promoter stake remains stable at 50.4%. Institutional confidence high with 12 mutual funds increasing holdings.',
+      final_summary: 'Reliance offers diversified exposure across India\'s growth sectors with strong execution track record. Retail and digital expansion provide near-term growth catalysts. Green energy investments position for long-term energy transition. Risk factors include high capital expenditure and regulatory challenges. Consider position for long-term wealth creation with India\'s leading conglomerate.'
     },
     'INFY': {
       global_news_summary: 'Infosys secures $2.4 billion deal with European telecom giant for cloud transformation. Atlas platform gains traction in enterprise AI deployments.',
@@ -24,10 +24,10 @@ const IntelligencePanel = ({ asset, assetName }) => {
       final_summary: 'Infosys offers value compared to peers with attractive valuations. Monitor large deal execution and margin trajectory.'
     },
     'HDFCBANK': {
-      global_news_summary: 'HDFC Bank integrates credit card business post-CorpBank merger. Net interest margin improves to 4.3% in Q3. Digital banking adoption reaches 85%.',
-      user_comments_summary: 'Depositors concerned about service quality issues post-merger. Investors optimistic about cross-selling opportunities and expanded branch network.',
-      market_sentiment_summary: 'Cautiously bullish at 58%. Stock underperformed peers by 8% this quarter. CASA ratio improved to 42%.',
-      final_summary: 'HDFC Bank remains a quality private bank play. Monitor integration benefits and NIM trends for entry points.'
+      global_news_summary: 'HDFC Bank reports Q3 FY24 net profit of ₹13,000 crore, up 20% YoY, driven by strong loan growth. Net interest margin improves to 4.3% as asset quality remains stable. Digital banking adoption reaches 85% with 811 app crossing 50 million users. Credit card integration post-CorpBank merger shows positive synergies. CASA ratio improves to 42% supporting margin expansion.',
+      user_comments_summary: 'Investors show confidence in management execution with 650+ comments discussing Q3 results. Depositors express satisfaction with digital banking improvements. Analyst community praises loan growth trajectory while monitoring asset quality. Retail investors focus on dividend sustainability and growth prospects. Technical discussions emphasize HDFC Bank\'s premium valuation relative to peers.',
+      market_sentiment_summary: 'Market sentiment for HDFC Bank shows 72% bullish vs 28% bearish based on 280+ votes. Stock outperforms banking index by 8% this quarter. Technical analysis shows support at ₹1,450 and resistance at ₹1,650. Institutional holding remains stable at 58%. FII interest increases with 2.3% stake rise in latest quarter.',
+      final_summary: 'HDFC Bank demonstrates strong fundamental performance with improving margins and digital leadership. Merger synergies starting to materialize with cross-selling opportunities. Risk factors include valuation premium and integration challenges. Consider accumulation on corrections below ₹1,500 for long-term portfolio stability.'
     },
     'SBIN': {
       global_news_summary: 'State Bank of India reduces bad loans to 4.2% - lowest in decade. Digital initiatives yield 30% cost-to-income ratio improvement. Government stake sale discussions ongoing.',
@@ -66,16 +66,16 @@ const IntelligencePanel = ({ asset, assetName }) => {
       final_summary: 'Kotak Bank remains a quality pick for risk-averse investors. Monitor digital initiatives for growth catalysts.'
     },
     'BTC': {
-      global_news_summary: 'Bitcoin ETF approvals drive institutional adoption. Recent network upgrades improve scalability and reduce energy consumption by 40%. Major corporations adding BTC to treasury.',
-      user_comments_summary: 'Crypto community divided on short-term price action but bullish long-term. Discussions center around ETF inflows and regulatory clarity improvements.',
-      market_sentiment_summary: 'Strong bullish sentiment at 68%. Trading above 200-day moving average. Institutional holdings growing through ETF channels.',
-      final_summary: 'Bitcoin remains the flagship cryptocurrency with growing institutional acceptance. Consider dollar-cost averaging for long-term exposure.'
+      global_news_summary: "Bitcoin maintains dominance above $67,000 as institutional adoption accelerates. Major financial institutions including BlackRock and Fidelity continue to accumulate BTC holdings. ETF inflows show sustained institutional demand. Regulatory clarity improves with favorable legislative developments in key markets. Mining operations show increasing efficiency with renewable energy adoption. Lightning Network capacity grows significantly, enhancing scalability solutions.",
+      user_comments_summary: "Community shows strong engagement with 1,250+ comments discussing Bitcoin's price action and institutional adoption. Technical analysis discussions focus on key resistance levels at $70,000 and support at $65,000. Long-term holders express confidence in BTC's store of value proposition. Trading community debates potential impact of upcoming halving cycle. Retail sentiment remains bullish with increased wallet activity observed.",
+      market_sentiment_summary: "Market sentiment for Bitcoin shows 78.5% bullish vs 21.5% bearish based on 450+ community votes. Technical indicators suggest strong uptrend momentum with RSI at 68. Volume analysis confirms institutional accumulation patterns. Options market data shows increased call option activity. On-chain metrics reveal decreasing exchange reserves and growing long-term holder confidence.",
+      final_summary: "Bitcoin demonstrates strong fundamental and technical strength with institutional backing driving price appreciation. Risk factors include regulatory uncertainty and potential market corrections. Long-term outlook remains positive with ETF flows providing sustained demand. Key levels to watch: $70,000 resistance and $65,000 support. Consider dollar-cost averaging strategies for long-term exposure."
     },
     'ETH': {
-      global_news_summary: 'Ethereum successfully completes Dencun upgrade reducing layer-2 costs by 90%. DeFi TVL reaches new highs. Major enterprises building on Ethereum for tokenization.',
-      user_comments_summary: 'Developer community excited about scalability improvements. Investors concerned about competition from other L1s but confident in network effects.',
-      market_sentiment_summary: 'Bullish at 64%. Staking ratio reaches 28%. Gas fees trending lower post-upgrade.',
-      final_summary: 'Ethereum\'s upgrades strengthen its position as the leading smart contract platform. Monitor DeFi growth and staking yields.'
+      global_news_summary: "Ethereum leads Layer 1 innovation with successful Dencun upgrade reducing gas fees by 40%. DeFi ecosystem on Ethereum shows $45B+ TVL with major protocols launching new features. Enterprise adoption increases with Fortune 500 companies exploring Ethereum solutions. Layer 2 solutions achieve record transaction volumes. Staking participation reaches 25% of total supply. NFT market shows resilience with renewed institutional interest.",
+      user_comments_summary: "Ethereum community actively discusses scalability improvements and DeFi innovations. 980+ comments highlight excitement about Layer 2 growth and reduced transaction costs. Developers praise Dencun upgrade impact on user experience. Validators report increased staking rewards. DeFi users express satisfaction with improved capital efficiency. Technical community debates future roadmap including proto-danksharding.",
+      market_sentiment_summary: "Market sentiment for Ethereum shows 85.2% bullish vs 14.8% bearish based on 380+ votes. Technical analysis shows strong support at $3,500 with resistance at $4,000. Network fundamentals improve with increasing active addresses and transaction counts. DeFi metrics show growing user adoption and protocol revenue. Staking economics remain attractive with 4.2% annual yield.",
+      final_summary: "Ethereum demonstrates technological leadership with successful upgrades and growing ecosystem adoption. Layer 2 solutions enhance scalability while maintaining security. Institutional interest in DeFi and enterprise solutions drives long-term value. Risk factors include competition from other L1s and regulatory uncertainty. Consider exposure through ETH and quality DeFi protocols."
     },
     'SOL': {
       global_news_summary: 'Solana achieves record throughput with 65,000 TPS during peak usage. Major DeFi protocols migrate to Solana attracted by low fees and high speed. Breakpoint conference showcases ecosystem growth.',
