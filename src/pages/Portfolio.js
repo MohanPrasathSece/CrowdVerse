@@ -53,13 +53,15 @@ const positions = [
 
 const Portfolio = () => (
   <div className="bg-primary-black min-h-screen text-off-white">
-    <div className="max-w-6xl mx-auto px-6 py-16 space-y-12">
-      <div className="space-y-3">
-        <span className="uppercase tracking-[0.35em] text-xs text-light-gray/60">Portfolio Overview</span>
-        <h1 className="text-4xl font-semibold">Balanced Growth Allocation</h1>
-        <p className="text-sm text-light-gray/70 max-w-2xl">
-          <span className="text-yellow-400 font-medium">⚠️ Demo Mode:</span> A diversified blend across equities, digital assets, and alternative holdings designed for a moderate risk appetite and long-term compounding. This is sample data for demonstration purposes.
-        </p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+      <div className={`mb-8 transition-all duration-700 opacity-100`}>
+        <div className="w-full max-w-5xl space-y-8 py-6 sm:py-8">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-off-white tracking-tight">Your Portfolio</h1>
+          <p className="text-base sm:text-lg text-light-gray/70 max-w-2xl">
+            <span className="text-yellow-400 font-medium">⚠️ Demo Mode:</span> A diversified blend across equities, digital assets, and alternative holdings designed for a moderate risk appetite and long-term compounding. This is sample data for demonstration purposes.
+          </p>
+          <div className="h-px w-48 bg-dark-gray/50"></div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

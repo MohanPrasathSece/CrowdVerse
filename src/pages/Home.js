@@ -66,13 +66,11 @@ const Home = () => {
         {/* Header */}
         <div className={`mb-8 transition-all duration-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
           <div className="w-full max-w-5xl space-y-8 py-6 sm:py-8">
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-semibold text-off-white tracking-tight">
-              Welcome to CrowdVerse
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl text-light-gray/80 leading-relaxed max-w-3xl">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-off-white tracking-tight">Welcome to CrowdVerse</h1>
+            <p className="text-base sm:text-lg text-light-gray/80 leading-relaxed max-w-3xl">
               See what's trending in the market or switch to your preferred market
             </p>
-            <p className="text-base sm:text-lg md:text-xl text-light-gray/80 leading-relaxed max-w-3xl">
+            <p className="text-base sm:text-lg text-light-gray/80 leading-relaxed max-w-3xl">
               Real-time crowd sentiment on every stock & cryptocurrency - voted by traders, summarised by AI.
             </p>
             <div className="h-px w-48 bg-dark-gray/50"></div>
@@ -94,8 +92,8 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-medium text-off-white mb-2">Stock Markets</h3>
-                <p className="text-sm text-light-gray/60 mb-4">
+                <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-2">Stock Markets</h3>
+                <p className="text-sm sm:text-base text-light-gray/60 mb-4">
                   Trade global equities with real-time data
                 </p>
                 <div className="flex items-center text-off-white/80 text-sm">
@@ -120,8 +118,8 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-medium text-off-white mb-2">Digital Markets</h3>
-                <p className="text-sm text-light-gray/60 mb-4">
+                <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-2">Digital Markets</h3>
+                <p className="text-sm sm:text-base text-light-gray/60 mb-4">
                   Digital assets with advanced analytics
                 </p>
                 <div className="flex items-center text-off-white/80 text-sm">

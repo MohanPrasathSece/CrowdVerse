@@ -28,6 +28,13 @@ const Navbar = () => {
     if (user.firstName) {
       return user.firstName;
     }
+    // For guest users, extract from email or use a default
+    if (user.isGuest && user.emailOrMobile) {
+      const guestMatch = user.emailOrMobile.match(/guest_(\d+)@/);
+      if (guestMatch) {
+        return `Guest ${guestMatch[1].slice(-4)}`; // Show last 4 digits of timestamp
+      }
+    }
     // Fallback to email parsing for backward compatibility
     const value = user.emailOrMobile || '';
     if (value.includes('@')) {
@@ -113,7 +120,9 @@ const Navbar = () => {
                     {getFirstName(user).charAt(0).toUpperCase()}
                   </div>
                   <div className="hidden md:flex flex-col items-start leading-tight">
-                    <span className="text-[10px] uppercase tracking-[0.25em] text-light-gray/60">Signed in</span>
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-light-gray/60">
+                      {user.isGuest ? 'Guest' : 'Signed in'}
+                    </span>
                     <span className="text-sm text-off-white font-medium">{getFirstName(user)}</span>
                   </div>
                   <button

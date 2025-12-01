@@ -96,12 +96,10 @@ const Dashboard = () => {
     <div className="min-h-screen bg-primary-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className={`mb-16 transition-all duration-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
-          <div className="w-full max-w-4xl space-y-8 py-12 sm:py-16">
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-off-white tracking-tight">
-              Live Equity & Crypto Overview
-            </h1>
-            <p className="text-sm sm:text-base md:text-lg text-light-gray/80 leading-relaxed max-w-2xl">
+        <div className={`mb-8 transition-all duration-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
+          <div className="w-full max-w-5xl space-y-8 py-6 sm:py-8">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-off-white tracking-tight">Live Equity & Crypto Overview</h1>
+            <p className="text-base sm:text-lg text-light-gray/80 leading-relaxed max-w-2xl">
               Quick read on benchmark indices and digital assets to orient your trading session before diving into detailed screens.
             </p>
             <div className="h-px w-48 bg-dark-gray/50"></div>

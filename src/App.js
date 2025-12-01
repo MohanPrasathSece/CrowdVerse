@@ -7,6 +7,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import GuestLogin from './pages/GuestLogin';
 import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import Home from './pages/Home';
@@ -24,6 +25,7 @@ function TitleUpdater() {
       '/': 'CrowdVerse - Home',
       '/login': 'CrowdVerse - Sign In',
       '/signup': 'CrowdVerse - Sign Up',
+      '/guest': 'CrowdVerse - Guest Login',
       '/home': 'CrowdVerse - Home',
       '/stocks': 'CrowdVerse - Market',
       '/crypto': 'CrowdVerse - Market',
@@ -55,6 +57,7 @@ function App() {
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/guest" element={<GuestLogin />} />
               <Route path="/asset/:symbol" element={<Asset />} />
               <Route
                 path="/home"

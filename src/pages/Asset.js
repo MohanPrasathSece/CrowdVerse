@@ -36,14 +36,15 @@ const Asset = () => {
 
   return (
     <div className="min-h-screen bg-primary-black">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Header */}
-        <div className="border border-dark-gray/60 rounded-3xl bg-primary-black/60 backdrop-blur-sm p-6">
+        <div className={`mb-8 transition-all duration-700 opacity-100`}>
+        <div className="w-full max-w-5xl space-y-8 py-6 sm:py-8">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-[11px] uppercase tracking-[0.35em] text-light-gray/60">Asset</div>
-              <h1 className="text-2xl sm:text-3xl font-semibold text-off-white">{assetName}</h1>
-              <div className="text-sm text-light-gray/70">{assetSymbol}</div>
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-off-white tracking-tight">{assetName}</h1>
+              <div className="text-sm sm:text-base text-light-gray/70">{assetSymbol}</div>
             </div>
             <button
               onClick={() => navigate('/dashboard', { state: { activeView: marketType } })}
@@ -52,7 +53,9 @@ const Asset = () => {
               ← Back
             </button>
           </div>
+          <div className="h-px w-48 bg-dark-gray/50"></div>
         </div>
+      </div>
 
         {/* Polls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -166,6 +166,24 @@ const Signup = () => {
               Sign in
             </Link>
           </p>
+
+          <div className="mt-4 text-center">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-dark-gray"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-primary-black text-light-gray/60">Or</span>
+              </div>
+            </div>
+            
+            <Link
+              to="/guest"
+              className="mt-3 w-full flex justify-center py-3 px-4 border border-dark-gray rounded-lg shadow-sm text-sm font-medium text-off-white hover:bg-secondary-black/60 transition-all"
+            >
+              Continue as Guest
+            </Link>
+          </div>
         </div>
       </div>
     </div>

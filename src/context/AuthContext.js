@@ -11,11 +11,14 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     
-    if (token && userData) {
+    if (userData) {
       try {
         const parsedUser = JSON.parse(userData);
-        // Validate user data has required fields
-        if (parsedUser && parsedUser.emailOrMobile) {
+        // For guest users, we don't need token validation
+        if (parsedUser.isGuest) {
+          setUser(parsedUser);
+        } else if (token && parsedUser && parsedUser.emailOrMobile) {
+          // For registered users, validate token and user data
           setUser(parsedUser);
         } else {
           // Clear invalid user data
@@ -31,8 +34,14 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const loginUser = (userData, token) => {
-    localStorage.setItem('token', token);
+  const loginUser = (userData, token = null) => {
+    // Only store token for registered users, not guests
+    if (token && !userData.isGuest) {
+      localStorage.setItem('token', token);
+    } else if (userData.isGuest) {
+      // Clear any existing token for guest users
+      localStorage.removeItem('token');
+    }
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };

@@ -16,7 +16,16 @@ const CommentsPanel = ({ asset }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [page] = useState(1);
 
-  const getFirstName = (value = '') => {
+  const getFirstName = (user, value = '') => {
+    // For guest users, use their firstName directly
+    if (user?.isGuest && user?.firstName) {
+      return user.firstName;
+    }
+    // For registered users with firstName
+    if (user?.firstName) {
+      return user.firstName;
+    }
+    // Fallback to email parsing for backward compatibility
     if (!value) return 'Anonymous';
     if (value.includes('@')) {
       const [namePart] = value.split('@');
@@ -136,7 +145,12 @@ const CommentsPanel = ({ asset }) => {
         {(showAll ? items : items.slice(0, 3)).map((c) => (
           <div key={c._id} className="p-3 border border-dark-gray/50 rounded-xl bg-primary-black/50">
             <div className="text-xs text-light-gray/60 flex items-center justify-between">
-              <span>{getFirstName(c.user?.emailOrMobile)}</span>
+              <span className="flex items-center gap-2">
+                {getFirstName(c.user, c.user?.emailOrMobile)}
+                {c.user?.isGuest && (
+                  <span className="text-xs px-1.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full">Guest</span>
+                )}
+              </span>
               <span>{new Date(c.createdAt).toLocaleString()}</span>
             </div>
             <div className="text-base sm:text-lg text-off-white mt-2 whitespace-pre-wrap leading-relaxed">{c.text}</div>

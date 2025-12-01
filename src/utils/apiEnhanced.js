@@ -6,7 +6,35 @@ const API = axios.create({
 
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  const userData = localStorage.getItem('user');
+  
+  console.log('API Request - URL:', config.url);
+  console.log('API Request - Token:', token);
+  console.log('API Request - User data exists:', !!userData);
+  
+  if (token && token !== 'undefined' && token !== 'null') {
+    config.headers.Authorization = `Bearer ${token}`;
+    console.log('API Request - Added Bearer token');
+  } else if (userData) {
+    // For guest users, add user info to headers
+    try {
+      const user = JSON.parse(userData);
+      console.log('API Request - Parsed user data:', user);
+      if (user.isGuest) {
+        const guestHeader = JSON.stringify({
+          id: user.id,
+          firstName: user.firstName,
+          isGuest: true
+        });
+        config.headers['X-Guest-User'] = guestHeader;
+        console.log('API Request - Added guest header:', guestHeader);
+      }
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+    }
+  }
+  
+  console.log('API Request - Headers:', config.headers);
   return config;
 });
 

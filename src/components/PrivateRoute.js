@@ -13,6 +13,7 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
+  // Allow both registered users and guest users
   return user ? children : <Navigate to="/login" />;
 };
 
