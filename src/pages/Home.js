@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import newsService from '../services/newsService';
 
 const marketNarrative = [
   {
@@ -37,12 +38,32 @@ const lookoutSignals = [
   'Liquidity conditions stable; overnight funding spreads holding near one-month lows.',
 ];
 
-
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [trendingNews, setTrendingNews] = useState([]);
+  const [newsLoading, setNewsLoading] = useState(true);
 
   useEffect(() => {
-    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    // Fetch news on component mount
+    const fetchNews = async () => {
+      try {
+        setNewsLoading(true);
+        const news = await newsService.fetchNews();
+        setTrendingNews(news);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      } finally {
+        setNewsLoading(false);
+      }
+    };
+
+    fetchNews();
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -118,7 +139,7 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-2">Digital Markets</h3>
+                <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-2">Crypto Markets</h3>
                 <p className="text-sm sm:text-base text-light-gray/60 mb-4">
                   Digital assets with advanced analytics
                 </p>
@@ -131,6 +152,71 @@ const Home = () => {
               </div>
             </div>
           </Link>
+        </div>
+
+        {/* Trending News Section */}
+        <div className={`mb-12 transition-all duration-700 delay-400 ${isVisible ? 'animate-slideInUp' : 'opacity-0'}`}>
+          <div className="text-center mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-2">Trending Market News</h2>
+            <p className="text-sm sm:text-base text-light-gray/70">Stay updated with the latest market movements and insights</p>
+          </div>
+          
+          {newsLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((index) => (
+                <div key={index} className="border border-dark-gray/50 rounded-xl p-6 bg-primary-black/40 animate-pulse">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-16 h-6 bg-dark-gray/60 rounded-full"></div>
+                    <div className="w-20 h-4 bg-dark-gray/60 rounded"></div>
+                  </div>
+                  <div className="h-6 bg-dark-gray/60 rounded mb-2"></div>
+                  <div className="h-12 bg-dark-gray/60 rounded mb-3"></div>
+                  <div className="flex items-center justify-between">
+                    <div className="w-16 h-4 bg-dark-gray/60 rounded"></div>
+                    <div className="w-12 h-4 bg-dark-gray/60 rounded"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {trendingNews.map((news, index) => (
+                <div key={index} className="border border-dark-gray/50 rounded-xl p-6 bg-primary-black/40 hover:border-off-white/30 transition-all duration-300 group cursor-pointer">
+                  <div className="flex items-start justify-between mb-3">
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      news.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
+                      news.category === 'Markets' ? 'bg-purple-500/20 text-purple-400' :
+                      news.category === 'Equities' ? 'bg-green-500/20 text-green-400' :
+                      'bg-orange-500/20 text-orange-400'
+                    }`}>
+                      {news.category}
+                    </span>
+                    <span className="text-xs text-light-gray/50">{news.time}</span>
+                  </div>
+                  
+                  <h3 className="text-base sm:text-lg font-semibold text-off-white mb-2 group-hover:text-white transition-colors line-clamp-2">
+                    {news.title}
+                  </h3>
+                  
+                  <p className="text-sm text-light-gray/70 mb-3 line-clamp-3">
+                    {news.summary}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-light-gray/60">{news.source}</span>
+                    <div className={`flex items-center gap-1 text-xs ${
+                      news.sentiment === 'bullish' ? 'text-green-400' :
+                      news.sentiment === 'bearish' ? 'text-red-400' :
+                      'text-yellow-400'
+                    }`}>
+                      <span className="w-2 h-2 rounded-full bg-current"></span>
+                      {news.sentiment}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Narrative Flow */}
