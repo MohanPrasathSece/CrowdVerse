@@ -5,7 +5,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-primary-black">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28 md:pt-48 lg:pt-40 xl:pt-36 2xl:pt-32">
+      <section className="relative overflow-hidden pt-20 pb-20 sm:pt-32 sm:pb-28 md:pt-36 lg:pt-28 xl:pt-24 2xl:pt-20">
         <div className="absolute inset-0 hero-gradient pointer-events-none" aria-hidden="true"></div>
         <div className="hero-orb absolute -top-32 -left-24 w-80 h-80 sm:w-[420px] sm:h-[420px]" aria-hidden="true"></div>
         <div className="hero-orb-secondary absolute bottom-[-20%] right-[-10%] w-[360px] h-[360px] sm:w-[480px] sm:h-[480px]" aria-hidden="true"></div>

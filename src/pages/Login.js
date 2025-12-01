@@ -39,7 +39,8 @@ const Login = () => {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-off-white mb-2">Welcome Back</h2>
-          <p className="text-sm sm:text-base text-light-gray">Sign in to your account</p>
+          <p className="text-sm sm:text-base text-light-gray mb-4">Sign in to your account</p>
+          <p className="text-xs sm:text-sm text-light-gray/60">Unlock Retail Psychology for Stocks & Crypto.</p>
         </div>
 
         <div className="bg-secondary-black px-5 py-6 sm:p-8 rounded-lg border border-dark-gray shadow-xl">
