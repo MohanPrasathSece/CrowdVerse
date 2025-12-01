@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { getMarketAnalysis } from '../utils/api';
 
 const IntelligencePanel = ({ asset, assetName }) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [realTimeData, setRealTimeData] = useState(null);
 
-  // Stock-specific intelligence data - moved outside to be accessible
-  const stockIntelligence = {
+  // Memoize stock intelligence data to prevent re-renders
+  const stockIntelligence = useMemo(() => ({
     'TCS': {
       global_news_summary: '📈 TCS shares surge 3.2% after securing $1.2B AI transformation deal with European banking giant. Company announces strategic partnership with Microsoft for generative AI solutions. Q3 FY24 beats expectations with 8% YoY revenue growth to ₹59,000 crore. Management raises full-year guidance citing strong demand in cloud and AI services. TCS expands digital capabilities with new innovation centers in Bangalore and Pune.',
       user_comments_summary: 'Investors show strong confidence with 850+ comments discussing the AI deal\'s impact. Technical analysts point to breakout above ₹4,200 resistance. Retail investors excited about dividend announcement of ₹18 per share. Community debates whether current valuation justifies premium multiples versus peers.',
@@ -128,10 +127,10 @@ const IntelligencePanel = ({ asset, assetName }) => {
       market_sentiment_summary: 'Bullish at 68%. Daily active addresses growing 25% QoQ. Gas fees remain low attracting users.',
       final_summary: 'Polygon\'s multi-scaling approach and ZK technology position well for Ethereum ecosystem growth. Consider exposure to L2 scaling trends.'
     }
-  };
+  }), []);
 
   // Name to symbol mapping for full names
-  const nameToSymbol = {
+  const nameToSymbol = useMemo(() => ({
     // Crypto full names
     'BITCOIN': 'BTC',
     'ETHEREUM': 'ETH',
@@ -154,7 +153,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
     'ITC LIMITED': 'ITC',
     'AXIS BANK': 'AXISBANK',
     'KOTAK MAHINDRA BANK': 'KOTAKBANK'
-  };
+  }), []);
 
   const clean = (txt) => {
     if (!txt) return '';
@@ -197,7 +196,6 @@ const IntelligencePanel = ({ asset, assetName }) => {
       const isCrypto = ['BTC', 'ETH', 'SOL', 'DOGE', 'ADA', 'XRP', 'DOT', 'AVAX', 'LINK', 'MATIC'].includes(symbolKey);
       
       if (isIndianStock || isCrypto) {
-        setLoading(true);
         try {
           const finnhubSymbol = isIndianStock ? `${symbolKey}.NS` : symbolKey;
           console.log(`[IntelligencePanel] Fetching real-time data for ${finnhubSymbol}`);
@@ -208,8 +206,6 @@ const IntelligencePanel = ({ asset, assetName }) => {
           }
         } catch (error) {
           console.error(`[IntelligencePanel] Failed to fetch real-time data for ${symbolKey}:`, error);
-        } finally {
-          setLoading(false);
         }
       }
     };
