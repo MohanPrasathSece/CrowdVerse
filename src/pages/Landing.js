@@ -35,9 +35,11 @@ const Landing = () => {
               >
                 Sign In
               </Link>
+            </div>
+            <div className="mt-4 text-center">
               <Link
                 to="/guest"
-                className="w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 sm:py-4 border border-light-gray/30 text-light-gray/80 rounded-lg hover:border-light-gray/50 hover:text-off-white transition-all text-sm sm:text-base"
+                className="text-sm text-light-gray/60 hover:text-off-white transition-colors"
               >
                 Continue as Guest
               </Link>
