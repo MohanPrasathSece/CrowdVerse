@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -16,11 +16,40 @@ import Crypto from './pages/Crypto';
 import PrivateRoute from './components/PrivateRoute';
 import Asset from './pages/Asset';
 
+// Component to handle dynamic title updates
+function TitleUpdater() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const titles = {
+      '/': 'CrowdVerse - Home',
+      '/login': 'CrowdVerse - Sign In',
+      '/signup': 'CrowdVerse - Sign Up',
+      '/home': 'CrowdVerse - Dashboard',
+      '/stocks': 'CrowdVerse - Stocks',
+      '/crypto': 'CrowdVerse - Crypto',
+      '/dashboard': 'CrowdVerse - Analytics',
+      '/portfolio': 'CrowdVerse - Portfolio'
+    };
+
+    // Handle dynamic asset pages
+    if (location.pathname.startsWith('/asset/')) {
+      const symbol = location.pathname.split('/asset/')[1];
+      document.title = `CrowdVerse - ${symbol.toUpperCase()}`;
+    } else {
+      document.title = titles[location.pathname] || 'CrowdVerse - Track Stocks & Crypto with Real-time Intelligence';
+    }
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
       <Router>
         <ScrollToTop />
+        <TitleUpdater />
         <div className="flex flex-col min-h-screen bg-primary-black">
           <Navbar />
           <main className="flex-1">
