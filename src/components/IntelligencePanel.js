@@ -191,14 +191,17 @@ const IntelligencePanel = ({ asset, assetName }) => {
       const a = String(assetName || asset || 'the asset').toUpperCase();
       let symbolKey = nameToSymbol[a] || a;
       
-      // Only fetch for Indian stocks (add .NS suffix for Finnhub)
+      // Check for Indian stocks (add .NS suffix for Finnhub)
       const isIndianStock = ['TCS', 'RELIANCE', 'INFY', 'HDFCBANK', 'SBIN', 'ICICIBANK', 'LT', 'ITC', 'AXISBANK', 'KOTAKBANK'].includes(symbolKey);
+      // Check for cryptocurrencies (use direct symbol for Finnhub)
+      const isCrypto = ['BTC', 'ETH', 'SOL', 'DOGE', 'ADA', 'XRP', 'DOT', 'AVAX', 'LINK', 'MATIC'].includes(symbolKey);
       
-      if (isIndianStock) {
+      if (isIndianStock || isCrypto) {
         setLoading(true);
         try {
-          console.log(`[IntelligencePanel] Fetching real-time data for ${symbolKey}.NS`);
-          const response = await getMarketAnalysis(`${symbolKey}.NS`);
+          const finnhubSymbol = isIndianStock ? `${symbolKey}.NS` : symbolKey;
+          console.log(`[IntelligencePanel] Fetching real-time data for ${finnhubSymbol}`);
+          const response = await getMarketAnalysis(finnhubSymbol);
           if (response.data && response.data.analysis) {
             setRealTimeData(response.data);
             console.log(`[IntelligencePanel] Real-time data received for ${symbolKey}`);
@@ -300,12 +303,15 @@ const IntelligencePanel = ({ asset, assetName }) => {
     if (data.currentPrice && data.change !== null) {
       const changeValue = parseFloat(data.change);
       const isPositive = changeValue >= 0;
+      const isCrypto = ['BTC', 'ETH', 'SOL', 'DOGE', 'ADA', 'XRP', 'DOT', 'AVAX', 'LINK', 'MATIC'].includes(String(assetName || asset).toUpperCase());
+      const currency = isCrypto ? '$' : '₹';
+      
       return (
         <div className="mb-4 p-3 rounded-xl border border-dark-gray/40 bg-primary-black/20">
           <div className="flex items-center justify-between">
             <span className="text-light-gray text-sm">Current Price</span>
             <div className="text-right">
-              <span className="text-off-white font-semibold">₹{data.currentPrice}</span>
+              <span className="text-off-white font-semibold">{currency}{data.currentPrice}</span>
               <span className={`ml-2 text-sm font-medium ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
                 {isPositive ? '+' : ''}{changeValue.toFixed(2)}%
               </span>
