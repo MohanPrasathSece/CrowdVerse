@@ -20,6 +20,7 @@ export const login = (data) => API.post('/auth/login', data);
 
 // Market endpoints (backend proxies)
 export const getQuote = (symbol) => API.get(`/market/quote`, { params: { symbol } });
+export const getMarketAnalysis = (symbol) => API.get(`/market/analysis`, { params: { symbol } });
 export const getCryptoMarkets = () => API.get(`/market/crypto`);
 export const getStockMarkets = () => API.get(`/market/stocks`);
 

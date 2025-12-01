@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getMarketAnalysis } from '../utils/api';
 
 const IntelligencePanel = ({ asset, assetName }) => {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [realTimeData, setRealTimeData] = useState(null);
 
   // Stock-specific intelligence data - moved outside to be accessible
   const stockIntelligence = {
@@ -182,8 +185,37 @@ const IntelligencePanel = ({ asset, assetName }) => {
     return s.trim();
   };
 
+  // Fetch real-time market data
+  useEffect(() => {
+    const fetchRealTimeData = async () => {
+      const a = String(assetName || asset || 'the asset').toUpperCase();
+      let symbolKey = nameToSymbol[a] || a;
+      
+      // Only fetch for Indian stocks (add .NS suffix for Finnhub)
+      const isIndianStock = ['TCS', 'RELIANCE', 'INFY', 'HDFCBANK', 'SBIN', 'ICICIBANK', 'LT', 'ITC', 'AXISBANK', 'KOTAKBANK'].includes(symbolKey);
+      
+      if (isIndianStock) {
+        setLoading(true);
+        try {
+          console.log(`[IntelligencePanel] Fetching real-time data for ${symbolKey}.NS`);
+          const response = await getMarketAnalysis(`${symbolKey}.NS`);
+          if (response.data && response.data.analysis) {
+            setRealTimeData(response.data);
+            console.log(`[IntelligencePanel] Real-time data received for ${symbolKey}`);
+          }
+        } catch (error) {
+          console.error(`[IntelligencePanel] Failed to fetch real-time data for ${symbolKey}:`, error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchRealTimeData();
+  }, [asset, assetName, nameToSymbol]);
+
   // Initialize data immediately from frontend stockIntelligence object
-  React.useEffect(() => {
+  useEffect(() => {
     const a = String(assetName || asset || 'the asset').toUpperCase();
     console.log(`[IntelligencePanel] Processing asset: "${a}" from assetName="${assetName}" asset="${asset}"`);
 
@@ -198,14 +230,22 @@ const IntelligencePanel = ({ asset, assetName }) => {
 
     if (specificData) {
       console.log(`[IntelligencePanel] ${assetName || asset} -> ${symbolKey} - Using frontend static data`);
+      
+      // Merge with real-time data if available
+      const globalNewsSummary = realTimeData?.analysis?.news_summary || specificData.global_news_summary;
+      const marketSentimentSummary = realTimeData?.analysis?.market_sentiment || specificData.market_sentiment_summary;
+      const finalSummary = realTimeData?.analysis?.summary || specificData.final_summary;
+      
       setData({
-        global_news_summary: specificData.global_news_summary,
+        global_news_summary: globalNewsSummary,
         user_comments_summary: specificData.user_comments_summary,
-        market_sentiment_summary: specificData.market_sentiment_summary,
-        final_summary: specificData.final_summary,
-        analysis_provider: 'frontend-static-data',
+        market_sentiment_summary: marketSentimentSummary,
+        final_summary: finalSummary,
+        analysis_provider: realTimeData ? 'realtime-finnhub' : 'frontend-static-data',
         generated_at: new Date().toISOString(),
-        data_points: { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 }
+        data_points: { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 },
+        currentPrice: realTimeData?.currentPrice,
+        change: realTimeData?.change
       });
     } else {
       console.log(`[IntelligencePanel] ${assetName || asset} - No static data found, using general stock information`);
@@ -246,18 +286,49 @@ const IntelligencePanel = ({ asset, assetName }) => {
         final_summary: generalInfo.final_summary,
         analysis_provider: 'frontend-general-info',
         generated_at: new Date().toISOString(),
-        data_points: { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 }
+        data_points: { comments_count: 0, sentiment_votes: 0, trade_votes: 0, bullish_percent: 50, buy_percent: 33.3 },
+        currentPrice: realTimeData?.currentPrice,
+        change: realTimeData?.change
       });
     }
-  }, [asset, assetName, nameToSymbol, stockIntelligence]);
+  }, [asset, assetName, nameToSymbol, stockIntelligence, realTimeData]);
 
   if (!data) return <div className="text-light-gray animate-pulse">Loading intelligence...</div>;
+
+  // Display real-time price info if available
+  const PriceInfo = () => {
+    if (data.currentPrice && data.change !== null) {
+      const changeValue = parseFloat(data.change);
+      const isPositive = changeValue >= 0;
+      return (
+        <div className="mb-4 p-3 rounded-xl border border-dark-gray/40 bg-primary-black/20">
+          <div className="flex items-center justify-between">
+            <span className="text-light-gray text-sm">Current Price</span>
+            <div className="text-right">
+              <span className="text-off-white font-semibold">₹{data.currentPrice}</span>
+              <span className={`ml-2 text-sm font-medium ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                {isPositive ? '+' : ''}{changeValue.toFixed(2)}%
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-off-white font-semibold text-lg">Quick Intelligence Panel</h3>
+        {data.analysis_provider && (
+          <span className="text-xs text-light-gray/60 px-2 py-1 rounded-full bg-primary-black/40 border border-dark-gray/40">
+            {data.analysis_provider === 'realtime-finnhub' ? '📡 Live Data' : '📊 Static Data'}
+          </span>
+        )}
       </div>
+
+      <PriceInfo />
 
       {/* Two-column spacious cards, all visible */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
