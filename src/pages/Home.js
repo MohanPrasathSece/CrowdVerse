@@ -73,7 +73,7 @@ const Home = () => {
               See what's trending in the market or switch to your preferred market
             </p>
             <p className="text-base sm:text-lg md:text-xl text-light-gray/80 leading-relaxed max-w-3xl">
-              Your gateway to intelligent market analytics. Track markets with real-time insights, institutional flows, and the narratives that drive markets.
+              Real-time crowd sentiment on every stock & cryptocurrency - voted by traders, summarised by AI.
             </p>
             <div className="h-px w-48 bg-dark-gray/50"></div>
           </div>
