@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL || '/api',
+  timeout: 10000, // 10 second timeout
 });
 
 // Add auth token to requests
