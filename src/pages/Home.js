@@ -37,30 +37,6 @@ const lookoutSignals = [
   'Liquidity conditions stable; overnight funding spreads holding near one-month lows.',
 ];
 
-const marketThumbnails = [
-  {
-    title: 'Global Equities Pulse',
-    subtitle: 'NIFTY • SENSEX • Dow Futures',
-    background:
-      'linear-gradient(135deg, rgba(104,126,255,0.55), rgba(30,30,30,0.6)), url(https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=800&q=80)',
-    to: '/dashboard',
-  },
-  {
-    title: 'Digital Assets Heatmap',
-    subtitle: 'BTC • ETH • Alt baskets',
-    background:
-      'linear-gradient(135deg, rgba(255,178,68,0.55), rgba(30,30,30,0.6)), url(https://images.unsplash.com/photo-1640172478435-451ac951cb9b?auto=format&fit=crop&w=800&q=80)',
-    to: '/dashboard',
-    state: { activeView: 'crypto' },
-  },
-  {
-    title: 'Macro Signals Monitor',
-    subtitle: 'Yields • FX • Commodities',
-    background:
-      'linear-gradient(135deg, rgba(120,180,120,0.55), rgba(30,30,30,0.6)), url(https://images.unsplash.com/photo-1454165205744-3b78555e5572?auto=format&fit=crop&w=800&q=80)',
-    to: '/dashboard',
-  },
-];
 
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -71,44 +47,40 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-primary-black">
+      {/* Beta Banner */}
+      <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-b border-blue-500/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center justify-center space-x-2">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-medium text-blue-300">
+              🚀 We're in Beta Mode! Join us early and help shape the future of market analytics.
+            </span>
+          </div>
+        </div>
+      </div>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className={`mb-16 transition-all duration-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
-          <div className="w-full max-w-5xl space-y-8 py-12 sm:py-16">
-            <div className="uppercase tracking-[0.35em] text-[10px] sm:text-xs text-light-gray/60">
-              Today’s Market Story
-            </div>
+        <div className={`mb-8 transition-all duration-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
+          <div className="w-full max-w-5xl space-y-8 py-6 sm:py-8">
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-semibold text-off-white tracking-tight">
-              From Opening Bell to Close
+              Welcome to CrowdVerse
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-light-gray/80 leading-relaxed max-w-3xl">
-              We trace the session’s tone across equities and crypto, stitching together liquidity signals, institutional flows,
-              and the narratives that mattered most.
+              See what's trending in the market or switch to your preferred market
+            </p>
+            <p className="text-base sm:text-lg md:text-xl text-light-gray/80 leading-relaxed max-w-3xl">
+              Your gateway to intelligent market analytics. Track markets with real-time insights, institutional flows, and the narratives that drive markets.
             </p>
             <div className="h-px w-48 bg-dark-gray/50"></div>
           </div>
         </div>
 
-        {/* Market Thumbnails */}
-        <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-12 transition-all duration-700 ${isVisible ? 'animate-slideInLeft' : 'opacity-0'}`}>
-          {marketThumbnails.map((item) => (
-            <Link
-              key={item.title}
-              to={item.to}
-              state={item.state}
-              className="relative overflow-hidden rounded-2xl border border-dark-gray/60 h-40 sm:h-44 flex items-end p-5 bg-center bg-cover hover-enlarge transition-transform"
-              style={{ backgroundImage: item.background }}
-            >
-              <div className="backdrop-blur-sm bg-primary-black/45 px-4 py-3 rounded-xl space-y-1">
-                <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.4em] text-light-gray/70">View Market</div>
-                <div className="text-off-white font-semibold text-base sm:text-lg">{item.title}</div>
-                <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-light-gray/60">{item.subtitle}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* CTA Section - Stocks & Crypto */}
+        
+        {/* CTA Section - Markets */}
         <div className={`grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12 transition-all duration-700 delay-200 ${isVisible ? 'animate-slideInUp' : 'opacity-0'}`}>
           <Link
             to="/dashboard"
@@ -127,7 +99,7 @@ const Home = () => {
                   Trade global equities with real-time data
                 </p>
                 <div className="flex items-center text-off-white/80 text-sm">
-                  <span>Explore Stocks</span>
+                  <span>Explore Markets</span>
                   <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
@@ -148,12 +120,12 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-medium text-off-white mb-2">Cryptocurrency</h3>
+                <h3 className="text-xl font-medium text-off-white mb-2">Digital Markets</h3>
                 <p className="text-sm text-light-gray/60 mb-4">
                   Digital assets with advanced analytics
                 </p>
                 <div className="flex items-center text-off-white/80 text-sm">
-                  <span>Explore Crypto</span>
+                  <span>Explore Markets</span>
                   <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

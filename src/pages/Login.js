@@ -25,7 +25,12 @@ const Login = () => {
 
     try {
       const { data } = await login(formData);
-      loginUser({ emailOrMobile: data.emailOrMobile, _id: data._id }, data.token);
+      loginUser({ 
+        firstName: data.firstName, 
+        lastName: data.lastName, 
+        emailOrMobile: data.emailOrMobile, 
+        _id: data._id 
+      }, data.token);
       navigate('/home');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');

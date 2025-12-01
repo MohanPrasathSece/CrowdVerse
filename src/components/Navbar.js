@@ -22,8 +22,14 @@ const Navbar = () => {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  const getFirstName = (value = '') => {
-    if (!value) return '';
+  const getFirstName = (user) => {
+    if (!user) return '';
+    // If firstName is available, use it
+    if (user.firstName) {
+      return user.firstName;
+    }
+    // Fallback to email parsing for backward compatibility
+    const value = user.emailOrMobile || '';
     if (value.includes('@')) {
       const [namePart] = value.split('@');
       return namePart.split(/[^a-zA-Z]+/).filter(Boolean)[0] || namePart;
@@ -34,6 +40,13 @@ const Navbar = () => {
   const handleLogout = () => {
     logoutUser();
     navigate('/');
+  };
+
+  const handleNavClick = (to) => {
+    // If clicking on the same page, scroll to top
+    if (location.pathname === to || (to === '/dashboard' && location.pathname.startsWith('/dashboard'))) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const navLinks = user
@@ -68,6 +81,7 @@ const Navbar = () => {
                   <Link 
                     key={link.label} 
                     to={link.to} 
+                    onClick={() => handleNavClick(link.to)}
                     className={`transition-all ${
                       isActive 
                         ? 'text-off-white font-semibold' 
@@ -96,11 +110,11 @@ const Navbar = () => {
 
                 <div className="hidden md:flex items-center space-x-3 bg-secondary-black/40 border border-dark-gray/50 rounded-full px-3 py-1.5 shadow-sm">
                   <div className="w-9 h-9 bg-off-white text-primary-black font-semibold rounded-full flex items-center justify-center">
-                    {user.emailOrMobile.charAt(0).toUpperCase()}
+                    {getFirstName(user).charAt(0).toUpperCase()}
                   </div>
                   <div className="hidden md:flex flex-col items-start leading-tight">
                     <span className="text-[10px] uppercase tracking-[0.25em] text-light-gray/60">Signed in</span>
-                    <span className="text-sm text-off-white font-medium">{getFirstName(user.emailOrMobile)}</span>
+                    <span className="text-sm text-off-white font-medium">{getFirstName(user)}</span>
                   </div>
                   <button
                     onClick={handleLogout}
@@ -164,6 +178,7 @@ const Navbar = () => {
                   <Link
                     key={link.label}
                     to={link.to}
+                    onClick={() => handleNavClick(link.to)}
                     className={`flex items-center justify-between px-3 py-4 text-base font-semibold border-b border-dark-gray/50 last:border-b-0 transition-all ${
                       isActive 
                         ? 'text-off-white bg-off-white/10 border-l-2 border-l-off-white' 

@@ -98,9 +98,6 @@ const Dashboard = () => {
         {/* Header */}
         <div className={`mb-16 transition-all duration-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
           <div className="w-full max-w-4xl space-y-8 py-12 sm:py-16">
-            <div className="uppercase tracking-[0.35em] text-[10px] sm:text-xs text-light-gray/60">
-              Market Overview
-            </div>
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-off-white tracking-tight">
               Live Equity & Crypto Overview
             </h1>

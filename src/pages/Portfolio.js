@@ -58,7 +58,7 @@ const Portfolio = () => (
         <span className="uppercase tracking-[0.35em] text-xs text-light-gray/60">Portfolio Overview</span>
         <h1 className="text-4xl font-semibold">Balanced Growth Allocation</h1>
         <p className="text-sm text-light-gray/70 max-w-2xl">
-          A diversified blend across equities, digital assets, and alternative holdings designed for a moderate risk appetite and long-term compounding.
+          <span className="text-yellow-400 font-medium">⚠️ Demo Mode:</span> A diversified blend across equities, digital assets, and alternative holdings designed for a moderate risk appetite and long-term compounding. This is sample data for demonstration purposes.
         </p>
       </div>
 

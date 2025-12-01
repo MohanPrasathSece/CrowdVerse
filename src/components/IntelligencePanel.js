@@ -323,11 +323,6 @@ const IntelligencePanel = ({ asset, assetName }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-off-white font-semibold text-lg">Quick Intelligence Panel</h3>
-        {data.analysis_provider && (
-          <span className="text-xs text-light-gray/60 px-2 py-1 rounded-full bg-primary-black/40 border border-dark-gray/40">
-            {data.analysis_provider === 'realtime-finnhub' ? '📡 Live Data' : '📊 Static Data'}
-          </span>
-        )}
       </div>
 
       <PriceInfo />

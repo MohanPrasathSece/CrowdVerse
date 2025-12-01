@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import FooterQuote from './components/FooterQuote';
 import ScrollToTop from './components/ScrollToTop';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
@@ -25,19 +24,18 @@ function TitleUpdater() {
       '/': 'CrowdVerse - Home',
       '/login': 'CrowdVerse - Sign In',
       '/signup': 'CrowdVerse - Sign Up',
-      '/home': 'CrowdVerse - Dashboard',
-      '/stocks': 'CrowdVerse - Stocks',
-      '/crypto': 'CrowdVerse - Crypto',
-      '/dashboard': 'CrowdVerse - Analytics',
+      '/home': 'CrowdVerse - Home',
+      '/stocks': 'CrowdVerse - Market',
+      '/crypto': 'CrowdVerse - Market',
+      '/dashboard': 'CrowdVerse - Market',
       '/portfolio': 'CrowdVerse - Portfolio'
     };
 
-    // Handle dynamic asset pages
+    // Handle dynamic asset pages - always show Market for asset pages
     if (location.pathname.startsWith('/asset/')) {
-      const symbol = location.pathname.split('/asset/')[1];
-      document.title = `CrowdVerse - ${symbol.toUpperCase()}`;
+      document.title = 'CrowdVerse - Market';
     } else {
-      document.title = titles[location.pathname] || 'CrowdVerse - Track Stocks & Crypto with Real-time Intelligence';
+      document.title = titles[location.pathname] || 'CrowdVerse - Track Markets with Real-time Intelligence';
     }
   }, [location]);
 
@@ -100,7 +98,6 @@ function App() {
               />
             </Routes>
           </main>
-          <FooterQuote />
           <Footer />
         </div>
       </Router>

@@ -5,6 +5,8 @@ import { signup } from '../utils/api';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
     emailOrMobile: '',
     password: '',
     confirmPassword: '',
@@ -37,7 +39,12 @@ const Signup = () => {
 
     try {
       const { data } = await signup(formData);
-      loginUser({ emailOrMobile: data.emailOrMobile, _id: data._id }, data.token);
+      loginUser({ 
+        firstName: data.firstName, 
+        lastName: data.lastName, 
+        emailOrMobile: data.emailOrMobile, 
+        _id: data._id 
+      }, data.token);
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || 'Signup failed. Please try again.');
@@ -61,6 +68,40 @@ const Signup = () => {
                 {error}
               </div>
             )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="firstName" className="block text-xs sm:text-sm font-medium text-light-gray mb-2">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 bg-dark-gray border border-dark-gray rounded-lg text-off-white focus:outline-none focus:ring-2 focus:ring-off-white"
+                  placeholder="Enter your first name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="lastName" className="block text-xs sm:text-sm font-medium text-light-gray mb-2">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 bg-dark-gray border border-dark-gray rounded-lg text-off-white focus:outline-none focus:ring-2 focus:ring-off-white"
+                  placeholder="Enter your last name"
+                />
+              </div>
+            </div>
 
             <div>
               <label htmlFor="emailOrMobile" className="block text-xs sm:text-sm font-medium text-light-gray mb-2">
