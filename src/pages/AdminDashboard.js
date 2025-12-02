@@ -61,8 +61,9 @@ const AdminDashboard = () => {
         <div className="bg-secondary-black border border-dark-gray rounded-xl p-6">
           <div className="text-sm text-light-gray mb-1">Total Users</div>
           <div className="text-3xl font-bold text-off-white mb-2">{stats?.users ?? 0}</div>
-          <div className="text-xs text-light-gray/70">Today: {stats?.usersToday ?? 0}</div>
-          <div className="text-xs text-light-gray/70">Last 7 days: {stats?.usersLast7Days ?? 0}</div>
+          <div className="text-xs text-light-gray/70">Signups today: {stats?.usersToday ?? 0}</div>
+          <div className="text-xs text-light-gray/70">Logins today: {stats?.dailyLoginUsers ?? 0}</div>
+          <div className="text-xs text-light-gray/70">Signups last 7 days: {stats?.usersLast7Days ?? 0}</div>
         </div>
         <div className="bg-secondary-black border border-dark-gray rounded-xl p-6">
           <div className="text-sm text-light-gray mb-1">Comments</div>
