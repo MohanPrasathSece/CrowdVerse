@@ -20,8 +20,8 @@ const Landing = () => {
               <img
                 src="/logoname.png"
                 alt="CrowdVerse"
-                className="h-auto max-w-full object-contain"
-                style={{ maxHeight: '4em' }}
+                className="object-contain"
+                style={{ height: '80px', width: 'auto' }}
               />
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-light-gray/80 max-w-2xl mx-auto leading-relaxed">
