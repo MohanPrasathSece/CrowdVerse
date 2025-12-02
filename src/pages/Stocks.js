@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getStockMarkets } from '../utils/api';
+import { FEATURED_STOCKS } from '../constants/featuredAssets';
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
@@ -17,17 +18,44 @@ const Stocks = () => {
 
         const items = Array.isArray(data?.results) ? data.results : [];
 
-        const formatted = items.map((item, idx) => ({
-          rank: item.rank ?? idx + 1,
-          name: item.name ?? '—',
-          symbol: item.symbol ?? '—',
-          price: typeof item.price === 'number' ? item.price : null,
-          open: typeof item.open === 'number' ? item.open : null,
-          high: typeof item.high === 'number' ? item.high : null,
-          low: typeof item.low === 'number' ? item.low : null,
-          prevClose: typeof item.prevClose === 'number' ? item.prevClose : null,
-          change: typeof item.change === 'number' ? item.change : null,
-        }));
+        const toNumber = (value) => {
+          if (typeof value === 'number') return value;
+          if (typeof value === 'string') {
+            const parsed = parseFloat(value);
+            return Number.isFinite(parsed) ? parsed : null;
+          }
+          return null;
+        };
+
+        const bySymbol = items.reduce((acc, item) => {
+          const symbol = (item.symbol || '').toUpperCase();
+          if (!symbol) return acc;
+          acc[symbol] = item;
+          return acc;
+        }, {});
+
+        const formatted = FEATURED_STOCKS.map((featured) => {
+          const raw = bySymbol[featured.symbol.toUpperCase()] || {};
+
+          const price = toNumber(raw.price);
+          const open = toNumber(raw.open);
+          const high = toNumber(raw.high);
+          const low = toNumber(raw.low);
+          const prevClose = toNumber(raw.prevClose);
+          const change = toNumber(raw.change);
+
+          return {
+            rank: featured.rank,
+            name: featured.name,
+            symbol: featured.symbol,
+            price,
+            open,
+            high,
+            low,
+            prevClose,
+            change,
+          };
+        });
 
         setStocks(formatted);
       } catch (err) {

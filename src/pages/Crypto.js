@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCryptoMarkets } from '../utils/api';
+import { FEATURED_CRYPTOS } from '../constants/featuredAssets';
 
 const Crypto = () => {
   const [crypto, setCrypto] = useState([]);
@@ -18,26 +19,35 @@ const Crypto = () => {
 
         const items = Array.isArray(data?.results) ? data.results : [];
 
-        const formatted = items.map((item, idx) => {
-          const priceValue = typeof item.price === 'number' ? item.price : null;
-          const changeValue = typeof item.change === 'number' ? item.change : null;
+        const bySymbol = items.reduce((acc, item) => {
+          const symbol = (item.symbol || '').toUpperCase();
+          if (!symbol) return acc;
+          acc[symbol] = item;
+          return acc;
+        }, {});
 
-          const formatNumber = (value) =>
-            typeof value === 'number'
-              ? `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-              : '—';
+        const formatNumber = (value) =>
+          typeof value === 'number'
+            ? `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            : '—';
+
+        const formatted = FEATURED_CRYPTOS.map((featured, idx) => {
+          const raw = bySymbol[featured.symbol.toUpperCase()] || {};
+
+          const priceValue = typeof raw.price === 'number' ? raw.price : null;
+          const changeValue = typeof raw.change === 'number' ? raw.change : null;
 
           return {
-            id: item.symbol ?? idx,
-            rank: item.rank ?? idx + 1,
-            name: item.name ?? '—',
-            symbol: (item.symbol ?? '').toUpperCase(),
+            id: featured.symbol ?? idx,
+            rank: featured.rank,
+            name: featured.name,
+            symbol: featured.symbol,
             price: formatNumber(priceValue),
             change: changeValue,
-            open: formatNumber(item.open),
-            high: formatNumber(item.high),
-            low: formatNumber(item.low),
-            prevClose: formatNumber(item.prevClose),
+            open: formatNumber(raw.open),
+            high: formatNumber(raw.high),
+            low: formatNumber(raw.low),
+            prevClose: formatNumber(raw.prevClose),
           };
         });
 
