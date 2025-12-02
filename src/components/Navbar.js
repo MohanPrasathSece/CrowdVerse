@@ -80,7 +80,7 @@ const Navbar = () => {
               <img
                 src="/logo.png"
                 alt="CrowdVerse logo"
-                className="h-24 w-24 rounded-md object-contain"
+                className="h-16 w-16 rounded-md object-contain"
               />
             </span>
           </Link>
