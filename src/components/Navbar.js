@@ -76,7 +76,13 @@ const Navbar = () => {
             to={user ? '/home' : '/'}
             className="text-2xl font-bold text-off-white hover:text-white transition-all hover-scale flex items-center space-x-2"
           >
-            <span className="gradient-border">CrowdVerse</span>
+            <span className="flex items-center">
+              <img
+                src="/logo.png"
+                alt="CrowdVerse logo"
+                className="h-24 w-24 rounded-md object-contain"
+              />
+            </span>
           </Link>
 
           {!hideNavLinks && (

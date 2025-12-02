@@ -16,8 +16,13 @@ const Landing = () => {
             <div className="flex justify-center" aria-hidden="true">
               <span className="hero-accent-line"></span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-light tracking-tight leading-tight">
-              <span className="hero-title-gradient">CrowdVerse</span>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-light tracking-tight leading-tight flex justify-center">
+              <img
+                src="/logoname.png"
+                alt="CrowdVerse"
+                className="h-auto max-w-full object-contain"
+                style={{ maxHeight: '4em' }}
+              />
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-light-gray/80 max-w-2xl mx-auto leading-relaxed">
               Track the pulse of the market and make better decisions together.
