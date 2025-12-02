@@ -6,17 +6,9 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-light-gray text-sm mb-4 md:mb-0">
-            Created by{' '}
-            <a
-              href="https://www.zyradigitals.info"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-off-white hover:text-white underline underline-offset-4"
-            >
-              Zyra Digitals
-            </a>
+            © {new Date().getFullYear()} CrowdVerse. All rights reserved.
           </p>
-          
+
           <div className="flex space-x-6">
             <a
               href="https://x.com/crowdversex"

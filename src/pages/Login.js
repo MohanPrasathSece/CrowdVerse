@@ -29,9 +29,14 @@ const Login = () => {
         firstName: data.firstName, 
         lastName: data.lastName, 
         emailOrMobile: data.emailOrMobile, 
-        _id: data._id 
+        _id: data._id,
+        isAdmin: data.isAdmin 
       }, data.token);
-      navigate('/home');
+      if (data.isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/home');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {

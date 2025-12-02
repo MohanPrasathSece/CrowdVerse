@@ -15,6 +15,8 @@ import Stocks from './pages/Stocks';
 import Crypto from './pages/Crypto';
 import PrivateRoute from './components/PrivateRoute';
 import Asset from './pages/Asset';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminRoute from './components/AdminRoute';
 
 // Component to handle dynamic title updates
 function TitleUpdater() {
@@ -30,7 +32,8 @@ function TitleUpdater() {
       '/stocks': 'CrowdVerse - Market',
       '/crypto': 'CrowdVerse - Market',
       '/dashboard': 'CrowdVerse - Market',
-      '/portfolio': 'CrowdVerse - Portfolio'
+      '/portfolio': 'CrowdVerse - Portfolio',
+      '/admin': 'CrowdVerse - Admin'
     };
 
     // Handle dynamic asset pages - always show Market for asset pages
@@ -97,6 +100,14 @@ function App() {
                   <PrivateRoute>
                     <Portfolio />
                   </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
                 }
               />
             </Routes>
