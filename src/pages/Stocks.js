@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getStockMarkets } from '../utils/api';
 import { FEATURED_STOCKS } from '../constants/featuredAssets';
+import CommentsPanel from '../components/CommentsPanel';
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
@@ -215,6 +216,11 @@ const Stocks = () => {
           <div className="text-xl text-light-gray">No stocks found matching "{searchTerm}"</div>
         </div>
       )}
+
+      {/* Comments Section */}
+      <div className="mt-12">
+        <CommentsPanel asset="stocks-market" />
+      </div>
     </div>
   );
 };

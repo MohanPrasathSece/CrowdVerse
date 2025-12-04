@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCryptoMarkets } from '../utils/api';
 import { FEATURED_CRYPTOS } from '../constants/featuredAssets';
+import CommentsPanel from '../components/CommentsPanel';
 
 const Crypto = () => {
   const [crypto, setCrypto] = useState([]);
@@ -26,6 +27,12 @@ const Crypto = () => {
           return acc;
         }, {});
 
+        // Conversion helpers - convert USD values to INR before display
+        const USD_TO_INR = 83; // Approximate conversion; adjust if you want a different rate
+
+        const toINR = (value) =>
+          typeof value === 'number' ? value * USD_TO_INR : null;
+
         const formatNumber = (value) =>
           typeof value === 'number'
             ? `₹${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -34,7 +41,7 @@ const Crypto = () => {
         const formatted = FEATURED_CRYPTOS.map((featured, idx) => {
           const raw = bySymbol[featured.symbol.toUpperCase()] || {};
 
-          const priceValue = typeof raw.price === 'number' ? raw.price : null;
+          const priceValue = toINR(raw.price);
           const changeValue = typeof raw.change === 'number' ? raw.change : null;
 
           return {
@@ -44,10 +51,10 @@ const Crypto = () => {
             symbol: featured.symbol,
             price: formatNumber(priceValue),
             change: changeValue,
-            open: formatNumber(raw.open),
-            high: formatNumber(raw.high),
-            low: formatNumber(raw.low),
-            prevClose: formatNumber(raw.prevClose),
+            open: formatNumber(toINR(raw.open)),
+            high: formatNumber(toINR(raw.high)),
+            low: formatNumber(toINR(raw.low)),
+            prevClose: formatNumber(toINR(raw.prevClose)),
           };
         });
 
@@ -209,6 +216,11 @@ const Crypto = () => {
           <div className="text-xl text-light-gray">No cryptocurrencies found matching "{searchTerm}"</div>
         </div>
       )}
+
+      {/* Comments Section */}
+      <div className="mt-12">
+        <CommentsPanel asset="crypto-market" />
+      </div>
     </div>
   );
 };

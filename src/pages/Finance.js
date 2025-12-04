@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import newsService from '../services/newsService';
+import CommentsPanel from '../components/CommentsPanel';
 
 const marketNarrative = [
   {
@@ -217,6 +218,11 @@ const Finance = () => {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Finance Page Comments */}
+        <div className="mt-12">
+          <CommentsPanel asset="finance-overview" />
         </div>
 
         {/* Full News with Polls and Comments - REMOVED */}
