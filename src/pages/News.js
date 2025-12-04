@@ -1,0 +1,154 @@
+import React, { useEffect, useState, useContext } from 'react';
+import { getNews, votePoll } from '../utils/apiEnhanced';
+import CommentsPanel from '../components/CommentsPanel';
+import { AuthContext } from '../context/AuthContext';
+
+const News = () => {
+    const { user } = useContext(AuthContext);
+    const [newsItems, setNewsItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [activeNewsId, setActiveNewsId] = useState(null);
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const { data } = await getNews();
+                setNewsItems(data);
+            } catch (error) {
+                console.error('Failed to fetch news:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchNews();
+    }, []);
+
+    const handleVote = async (pollId, optionIndex) => {
+        if (!user) return alert('Please login to vote');
+        try {
+            const { data: updatedPoll } = await votePoll(pollId, optionIndex);
+            setNewsItems(prev => prev.map(item => {
+                if (item.poll && item.poll._id === pollId) {
+                    return { ...item, poll: updatedPoll };
+                }
+                return item;
+            }));
+        } catch (error) {
+            console.error('Vote failed:', error);
+            alert('Failed to submit vote');
+        }
+    };
+
+    const toggleComments = (id) => {
+        setActiveNewsId(activeNewsId === id ? null : id);
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-primary-black flex items-center justify-center">
+                <div className="text-off-white animate-pulse">Loading Market Intelligence...</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-primary-black py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+                <div className="mb-10">
+                    <h1 className="text-3xl sm:text-5xl font-semibold text-off-white mb-4">Market Intelligence</h1>
+                    <p className="text-light-gray/70 text-lg">Weekly curated insights on Crypto, Stocks, and Policy.</p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {newsItems.map((item) => (
+                        <div key={item._id} className="bg-secondary-black/30 border border-dark-gray/60 rounded-2xl overflow-hidden hover:border-off-white/20 transition-all">
+                            <div className="p-6 sm:p-8">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <span className={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${item.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
+                                        item.category === 'Stocks' ? 'bg-green-500/20 text-green-400' :
+                                            'bg-purple-500/20 text-purple-400'
+                                        }`}>
+                                        {item.category}
+                                    </span>
+                                    <span className="text-light-gray/50 text-sm">{new Date(item.createdAt).toLocaleDateString()}</span>
+                                </div>
+
+                                <h2 className="text-2xl sm:text-3xl font-semibold text-off-white mb-4">{item.title}</h2>
+                                <p className="text-light-gray/80 text-lg leading-relaxed mb-6">{item.summary}</p>
+
+                                {/* Poll Section */}
+                                {item.poll && (
+                                    <div className="mb-8 bg-primary-black/50 rounded-xl p-6 border border-dark-gray/50">
+                                        <h3 className="text-off-white font-medium mb-4 flex items-center gap-2">
+                                            <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                            </svg>
+                                            {item.poll.question}
+                                        </h3>
+                                        <div className="space-y-3">
+                                            {item.poll.options.map((option, idx) => {
+                                                const totalVotes = item.poll.options.reduce((acc, curr) => acc + curr.votes, 0);
+                                                const percentage = totalVotes === 0 ? 0 : Math.round((option.votes / totalVotes) * 100);
+
+                                                return (
+                                                    <button
+                                                        key={idx}
+                                                        onClick={() => handleVote(item.poll._id, idx)}
+                                                        className="w-full relative group"
+                                                        disabled={!user}
+                                                    >
+                                                        <div className="absolute inset-0 bg-dark-gray/30 rounded-lg overflow-hidden">
+                                                            <div
+                                                                className="h-full bg-blue-600/20 transition-all duration-500"
+                                                                style={{ width: `${percentage}%` }}
+                                                            />
+                                                        </div>
+                                                        <div className="relative flex items-center justify-between p-3 rounded-lg border border-dark-gray/50 group-hover:border-off-white/30 transition-all">
+                                                            <span className="text-off-white/90 font-medium">{option.text}</span>
+                                                            <span className="text-light-gray/60 text-sm">{percentage}% ({option.votes})</span>
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                        {!user && <p className="text-xs text-red-400 mt-2 text-center">Login to vote</p>}
+                                    </div>
+                                )}
+
+                                <div className="flex items-center justify-between pt-4 border-t border-dark-gray/50">
+                                    <button
+                                        onClick={() => toggleComments(item._id)}
+                                        className="flex items-center gap-2 text-light-gray/70 hover:text-off-white transition-colors"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                        </svg>
+                                        <span>{activeNewsId === item._id ? 'Hide Discussion' : 'Join Discussion'}</span>
+                                    </button>
+
+                                    <div className="flex items-center gap-2 text-sm text-light-gray/50">
+                                        <span>Sentiment:</span>
+                                        <span className={`uppercase font-medium ${item.sentiment === 'bullish' ? 'text-green-400' :
+                                            item.sentiment === 'bearish' ? 'text-red-400' :
+                                                'text-yellow-400'
+                                            }`}>
+                                            {item.sentiment}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {activeNewsId === item._id && (
+                                    <div className="mt-6 animate-fadeIn">
+                                        <CommentsPanel asset={item._id} isNews={true} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default News;

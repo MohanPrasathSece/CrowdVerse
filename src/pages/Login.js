@@ -25,17 +25,17 @@ const Login = () => {
 
     try {
       const { data } = await login(formData);
-      loginUser({ 
-        firstName: data.firstName, 
-        lastName: data.lastName, 
-        emailOrMobile: data.emailOrMobile, 
+      loginUser({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        emailOrMobile: data.emailOrMobile,
         _id: data._id,
-        isAdmin: data.isAdmin 
+        isAdmin: data.isAdmin
       }, data.token);
       if (data.isAdmin) {
         navigate('/admin');
       } else {
-        navigate('/home');
+        navigate('/finance');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
@@ -118,7 +118,7 @@ const Login = () => {
                 <span className="px-2 bg-primary-black text-light-gray/60">Or</span>
               </div>
             </div>
-            
+
             <Link
               to="/guest"
               className="mt-3 w-full flex justify-center py-3 px-4 border border-dark-gray rounded-lg shadow-sm text-sm font-medium text-off-white hover:bg-secondary-black/60 transition-all"

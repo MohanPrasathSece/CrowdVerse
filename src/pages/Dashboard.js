@@ -42,7 +42,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('stocks');
   const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
-  
+
   useEffect(() => {
     setIsVisible(true);
     // Check if we have state from navigation (from Home page CTA buttons)
@@ -56,8 +56,8 @@ const Dashboard = () => {
     if (location.state?.activeView && activeTab === location.state.activeView) {
       // Scroll to the appropriate section after content is rendered
       setTimeout(() => {
-        const elementId = activeTab === 'stocks' 
-          ? 'global-equities-snapshot' 
+        const elementId = activeTab === 'stocks'
+          ? 'global-equities-snapshot'
           : 'cryptocurrency-market';
         const element = document.getElementById(elementId);
         if (element) {
@@ -72,8 +72,8 @@ const Dashboard = () => {
 
   const quickStats = [
     { label: 'NIFTY 50', value: '19,674.25', change: '+1.21%', tone: 'positive' },
-    { label: 'BTC/USD', value: '$67,234', change: '+3.29%', tone: 'positive' },
-    { label: 'Crypto Market Cap', value: '$2.85T', change: '+4.2% 24h', tone: 'positive' },
+    { label: 'BTC/USD', value: '₹67,234', change: '+3.29%', tone: 'positive' },
+    { label: 'Crypto Market Cap', value: '₹2.85T', change: '+4.2% 24h', tone: 'positive' },
     { label: 'Market Status', value: 'Live', change: 'Synced', tone: 'neutral' },
   ];
 
@@ -125,55 +125,14 @@ const Dashboard = () => {
               <div className="text-xs sm:text-sm text-light-gray/70 mb-3 uppercase tracking-[0.2em]">{item.label}</div>
               <div className="text-xl sm:text-2xl font-semibold text-off-white">{item.value}</div>
               <div
-                className={`text-xs sm:text-sm mt-2 ${
-                  item.tone === 'positive'
-                    ? 'text-green-400'
-                    : item.tone === 'negative'
-                      ? 'text-red-400'
-                      : 'text-light-gray/60'
-                }`}
+                className={`text-xs sm:text-sm mt-2 ${item.tone === 'positive'
+                  ? 'text-green-400'
+                  : item.tone === 'negative'
+                    ? 'text-red-400'
+                    : 'text-light-gray/60'
+                  }`}
               >
                 {item.change}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Comparison Graphs */}
-        <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 transition-all duration-1000 delay-350 ${isVisible ? 'animate-slideInLeft' : 'opacity-0'}`}>
-          {comparisonCards.map((card) => (
-            <div key={card.title} className="border border-dark-gray/60 rounded-3xl bg-primary-black/60 backdrop-blur-sm p-5 sm:p-6 hover-enlarge transition-all">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-off-white">{card.title}</h3>
-                  <p className="text-xs sm:text-sm text-light-gray/70">{card.subtitle}</p>
-                </div>
-                <div className="flex flex-wrap items-center gap-3 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-light-gray/60">
-                  {card.series.map((line) => (
-                    <span key={line.name} className="flex items-center gap-2">
-                      <span
-                        className="inline-block w-3 h-3 rounded-full"
-                        style={{ backgroundColor: line.color }}
-                      ></span>
-                      {line.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="w-full">
-                <svg viewBox="0 0 120 60" preserveAspectRatio="none" className="w-full h-36">
-                  <rect x="0" y="0" width="120" height="60" rx="12" className="fill-secondary-black/40" />
-                  {card.series.map((line) => (
-                    <polyline
-                      key={line.name}
-                      fill="none"
-                      stroke={line.color}
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      points={buildPoints(line.values)}
-                    />
-                  ))}
-                </svg>
               </div>
             </div>
           ))}
@@ -204,21 +163,19 @@ const Dashboard = () => {
           <div className="flex flex-col sm:flex-row sm:space-x-1 bg-secondary-black p-1 rounded-xl mb-8 border border-dark-gray max-w-md hover-glow">
             <button
               onClick={() => setActiveTab('stocks')}
-              className={`flex-1 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all hover-scale ${
-                activeTab === 'stocks'
-                  ? 'bg-off-white text-primary-black shadow-lg'
-                  : 'text-light-gray hover:text-off-white hover:bg-dark-gray'
-              }`}
+              className={`flex-1 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all hover-scale ${activeTab === 'stocks'
+                ? 'bg-off-white text-primary-black shadow-lg'
+                : 'text-light-gray hover:text-off-white hover:bg-dark-gray'
+                }`}
             >
               Stocks
             </button>
             <button
               onClick={() => setActiveTab('crypto')}
-              className={`flex-1 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all hover-scale ${
-                activeTab === 'crypto'
-                  ? 'bg-off-white text-primary-black shadow-lg'
-                  : 'text-light-gray hover:text-off-white hover:bg-dark-gray'
-              }`}
+              className={`flex-1 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all hover-scale ${activeTab === 'crypto'
+                ? 'bg-off-white text-primary-black shadow-lg'
+                : 'text-light-gray hover:text-off-white hover:bg-dark-gray'
+                }`}
             >
               Crypto
             </button>

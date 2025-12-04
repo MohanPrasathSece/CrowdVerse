@@ -20,9 +20,9 @@ const SAMPLE_NEWS = [
     summary: "Federal Reserve officials indicate potential pause in rate hikes as economic data shows mixed signals..."
   },
   {
-    title: "Bitcoin Surges Past $45,000 as Institutional Interest Grows",
+    title: "Bitcoin Surges Past ₹45,00,000 as Institutional Interest Grows",
     source: "CoinDesk",
-    time: "4 hours ago", 
+    time: "4 hours ago",
     category: "Crypto",
     sentiment: "bullish",
     summary: "Major financial institutions announce increased crypto allocations, driving Bitcoin to new monthly highs..."
@@ -31,7 +31,7 @@ const SAMPLE_NEWS = [
     title: "Tech Stocks Lead Market Rally on AI Optimism",
     source: "Bloomberg",
     time: "5 hours ago",
-    category: "Equities", 
+    category: "Equities",
     sentiment: "bullish",
     summary: "Nasdaq jumps 2% as AI-related companies report strong earnings and positive outlooks..."
   }
@@ -42,7 +42,7 @@ class NewsService {
   isCacheValid() {
     const timestamp = localStorage.getItem(NEWS_CACHE_TIMESTAMP_KEY);
     if (!timestamp) return false;
-    
+
     const cacheAge = Date.now() - parseInt(timestamp);
     return cacheAge < CACHE_DURATION;
   }
@@ -74,7 +74,7 @@ class NewsService {
     const diff = now - timestamp;
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(hours / 24);
-    
+
     if (days > 0) {
       return `${days} day${days > 1 ? 's' : ''} ago`;
     } else if (hours > 0) {
@@ -97,35 +97,35 @@ class NewsService {
 
     try {
       console.log('📰 Fetching fresh news data');
-      
+
       // Try to fetch from API
-      const response = await API.get('/news/market');
+      const response = await API.get('/news');
       const newsData = response.data;
-      
+
       // Format the news data with proper time formatting
       const formattedNews = newsData.map(article => ({
         title: article.title,
         source: article.source || 'Market News',
-        time: this.formatTimeAgo(article.publishedAt || Date.now()),
+        time: this.formatTimeAgo(new Date(article.createdAt).getTime()),
         category: article.category || 'Markets',
         sentiment: article.sentiment || 'neutral',
-        summary: article.summary || article.description || article.content?.substring(0, 150) + '...'
+        summary: article.summary || article.content?.substring(0, 150) + '...'
       }));
 
       // Cache the formatted news
       this.setCachedNews(formattedNews);
-      
+
       return formattedNews;
     } catch (error) {
       console.error('Error fetching news:', error);
-      
+
       // If API fails, use sample data with current timestamps
       console.log('📰 Using sample news data as fallback');
       const sampleNewsWithTime = SAMPLE_NEWS.map(news => ({
         ...news,
         time: this.formatTimeAgo(Date.now() - Math.random() * 6 * 60 * 60 * 1000) // Random time within last 6 hours
       }));
-      
+
       // Cache sample data for a shorter period (1 hour)
       try {
         localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify(sampleNewsWithTime));
@@ -133,7 +133,7 @@ class NewsService {
       } catch (cacheError) {
         console.error('Error caching sample news:', cacheError);
       }
-      
+
       return sampleNewsWithTime;
     }
   }

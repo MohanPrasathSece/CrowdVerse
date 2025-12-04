@@ -10,7 +10,8 @@ import Signup from './pages/Signup';
 import GuestLogin from './pages/GuestLogin';
 import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
-import Home from './pages/Home';
+import Finance from './pages/Finance';
+import News from './pages/News';
 import Stocks from './pages/Stocks';
 import Crypto from './pages/Crypto';
 import PrivateRoute from './components/PrivateRoute';
@@ -28,7 +29,8 @@ function TitleUpdater() {
       '/login': 'CrowdVerse - Sign In',
       '/signup': 'CrowdVerse - Sign Up',
       '/guest': 'CrowdVerse - Guest Login',
-      '/home': 'CrowdVerse - Home',
+      '/finance': 'CrowdVerse - Finance',
+      '/news': 'CrowdVerse - News',
       '/stocks': 'CrowdVerse - Market',
       '/crypto': 'CrowdVerse - Market',
       '/dashboard': 'CrowdVerse - Market',
@@ -63,10 +65,18 @@ function App() {
               <Route path="/guest" element={<GuestLogin />} />
               <Route path="/asset/:symbol" element={<Asset />} />
               <Route
-                path="/home"
+                path="/finance"
                 element={
                   <PrivateRoute>
-                    <Home />
+                    <Finance />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/news"
+                element={
+                  <PrivateRoute>
+                    <News />
                   </PrivateRoute>
                 }
               />

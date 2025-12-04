@@ -67,7 +67,7 @@ const Landing = () => {
               Everything you need to monitor markets and manage portfolios in one minimal platform.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10 md:gap-12">
             {[
               {
@@ -108,7 +108,7 @@ const Landing = () => {
             <div className="space-y-6">
               <h2 className="text-2xl sm:text-3xl font-light text-off-white">Market Coverage</h2>
               <p className="text-sm sm:text-base text-light-gray/80 leading-relaxed">
-                Track the Indian stock market with real-time NSE data covering major indices and blue-chip stocks. 
+                Track the Indian stock market with real-time NSE data covering major indices and blue-chip stocks.
                 Monitor cryptocurrency markets with live pricing for Bitcoin, Ethereum, and other top digital assets.
               </p>
               <div className="grid grid-cols-2 gap-4 pt-4">
@@ -148,11 +148,11 @@ const Landing = () => {
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-dark-gray/20">
                     <span className="text-off-white">BTC/USDT</span>
-                    <span className="text-green-400">$43,250.00</span>
+                    <span className="text-green-400">₹43,250.00</span>
                   </div>
                   <div className="flex items-center justify-between py-2">
                     <span className="text-off-white">ETH/USDT</span>
-                    <span className="text-red-400">$2,890.45</span>
+                    <span className="text-red-400">₹2,890.45</span>
                   </div>
                 </div>
               </div>

@@ -58,22 +58,23 @@ const Navbar = () => {
 
   const navLinks = user
     ? [
-        { to: '/home', label: 'Home' },
-        { to: '/dashboard', label: 'Market' },
-        { to: '/portfolio', label: 'Portfolio' },
-      ]
+      { to: '/finance', label: 'Finance' },
+      { to: '/news', label: 'News' },
+      { to: '/dashboard', label: 'Market' },
+      { to: '/portfolio', label: 'Portfolio' },
+    ]
     : [
-        { to: '/', label: 'Home' },
-        { to: '/dashboard', label: 'Market' },
-        { to: '/portfolio', label: 'Portfolio' },
-      ];
+      { to: '/', label: 'Home' },
+      { to: '/dashboard', label: 'Market' },
+      { to: '/portfolio', label: 'Portfolio' },
+    ];
 
   return (
     <nav className={`sticky top-0 z-40 bg-gradient-bg border-b border-dark-gray backdrop-blur-lg transition-all duration-1000 ${isVisible ? 'animate-slideInLeft' : 'opacity-0'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-20">
           <Link
-            to={user ? '/home' : '/'}
+            to={user ? '/finance' : '/'}
             className="text-2xl font-bold text-off-white hover:text-white transition-all hover-scale flex items-center space-x-2"
           >
             <span className="flex items-center">
@@ -88,18 +89,17 @@ const Navbar = () => {
           {!hideNavLinks && (
             <nav className="hidden md:flex flex-1 justify-center items-center space-x-6 text-sm uppercase tracking-[0.25em] text-light-gray/70">
               {navLinks.map((link) => {
-                const isActive = location.pathname === link.to || 
-                                (link.to === '/dashboard' && location.pathname.startsWith('/dashboard'));
+                const isActive = location.pathname === link.to ||
+                  (link.to === '/dashboard' && location.pathname.startsWith('/dashboard'));
                 return (
-                  <Link 
-                    key={link.label} 
-                    to={link.to} 
+                  <Link
+                    key={link.label}
+                    to={link.to}
                     onClick={() => handleNavClick(link.to)}
-                    className={`transition-all ${
-                      isActive 
-                        ? 'text-off-white font-semibold' 
-                        : 'hover:text-off-white'
-                    }`}
+                    className={`transition-all ${isActive
+                      ? 'text-off-white font-semibold'
+                      : 'hover:text-off-white'
+                      }`}
                   >
                     {link.label}
                   </Link>
@@ -199,11 +199,10 @@ const Navbar = () => {
                 <Link
                   to="/admin"
                   onClick={() => handleNavClick('/admin')}
-                  className={`flex items-center justify-between px-3 py-4 text-base font-semibold border-b border-dark-gray/50 transition-all ${
-                    location.pathname === '/admin'
-                      ? 'text-off-white bg-off-white/10 border-l-2 border-l-off-white'
-                      : 'text-off-white/90 hover:text-white'
-                  }`}
+                  className={`flex items-center justify-between px-3 py-4 text-base font-semibold border-b border-dark-gray/50 transition-all ${location.pathname === '/admin'
+                    ? 'text-off-white bg-off-white/10 border-l-2 border-l-off-white'
+                    : 'text-off-white/90 hover:text-white'
+                    }`}
                 >
                   <span>Admin Panel</span>
                   <svg
@@ -220,18 +219,17 @@ const Navbar = () => {
               )}
 
               {navLinks.map((link) => {
-                const isActive = location.pathname === link.to || 
-                                (link.to === '/dashboard' && location.pathname.startsWith('/dashboard'));
+                const isActive = location.pathname === link.to ||
+                  (link.to === '/dashboard' && location.pathname.startsWith('/dashboard'));
                 return (
                   <Link
                     key={link.label}
                     to={link.to}
                     onClick={() => handleNavClick(link.to)}
-                    className={`flex items-center justify-between px-3 py-4 text-base font-semibold border-b border-dark-gray/50 last:border-b-0 transition-all ${
-                      isActive 
-                        ? 'text-off-white bg-off-white/10 border-l-2 border-l-off-white' 
-                        : 'text-off-white/90 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-between px-3 py-4 text-base font-semibold border-b border-dark-gray/50 last:border-b-0 transition-all ${isActive
+                      ? 'text-off-white bg-off-white/10 border-l-2 border-l-off-white'
+                      : 'text-off-white/90 hover:text-white'
+                      }`}
                   >
                     <span>{link.label}</span>
                     <svg

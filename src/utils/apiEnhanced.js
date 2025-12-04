@@ -7,11 +7,11 @@ const API = axios.create({
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   const userData = localStorage.getItem('user');
-  
+
   console.log('API Request - URL:', config.url);
   console.log('API Request - Token:', token);
   console.log('API Request - User data exists:', !!userData);
-  
+
   if (token && token !== 'undefined' && token !== 'null') {
     config.headers.Authorization = `Bearer ${token}`;
     console.log('API Request - Added Bearer token');
@@ -33,7 +33,7 @@ API.interceptors.request.use((config) => {
       console.error('Error parsing user data:', error);
     }
   }
-  
+
   console.log('API Request - Headers:', config.headers);
   return config;
 });
@@ -56,9 +56,15 @@ export const getMyIntent = (asset) => API.get(`/assets/${asset}/intent/me`);
 
 export const getComments = (asset, page = 1, limit = 20) =>
   API.get(`/assets/${asset}/comments`, { params: { page, limit } });
-export const addComment = (asset, text) => API.post(`/assets/${asset}/comments`, { text });
+export const addComment = (asset, text, parentId = null) => API.post(`/assets/${asset}/comments`, { text, parentId });
 export const editComment = (id, text) => API.patch(`/assets/comments/${id}`, { text });
 export const deleteComment = (id) => API.delete(`/assets/comments/${id}`);
+
+// News API
+export const getNews = () => API.get('/news');
+export const votePoll = (pollId, optionIndex) => API.post(`/news/vote/${pollId}`, { optionIndex });
+export const getNewsComments = (newsId) => API.get(`/news/${newsId}/comments`);
+export const addNewsComment = (newsId, text, parentId = null) => API.post(`/news/${newsId}/comments`, { text, parentId });
 
 export const getAISummary = (assetName, recentComments = [], recentNews = [], marketSentiment = '', refresh = false) =>
   API.post('/ai-summary', { asset_name: assetName, recent_comments: recentComments, recent_news: recentNews, market_sentiment: marketSentiment, refresh });

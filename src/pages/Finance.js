@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import newsService from '../services/newsService';
+import { getNews, votePoll } from '../utils/apiEnhanced';
+import { AuthContext } from '../context/AuthContext';
+import CommentsPanel from '../components/CommentsPanel';
 
 const marketNarrative = [
   {
@@ -14,20 +17,20 @@ const marketNarrative = [
   },
   {
     phase: 'Midday Momentum',
-    headline: 'Crypto joined the rally as BTC defended the $66K shelf and accelerated.',
+    headline: 'Crypto joined the rally as BTC defended the ₹66K shelf and accelerated.',
     detail:
       'Flows rotated from defensives into growth trades; desks reported stronger appetite for digital assets as volatility stayed contained.',
     metricLabel: 'BTC/USD',
-    metricValue: '$67,234',
+    metricValue: '₹67,234',
     metricDelta: '+3.29% in 24h',
   },
   {
     phase: 'Closing Narrative',
     headline: 'Market breadth stayed constructive while liquidity pockets remained deep.',
     detail:
-      'Crypto market cap reclaimed the $2.8T handle and equity futures held gains, hinting at follow-through if macro data cooperates overnight.',
+      'Crypto market cap reclaimed the ₹2.8T handle and equity futures held gains, hinting at follow-through if macro data cooperates overnight.',
     metricLabel: 'Crypto Market Cap',
-    metricValue: '$2.85T',
+    metricValue: '₹2.85T',
     metricDelta: '+4.2% across 24h',
   },
 ];
@@ -38,10 +41,13 @@ const lookoutSignals = [
   'Liquidity conditions stable; overnight funding spreads holding near one-month lows.',
 ];
 
-const Home = () => {
+const Finance = () => {
+  const { user } = useContext(AuthContext);
   const [isVisible, setIsVisible] = useState(false);
   const [trendingNews, setTrendingNews] = useState([]);
   const [newsLoading, setNewsLoading] = useState(true);
+  const [newsWithPolls, setNewsWithPolls] = useState([]);
+  const [activeNewsId, setActiveNewsId] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -53,7 +59,11 @@ const Home = () => {
       try {
         setNewsLoading(true);
         const news = await newsService.fetchNews();
-        setTrendingNews(news);
+        setTrendingNews(news.slice(0, 3)); // First 3 for trending
+
+        // Fetch full news with polls
+        const { data } = await getNews();
+        setNewsWithPolls(data);
       } catch (error) {
         console.error('Error fetching news:', error);
       } finally {
@@ -65,6 +75,26 @@ const Home = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleVote = async (pollId, optionIndex) => {
+    if (!user) return alert('Please login to vote');
+    try {
+      const { data: updatedPoll } = await votePoll(pollId, optionIndex);
+      setNewsWithPolls(prev => prev.map(item => {
+        if (item.poll && item.poll._id === pollId) {
+          return { ...item, poll: updatedPoll };
+        }
+        return item;
+      }));
+    } catch (error) {
+      console.error('Vote failed:', error);
+      alert('Failed to submit vote');
+    }
+  };
+
+  const toggleComments = (id) => {
+    setActiveNewsId(activeNewsId === id ? null : id);
+  };
 
   return (
     <div className="min-h-screen bg-primary-black">
@@ -82,7 +112,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className={`mb-8 transition-all duration-700 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
@@ -98,7 +128,7 @@ const Home = () => {
           </div>
         </div>
 
-        
+
         {/* CTA Section - Markets */}
         <div className={`grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12 transition-all duration-700 delay-200 ${isVisible ? 'animate-slideInUp' : 'opacity-0'}`}>
           <Link
@@ -126,7 +156,7 @@ const Home = () => {
               </div>
             </div>
           </Link>
-          
+
           <Link
             to="/dashboard"
             state={{ activeView: 'crypto' }}
@@ -160,7 +190,7 @@ const Home = () => {
             <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-2">Trending Market News</h2>
             <p className="text-sm sm:text-base text-light-gray/70">Stay updated with the latest market movements and insights</p>
           </div>
-          
+
           {newsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((index) => (
@@ -183,32 +213,30 @@ const Home = () => {
               {trendingNews.map((news, index) => (
                 <div key={index} className="border border-dark-gray/50 rounded-xl p-6 bg-primary-black/40 hover:border-off-white/30 transition-all duration-300 group cursor-pointer">
                   <div className="flex items-start justify-between mb-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      news.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
+                    <span className={`text-xs px-2 py-1 rounded-full ${news.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
                       news.category === 'Markets' ? 'bg-purple-500/20 text-purple-400' :
-                      news.category === 'Equities' ? 'bg-green-500/20 text-green-400' :
-                      'bg-orange-500/20 text-orange-400'
-                    }`}>
+                        news.category === 'Equities' ? 'bg-green-500/20 text-green-400' :
+                          'bg-orange-500/20 text-orange-400'
+                      }`}>
                       {news.category}
                     </span>
                     <span className="text-xs text-light-gray/50">{news.time}</span>
                   </div>
-                  
+
                   <h3 className="text-base sm:text-lg font-semibold text-off-white mb-2 group-hover:text-white transition-colors line-clamp-2">
                     {news.title}
                   </h3>
-                  
+
                   <p className="text-sm text-light-gray/70 mb-3 line-clamp-3">
                     {news.summary}
                   </p>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-light-gray/60">{news.source}</span>
-                    <div className={`flex items-center gap-1 text-xs ${
-                      news.sentiment === 'bullish' ? 'text-green-400' :
+                    <div className={`flex items-center gap-1 text-xs ${news.sentiment === 'bullish' ? 'text-green-400' :
                       news.sentiment === 'bearish' ? 'text-red-400' :
-                      'text-yellow-400'
-                    }`}>
+                        'text-yellow-400'
+                      }`}>
                       <span className="w-2 h-2 rounded-full bg-current"></span>
                       {news.sentiment}
                     </div>
@@ -219,30 +247,30 @@ const Home = () => {
           )}
         </div>
 
+        {/* Full News with Polls and Comments - REMOVED */}
+
         {/* Narrative Flow */}
-        <div className={`space-y-6 mb-12 transition-all duration-1000 delay-300 ${isVisible ? 'animate-slideInLeft' : 'opacity-0'}`}>
-          {marketNarrative.map((scene) => (
-            <div
-              key={scene.phase}
-              className="p-6 sm:p-8 border border-dark-gray/60 rounded-3xl bg-primary-black/60 backdrop-blur-sm hover-enlarge transition-all"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-4">
-                <div className="space-y-2 max-w-3xl">
-                  <span className="text-[11px] sm:text-xs uppercase tracking-[0.35em] text-light-gray/60">{scene.phase}</span>
-                  <h2 className="text-lg sm:text-2xl font-semibold text-off-white">{scene.headline}</h2>
-                  <p className="text-sm text-light-gray/70 leading-relaxed">{scene.detail}</p>
-                </div>
-                <div className="w-full sm:w-auto sm:min-w-[220px] text-left sm:text-right">
-                  <div className="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-light-gray/60">{scene.metricLabel}</div>
-                  <div className="text-2xl sm:text-3xl font-semibold text-off-white">{scene.metricValue}</div>
-                  <div className="text-sm text-green-400 mt-1">{scene.metricDelta}</div>
-                </div>
+        {marketNarrative.map((scene) => (
+          <div
+            key={scene.phase}
+            className="p-6 sm:p-8 border border-dark-gray/60 rounded-3xl bg-primary-black/60 backdrop-blur-sm hover-enlarge transition-all"
+          >
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-4">
+              <div className="space-y-2 max-w-3xl">
+                <span className="text-[11px] sm:text-xs uppercase tracking-[0.35em] text-light-gray/60">{scene.phase}</span>
+                <h2 className="text-lg sm:text-2xl font-semibold text-off-white">{scene.headline}</h2>
+                <p className="text-sm text-light-gray/70 leading-relaxed">{scene.detail}</p>
+              </div>
+              <div className="w-full sm:w-auto sm:min-w-[220px] text-left sm:text-right">
+                <div className="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-light-gray/60">{scene.metricLabel}</div>
+                <div className="text-2xl sm:text-3xl font-semibold text-off-white">{scene.metricValue}</div>
+                <div className="text-sm text-green-400 mt-1">{scene.metricDelta}</div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
 
-        {/* Signals to Watch */}
+        {/* Signals to Watch */ }
         <div className={`bg-gradient-bg p-6 sm:p-8 rounded-3xl border border-dark-gray/70 mb-8 hover-glow transition-all duration-1000 delay-500 ${isVisible ? 'animate-slideInRight' : 'opacity-0'}`}>
           <h3 className="text-xl sm:text-2xl font-bold text-off-white mb-4">Signals on the Radar</h3>
           <p className="text-sm text-light-gray/70 mb-6 max-w-3xl">
@@ -260,4 +288,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Finance;

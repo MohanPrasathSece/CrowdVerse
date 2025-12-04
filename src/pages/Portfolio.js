@@ -4,49 +4,49 @@ const positions = [
   {
     asset: 'US Growth Equity ETF',
     allocation: '28%',
-    value: '$42,694',
-    cost: '$38,510',
-    pl: '+$4,184',
+    value: '₹42,694',
+    cost: '₹38,510',
+    pl: '+₹4,184',
     trend: '+3.6%',
   },
   {
     asset: 'Global Quality Dividend ETF',
     allocation: '18%',
-    value: '$27,446',
-    cost: '$26,220',
-    pl: '+$1,226',
+    value: '₹27,446',
+    cost: '₹26,220',
+    pl: '+₹1,226',
     trend: '+1.8%',
   },
   {
     asset: 'Digital Assets Basket',
     allocation: '25%',
-    value: '$38,120',
-    cost: '$34,980',
-    pl: '+$3,140',
+    value: '₹38,120',
+    cost: '₹34,980',
+    pl: '+₹3,140',
     trend: '+6.4%',
   },
   {
     asset: 'Emerging Markets Equity',
     allocation: '12%',
-    value: '$18,298',
-    cost: '$17,040',
-    pl: '+$1,258',
+    value: '₹18,298',
+    cost: '₹17,040',
+    pl: '+₹1,258',
     trend: '+2.1%',
   },
   {
     asset: 'Short Duration Treasuries',
     allocation: '10%',
-    value: '$15,248',
-    cost: '$15,000',
-    pl: '+$248',
+    value: '₹15,248',
+    cost: '₹15,000',
+    pl: '+₹248',
     trend: '+0.4%',
   },
   {
     asset: 'Private Credit Fund',
     allocation: '7%',
-    value: '$10,674',
-    cost: '$10,200',
-    pl: '+$474',
+    value: '₹10,674',
+    cost: '₹10,200',
+    pl: '+₹474',
     trend: '+1.1%',
   },
 ];
@@ -66,10 +66,10 @@ const Portfolio = () => (
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: 'Total Value', value: '$152,480', delta: '+5.1% YTD', tone: 'positive' },
+          { title: 'Total Value', value: '₹152,480', delta: '+5.1% YTD', tone: 'positive' },
           { title: 'Annual Yield', value: '3.4%', delta: 'Blend of dividends + staking', tone: 'neutral' },
           { title: 'Risk Profile', value: 'Moderate', delta: 'Max drawdown -12.4%', tone: 'neutral' },
-          { title: 'Cash Buffer', value: '$12,480', delta: '2 months runway', tone: 'neutral' },
+          { title: 'Cash Buffer', value: '₹12,480', delta: '2 months runway', tone: 'neutral' },
         ].map((card) => (
           <div
             key={card.title}
@@ -78,13 +78,12 @@ const Portfolio = () => (
             <div className="text-xs uppercase tracking-[0.25em] text-light-gray/60 mb-3">{card.title}</div>
             <div className="text-3xl font-semibold text-off-white">{card.value}</div>
             <div
-              className={`text-sm mt-2 ${
-                card.tone === 'positive'
+              className={`text-sm mt-2 ${card.tone === 'positive'
                   ? 'text-green-400'
                   : card.tone === 'negative'
                     ? 'text-red-400'
                     : 'text-light-gray/60'
-              }`}
+                }`}
             >
               {card.delta}
             </div>

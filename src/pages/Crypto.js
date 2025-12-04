@@ -28,7 +28,7 @@ const Crypto = () => {
 
         const formatNumber = (value) =>
           typeof value === 'number'
-            ? `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            ? `₹${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
             : '—';
 
         const formatted = FEATURED_CRYPTOS.map((featured, idx) => {
@@ -100,7 +100,7 @@ const Crypto = () => {
   return (
     <div className="animate-fadeIn">
       <div className="mb-8">
-          <div id="cryptocurrency-market" className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div id="cryptocurrency-market" className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
             <h2 className="text-3xl font-bold text-off-white mb-2 animate-slideInLeft">
               Cryptocurrency Market
@@ -122,12 +122,12 @@ const Crypto = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 animate-slideInLeft">
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
             <div className="text-sm text-light-gray mb-1">Total Market Cap</div>
-            <div className="text-2xl font-bold text-off-white">$2.85T</div>
+            <div className="text-2xl font-bold text-off-white">₹2.85T</div>
             <div className="text-green-400 text-sm">+4.2% (24h)</div>
           </div>
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
             <div className="text-sm text-light-gray mb-1">24h Volume</div>
-            <div className="text-2xl font-bold text-off-white">$89.5B</div>
+            <div className="text-2xl font-bold text-off-white">₹89.5B</div>
             <div className="text-blue-400 text-sm">High activity</div>
           </div>
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
@@ -166,18 +166,17 @@ const Crypto = () => {
               <div className="text-right">
                 <div className="text-2xl font-bold text-off-white mb-1">{coin.price}</div>
                 <div
-                  className={`text-sm font-medium ${
-                    coin.change === null ? 'text-light-gray'
+                  className={`text-sm font-medium ${coin.change === null ? 'text-light-gray'
                       : coin.change >= 0
                         ? 'text-green-400'
                         : 'text-red-400'
-                  }`}
+                    }`}
                 >
                   {coin.change === null ? '—' : `${coin.change >= 0 ? '+' : ''}${coin.change.toFixed(2)}%`}
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2 border-b border-dark-gray">
                 <span className="text-light-gray text-sm">Open</span>
