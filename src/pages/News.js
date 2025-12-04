@@ -8,6 +8,7 @@ const News = () => {
     const [newsItems, setNewsItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeNewsId, setActiveNewsId] = useState(null);
+    const [expandedId, setExpandedId] = useState(null);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -59,10 +60,13 @@ const News = () => {
                     <p className="text-light-gray/70 text-lg">Weekly curated insights on Crypto, Stocks, and Policy.</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
                     {newsItems.map((item) => (
-                        <div key={item._id} className="bg-secondary-black/30 border border-dark-gray/60 rounded-2xl overflow-hidden hover:border-off-white/20 transition-all">
-                            <div className="p-6 sm:p-8">
+                        <div
+                            key={item._id}
+                            className="bg-secondary-black/30 border border-dark-gray/60 rounded-xl overflow-hidden hover:border-off-white/20 transition-all h-full flex flex-col"
+                        >
+                            <div className="p-4 sm:p-5 flex flex-col h-full">
                                 <div className="flex items-center gap-3 mb-4">
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${item.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
                                         item.category === 'Stocks' ? 'bg-green-500/20 text-green-400' :
@@ -73,8 +77,20 @@ const News = () => {
                                     <span className="text-light-gray/50 text-sm">{new Date(item.createdAt).toLocaleDateString()}</span>
                                 </div>
 
-                                <h2 className="text-2xl sm:text-3xl font-semibold text-off-white mb-4">{item.title}</h2>
-                                <p className="text-light-gray/80 text-lg leading-relaxed mb-6">{item.summary}</p>
+                                <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-3">{item.title}</h2>
+                                <p
+                                    className={`text-light-gray/80 text-sm sm:text-base leading-relaxed mb-2 ${expandedId === item._id ? '' : 'line-clamp-3'}`}
+                                >
+                                    {item.summary}
+                                </p>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setExpandedId(expandedId === item._id ? null : item._id)}
+                                    className="text-xs text-blue-400 hover:text-blue-300 mb-4 self-start"
+                                >
+                                    {expandedId === item._id ? 'Show less' : 'Read more'}
+                                </button>
 
                                 {/* Poll Section */}
                                 {item.poll && (
@@ -115,7 +131,7 @@ const News = () => {
                                     </div>
                                 )}
 
-                                <div className="flex items-center justify-between pt-4 border-t border-dark-gray/50">
+                                <div className="flex items-center justify-between pt-4 border-t border-dark-gray/50 mt-auto">
                                     <button
                                         onClick={() => toggleComments(item._id)}
                                         className="flex items-center gap-2 text-light-gray/70 hover:text-off-white transition-colors"
