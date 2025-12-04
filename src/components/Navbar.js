@@ -58,8 +58,8 @@ const Navbar = () => {
 
   const navLinks = user
     ? [
-      { to: '/finance', label: 'Finance' },
       { to: '/news', label: 'News' },
+      { to: '/finance', label: 'Finance' },
       { to: '/dashboard', label: 'Market' },
       { to: '/portfolio', label: 'Portfolio' },
     ]

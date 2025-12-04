@@ -102,14 +102,16 @@ class NewsService {
       const response = await API.get('/news');
       const newsData = response.data;
 
-      // Format the news data with proper time formatting
+      // Format the news data with proper time formatting and keep identifiers/polls
       const formattedNews = newsData.map(article => ({
+        id: article._id,
         title: article.title,
         source: article.source || 'Market News',
         time: this.formatTimeAgo(new Date(article.createdAt).getTime()),
         category: article.category || 'Markets',
         sentiment: article.sentiment || 'neutral',
-        summary: article.summary || article.content?.substring(0, 150) + '...'
+        summary: article.summary || (article.content ? `${article.content.substring(0, 150)}...` : ''),
+        poll: article.poll || null,
       }));
 
       // Cache the formatted news

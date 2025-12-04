@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import newsService from '../services/newsService';
 import CommentsPanel from '../components/CommentsPanel';
+import { AuthContext } from '../context/AuthContext';
+import { votePoll } from '../utils/apiEnhanced';
 
 const marketNarrative = [
   {
@@ -40,9 +42,11 @@ const lookoutSignals = [
 ];
 
 const Finance = () => {
+  const { user } = useContext(AuthContext);
   const [isVisible, setIsVisible] = useState(false);
   const [trendingNews, setTrendingNews] = useState([]);
   const [newsLoading, setNewsLoading] = useState(true);
+  const [activeNewsId, setActiveNewsId] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -67,7 +71,25 @@ const Finance = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  
+  const handleVote = async (pollId, optionIndex) => {
+    if (!user) return alert('Please login to vote');
+    try {
+      const { data: updatedPoll } = await votePoll(pollId, optionIndex);
+      setTrendingNews(prev => prev.map(item => {
+        if (item.poll && item.poll._id === pollId) {
+          return { ...item, poll: updatedPoll };
+        }
+        return item;
+      }));
+    } catch (error) {
+      console.error('Vote failed:', error);
+      alert('Failed to submit vote');
+    }
+  };
+
+  const toggleComments = (id) => {
+    setActiveNewsId(prev => (prev === id ? null : id));
+  };
 
   return (
     <div className="min-h-screen bg-primary-black">
@@ -204,8 +226,56 @@ const Finance = () => {
                     {news.summary}
                   </p>
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-light-gray/60">{news.source}</span>
+                  {/* Poll (votes) */}
+                  {news.poll && (
+                    <div className="mt-4 mb-4 bg-primary-black/50 rounded-xl p-4 border border-dark-gray/50">
+                      <h3 className="text-off-white font-medium mb-3 flex items-center gap-2 text-sm">
+                        <svg className="w-4 h-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a 2 2 0 002 2h2a2 2 0 002-2m0 0V5a 2 2 0 012-2h2a2 2 0 012 2v14a 2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        {news.poll.question}
+                      </h3>
+                      <div className="space-y-2">
+                        {news.poll.options.map((option, idx) => {
+                          const totalVotes = news.poll.options.reduce((acc, curr) => acc + curr.votes, 0);
+                          const percentage = totalVotes === 0 ? 0 : Math.round((option.votes / totalVotes) * 100);
+
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => handleVote(news.poll._id, idx)}
+                              className="w-full relative group"
+                              disabled={!user}
+                            >
+                              <div className="absolute inset-0 bg-dark-gray/30 rounded-lg overflow-hidden">
+                                <div
+                                  className="h-full bg-blue-600/20 transition-all duration-500"
+                                  style={{ width: `${percentage}%` }}
+                                />
+                              </div>
+                              <div className="relative flex items-center justify-between p-2 rounded-lg border border-dark-gray/50 group-hover:border-off-white/30 transition-all text-xs">
+                                <span className="text-off-white/90 font-medium">{option.text}</span>
+                                <span className="text-light-gray/60">{percentage}% ({option.votes})</span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {!user && <p className="text-[10px] text-red-400 mt-2 text-center">Login to vote</p>}
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between pt-2 border-t border-dark-gray/50 mt-2">
+                    <button
+                      onClick={() => news.id && toggleComments(news.id)}
+                      className="flex items-center gap-2 text-xs text-light-gray/70 hover:text-off-white transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a 2 2 0 01-2-2V6a 2 2 0 012-2h14a 2 2 0 012 2v8a 2 2 0 01-2 2h-3l-4 4z" />
+                      </svg>
+                      <span>{activeNewsId === news.id ? 'Hide Discussion' : 'Join Discussion'}</span>
+                    </button>
+
                     <div className={`flex items-center gap-1 text-xs ${news.sentiment === 'bullish' ? 'text-green-400' :
                       news.sentiment === 'bearish' ? 'text-red-400' :
                         'text-yellow-400'
@@ -214,6 +284,12 @@ const Finance = () => {
                       {news.sentiment}
                     </div>
                   </div>
+
+                  {activeNewsId === news.id && news.id && (
+                    <div className="mt-4 animate-fadeIn">
+                      <CommentsPanel asset={news.id} isNews={true} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
