@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import newsService from '../services/newsService';
-import { AuthContext } from '../context/AuthContext';
 
 const marketNarrative = [
   {
@@ -40,7 +39,6 @@ const lookoutSignals = [
 ];
 
 const Finance = () => {
-  const { user } = useContext(AuthContext);
   const [isVisible, setIsVisible] = useState(false);
   const [trendingNews, setTrendingNews] = useState([]);
   const [newsLoading, setNewsLoading] = useState(true);
