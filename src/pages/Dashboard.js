@@ -3,41 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import Stocks from './Stocks';
 import Crypto from './Crypto';
 
-const comparisonCards = [
-  {
-    title: 'Equity vs Crypto Momentum',
-    subtitle: 'Normalized 7-day performance view',
-    series: [
-      {
-        name: 'NIFTY 50',
-        color: '#8AB4FF',
-        values: [0, 1.6, 2.1, 1.4, 2.8, 3.4, 4.6],
-      },
-      {
-        name: 'BTC/USD',
-        color: '#F5A623',
-        values: [0, 2.8, 3.6, 4.2, 6.8, 7.4, 8.1],
-      },
-    ],
-  },
-  {
-    title: 'Emerging vs Developed Flows',
-    subtitle: 'Capital rotation over the past week',
-    series: [
-      {
-        name: 'MSCI EM',
-        color: '#7EE0C3',
-        values: [0, 0.8, 1.4, 1.2, 1.9, 2.1, 2.7],
-      },
-      {
-        name: 'MSCI World',
-        color: '#FFDCA8',
-        values: [0, 0.4, 0.9, 0.6, 1.3, 1.1, 1.5],
-      },
-    ],
-  },
-];
-
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('stocks');
   const [isVisible, setIsVisible] = useState(false);
@@ -76,21 +41,6 @@ const Dashboard = () => {
     { label: 'Crypto Market Cap', value: '₹2.85T', change: '+4.2% 24h', tone: 'positive' },
     { label: 'Market Status', value: 'Live', change: 'Synced', tone: 'neutral' },
   ];
-
-  const buildPoints = (values) => {
-    if (!values?.length) return '';
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    const range = max - min || 1;
-    return values
-      .map((value, index) => {
-        const x = (index / (values.length - 1)) * 120;
-        const normalized = (value - min) / range;
-        const y = 60 - normalized * 50 - 5;
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-      })
-      .join(' ');
-  };
 
   return (
     <div className="min-h-screen bg-primary-black">

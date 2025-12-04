@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import newsService from '../services/newsService';
-import { getNews, votePoll } from '../utils/apiEnhanced';
 import { AuthContext } from '../context/AuthContext';
-import CommentsPanel from '../components/CommentsPanel';
 
 const marketNarrative = [
   {
@@ -46,8 +44,6 @@ const Finance = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [trendingNews, setTrendingNews] = useState([]);
   const [newsLoading, setNewsLoading] = useState(true);
-  const [newsWithPolls, setNewsWithPolls] = useState([]);
-  const [activeNewsId, setActiveNewsId] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -60,10 +56,6 @@ const Finance = () => {
         setNewsLoading(true);
         const news = await newsService.fetchNews();
         setTrendingNews(news.slice(0, 3)); // First 3 for trending
-
-        // Fetch full news with polls
-        const { data } = await getNews();
-        setNewsWithPolls(data);
       } catch (error) {
         console.error('Error fetching news:', error);
       } finally {
@@ -76,25 +68,7 @@ const Finance = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleVote = async (pollId, optionIndex) => {
-    if (!user) return alert('Please login to vote');
-    try {
-      const { data: updatedPoll } = await votePoll(pollId, optionIndex);
-      setNewsWithPolls(prev => prev.map(item => {
-        if (item.poll && item.poll._id === pollId) {
-          return { ...item, poll: updatedPoll };
-        }
-        return item;
-      }));
-    } catch (error) {
-      console.error('Vote failed:', error);
-      alert('Failed to submit vote');
-    }
-  };
-
-  const toggleComments = (id) => {
-    setActiveNewsId(activeNewsId === id ? null : id);
-  };
+  
 
   return (
     <div className="min-h-screen bg-primary-black">
