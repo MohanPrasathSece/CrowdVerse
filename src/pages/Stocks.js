@@ -61,8 +61,18 @@ const Stocks = () => {
         setStocks(formatted);
       } catch (err) {
         if (!cancelled) {
-          setError('Failed to load stocks. Please try again.');
-          console.error(err);
+          let errorMessage = 'Failed to load stocks. Please try again.';
+          
+          if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+            errorMessage = 'Request timed out. Market data is taking longer than usual. Please refresh.';
+          } else if (err.response?.status === 429) {
+            errorMessage = 'Too many requests. Please wait a moment and try again.';
+          } else if (err.response?.status >= 500) {
+            errorMessage = 'Server is experiencing issues. Please try again later.';
+          }
+          
+          setError(errorMessage);
+          console.error('Stocks fetch error:', err);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -98,8 +108,18 @@ const Stocks = () => {
 
   if (error) {
     return (
-      <div className="bg-red-900/20 border border-red-500 text-red-200 px-4 py-3 rounded animate-fadeIn">
-        {error}
+      <div className="space-y-4">
+        <div className="bg-red-900/20 border border-red-500 text-red-200 px-4 py-3 rounded animate-fadeIn">
+          <div className="flex items-center justify-between">
+            <span>{error}</span>
+            <button
+              onClick={() => window.location.reload()}
+              className="ml-4 px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

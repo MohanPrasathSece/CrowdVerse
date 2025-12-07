@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { getComments, addComment, editComment, deleteComment, getNewsComments, addNewsComment } from '../utils/apiEnhanced';
 import { AuthContext } from '../context/AuthContext';
 
-const CommentsPanel = ({ asset, isNews = false }) => {
+const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
   const { user } = useContext(AuthContext);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,6 +63,13 @@ const CommentsPanel = ({ asset, isNews = false }) => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asset, isNews]);
+
+  // Expose refresh function via ref
+  useEffect(() => {
+    if (onRefreshRef && typeof onRefreshRef === 'function') {
+      onRefreshRef(load);
+    }
+  }, [load, onRefreshRef]);
 
   const onSubmit = async (e, parentId = null) => {
     e.preventDefault();
@@ -137,10 +144,17 @@ const CommentsPanel = ({ asset, isNews = false }) => {
     const isReplying = replyingId === comment._id;
 
     return (
-      <div className={depth > 0 ? 'ml-8 mt-3' : ''}>
-        <div className={`p-4 rounded-xl bg-primary-black/50 ${depth > 0 ? 'border-l-2 border-blue-500/40 pl-4' : 'border border-dark-gray/50'}`}>
+      <div className={`${depth > 0 ? 'ml-12 mt-3' : ''}`}>
+        <div className={`p-4 rounded-xl ${depth > 0 
+          ? 'bg-gradient-to-r from-blue-900/20 to-transparent border-l-3 border-blue-500/60 pl-4 ml-2' 
+          : 'bg-primary-black/50 border border-dark-gray/50'}`}>
           <div className="text-xs text-light-gray/60 flex items-center justify-between mb-2">
             <span className="flex items-center gap-2">
+              {depth > 0 && (
+                <span className="text-xs px-1.5 py-0.5 bg-blue-500/30 text-blue-300 rounded-full font-medium">
+                  Reply {depth}
+                </span>
+              )}
               <span className="font-medium text-off-white/90">{getFirstName(comment.user, comment.user?.emailOrMobile)}</span>
               {comment.user?.isGuest && (
                 <span className="text-xs px-1.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full">Guest</span>
@@ -169,7 +183,9 @@ const CommentsPanel = ({ asset, isNews = false }) => {
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Write a reply..."
-                className="flex-1 px-3 py-2 rounded-lg bg-secondary-black border border-dark-gray text-off-white focus:outline-none focus:ring-1 focus:ring-blue-500/50 text-sm"
+                className={`flex-1 px-3 py-2 rounded-lg ${depth > 0 
+                  ? 'bg-blue-900/20 border-blue-500/40 text-off-white focus:outline-none focus:ring-1 focus:ring-blue-500/50' 
+                  : 'bg-secondary-black border border-dark-gray text-off-white focus:outline-none focus:ring-1 focus:ring-blue-500/50'} text-sm`}
                 autoFocus
               />
               <button
@@ -184,7 +200,7 @@ const CommentsPanel = ({ asset, isNews = false }) => {
         </div>
 
         {replies.length > 0 && (
-          <div className="space-y-0">
+          <div className={`space-y-0 ${depth > 0 ? 'border-l-2 border-blue-500/20 ml-6' : ''}`}>
             {replies.map(reply => (
               <CommentItem key={reply._id} comment={reply} depth={depth + 1} />
             ))}
