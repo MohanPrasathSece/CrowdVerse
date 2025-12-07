@@ -61,7 +61,7 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     }
     setLoading(true);
     load();
-  }, [load]);
+  }, [load, items.length, loading]);
 
   // Expose refresh function via ref
   useEffect(() => {
