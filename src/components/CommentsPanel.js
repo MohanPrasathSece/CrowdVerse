@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { getComments, addComment, editComment, deleteComment, getNewsComments, addNewsComment } from '../utils/apiEnhanced';
 import { AuthContext } from '../context/AuthContext';
 
@@ -34,7 +34,7 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     setTimeout(() => setToast({ show: false, message: '', type }), 2000);
   };
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       let data;
       if (isNews) {
@@ -52,7 +52,7 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [asset, isNews, page]);
 
   useEffect(() => {
     if (items.length === 0 && loading) {
@@ -61,8 +61,7 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     }
     setLoading(true);
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asset, isNews]);
+  }, [load]);
 
   // Expose refresh function via ref
   useEffect(() => {
