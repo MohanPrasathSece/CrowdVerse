@@ -9,7 +9,7 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     return cached ? JSON.parse(cached) : [];
   });
   const [loading, setLoading] = useState(items.length === 0);
-  const [error, setError] = useState('');
+  const [error] = useState('');
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState(null);
