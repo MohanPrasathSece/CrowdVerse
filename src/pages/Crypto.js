@@ -5,8 +5,11 @@ import { FEATURED_CRYPTOS } from '../constants/featuredAssets';
 import CommentsPanel from '../components/CommentsPanel';
 
 const Crypto = () => {
-  const [crypto, setCrypto] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [crypto, setCrypto] = useState(() => {
+    const cached = localStorage.getItem('cv_crypto_cache');
+    return cached ? JSON.parse(cached) : [];
+  });
+  const [loading, setLoading] = useState(crypto.length === 0);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -59,6 +62,7 @@ const Crypto = () => {
         });
 
         setCrypto(formatted);
+        localStorage.setItem('cv_crypto_cache', JSON.stringify(formatted));
       } catch (err) {
         if (!cancelled) {
           setError('Failed to load cryptocurrencies. Please try again.');
@@ -174,9 +178,9 @@ const Crypto = () => {
                 <div className="text-2xl font-bold text-off-white mb-1">{coin.price}</div>
                 <div
                   className={`text-sm font-medium ${coin.change === null ? 'text-light-gray'
-                      : coin.change >= 0
-                        ? 'text-green-400'
-                        : 'text-red-400'
+                    : coin.change >= 0
+                      ? 'text-green-400'
+                      : 'text-red-400'
                     }`}
                 >
                   {coin.change === null ? '—' : `${coin.change >= 0 ? '+' : ''}${coin.change.toFixed(2)}%`}

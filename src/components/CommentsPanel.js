@@ -4,8 +4,11 @@ import { AuthContext } from '../context/AuthContext';
 
 const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
   const { user } = useContext(AuthContext);
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState(() => {
+    const cached = localStorage.getItem(`cv_comments_${asset}`);
+    return cached ? JSON.parse(cached) : [];
+  });
+  const [loading, setLoading] = useState(items.length === 0);
   const [error, setError] = useState('');
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -34,7 +37,19 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     setTimeout(() => setToast({ show: false, message: '', type }), 2000);
   };
 
+  /* Ref to track if a fetch is currently in progress to prevent duplicate/overlapping calls */
+  const isFetching = React.useRef(false);
+
   const load = useCallback(async () => {
+    // Prevent multiple simultaneous fetches
+    if (isFetching.current) return;
+
+    isFetching.current = true;
+    setLoading(true);
+
+    // Create abort controller for this request
+    const controller = new AbortController();
+
     try {
       let data;
       if (isNews) {
@@ -44,26 +59,39 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
         const res = await getComments(asset, page, 20);
         data = res.data;
       }
-      setItems(Array.isArray(data) ? data : []);
+      console.log('[DEBUG] Fetched comment items:', data);
+
+      // Only update state if component is still mounted/valid
+      const finalData = Array.isArray(data) ? data : [];
+      setItems(finalData);
+      localStorage.setItem(`cv_comments_${asset}`, JSON.stringify(finalData));
     } catch (e) {
-      console.error('Failed to load comments:', e);
-      setItems([]);
-      setError('Failed to load comments');
+      if (e.name !== 'CanceledError') {
+        console.error('Failed to load comments:', e);
+        setItems([]);
+      }
     } finally {
       setLoading(false);
+      isFetching.current = false;
     }
+
+    return () => controller.abort();
   }, [asset, isNews, page]);
 
   useEffect(() => {
-    if (items.length === 0 && loading) {
-      setItems([]);
-      setLoading(false);
-    }
-    setLoading(true);
-    load();
-  }, [load, items.length, loading]);
+    let cancelFetch;
 
-  // Expose refresh function via ref
+    // Only fetch if we have an asset
+    if (asset) {
+      cancelFetch = load();
+    }
+
+    // Cleanup: Cancel any pending request if deps change or unmount
+    return () => {
+      if (typeof cancelFetch === 'function') cancelFetch();
+    };
+  }, [load, asset]);
+
   useEffect(() => {
     if (onRefreshRef && typeof onRefreshRef === 'function') {
       onRefreshRef(load);
@@ -136,7 +164,11 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
 
   // Organize comments into threads
   const rootComments = items.filter(c => !c.parentId);
-  const getReplies = (parentId) => items.filter(c => c.parentId === parentId || (c.parentId && c.parentId._id === parentId));
+  const getReplies = (parentId) => items.filter(c => {
+    if (!c.parentId) return false;
+    const cParentId = typeof c.parentId === 'object' ? (c.parentId._id || c.parentId) : c.parentId;
+    return String(cParentId) === String(parentId);
+  });
 
   const CommentItem = ({ comment, depth = 0 }) => {
     const replies = getReplies(comment._id);
@@ -144,8 +176,8 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
 
     return (
       <div className={`${depth > 0 ? 'ml-12 mt-3' : ''}`}>
-        <div className={`p-4 rounded-xl ${depth > 0 
-          ? 'bg-gradient-to-r from-blue-900/20 to-transparent border-l-3 border-blue-500/60 pl-4 ml-2' 
+        <div className={`p-4 rounded-xl ${depth > 0
+          ? 'bg-gradient-to-r from-blue-900/20 to-transparent border-l-3 border-blue-500/60 pl-4 ml-2'
           : 'bg-primary-black/50 border border-dark-gray/50'}`}>
           <div className="text-xs text-light-gray/60 flex items-center justify-between mb-2">
             <span className="flex items-center gap-2">
@@ -182,8 +214,8 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Write a reply..."
-                className={`flex-1 px-3 py-2 rounded-lg ${depth > 0 
-                  ? 'bg-blue-900/20 border-blue-500/40 text-off-white focus:outline-none focus:ring-1 focus:ring-blue-500/50' 
+                className={`flex-1 px-3 py-2 rounded-lg ${depth > 0
+                  ? 'bg-blue-900/20 border-blue-500/40 text-off-white focus:outline-none focus:ring-1 focus:ring-blue-500/50'
                   : 'bg-secondary-black border border-dark-gray text-off-white focus:outline-none focus:ring-1 focus:ring-blue-500/50'} text-sm`}
                 autoFocus
               />
@@ -209,12 +241,21 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     );
   };
 
-  if (loading) return <div className="text-light-gray animate-pulse">Loading comments...</div>;
+  // if (loading && items.length === 0) return <div className="text-light-gray animate-pulse">Loading comments...</div>;
   if (error) return <div className="text-red-400">{error}</div>;
 
   return (
     <div className="border border-dark-gray/60 rounded-2xl p-4 bg-secondary-black/40 space-y-4">
-      <h3 className="text-off-white font-semibold">{isNews ? 'Discussion' : 'Community Comments'}</h3>
+      {/* DEBUG: Remove after fixing */}
+      <div className="text-xs text-yellow-500">
+        Debug Status: {loading ? 'Loading' : 'Idle'} | Items: {items.length} | Asset: {asset}
+      </div>
+      <div className="flex items-center justify-between">
+        <h3 className="text-off-white font-semibold">{isNews ? 'Discussion' : 'Community Comments'}</h3>
+        {loading && (
+          <div className="w-4 h-4 border-2 border-off-white/20 border-t-off-white rounded-full animate-spin"></div>
+        )}
+      </div>
 
       <form onSubmit={(e) => onSubmit(e)} className="flex flex-col sm:flex-row gap-2">
         <input

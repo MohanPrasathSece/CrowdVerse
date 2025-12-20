@@ -5,8 +5,11 @@ import { FEATURED_STOCKS } from '../constants/featuredAssets';
 import CommentsPanel from '../components/CommentsPanel';
 
 const Stocks = () => {
-  const [stocks, setStocks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [stocks, setStocks] = useState(() => {
+    const cached = localStorage.getItem('cv_stocks_cache');
+    return cached ? JSON.parse(cached) : [];
+  });
+  const [loading, setLoading] = useState(stocks.length === 0);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -18,6 +21,8 @@ const Stocks = () => {
         if (cancelled) return;
 
         const items = Array.isArray(data?.results) ? data.results : [];
+
+        // ... formatting logic ...
 
         const toNumber = (value) => {
           if (typeof value === 'number') return value;
@@ -59,10 +64,11 @@ const Stocks = () => {
         });
 
         setStocks(formatted);
+        localStorage.setItem('cv_stocks_cache', JSON.stringify(formatted));
       } catch (err) {
         if (!cancelled) {
           let errorMessage = 'Failed to load stocks. Please try again.';
-          
+
           if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
             errorMessage = 'Request timed out. Market data is taking longer than usual. Please refresh.';
           } else if (err.response?.status === 429) {
@@ -70,7 +76,7 @@ const Stocks = () => {
           } else if (err.response?.status >= 500) {
             errorMessage = 'Server is experiencing issues. Please try again later.';
           }
-          
+
           setError(errorMessage);
           console.error('Stocks fetch error:', err);
         }
@@ -203,7 +209,7 @@ const Stocks = () => {
                 )}
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2 border-b border-dark-gray">
                 <span className="text-light-gray text-base">Open</span>

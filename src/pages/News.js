@@ -5,8 +5,11 @@ import { AuthContext } from '../context/AuthContext';
 
 const News = () => {
     const { user } = useContext(AuthContext);
-    const [newsItems, setNewsItems] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [newsItems, setNewsItems] = useState(() => {
+        const cached = localStorage.getItem('cv_news_cache');
+        return cached ? JSON.parse(cached) : [];
+    });
+    const [loading, setLoading] = useState(newsItems.length === 0);
     const [activeNewsId, setActiveNewsId] = useState(null);
     const [expandedId, setExpandedId] = useState(null);
 
@@ -15,6 +18,7 @@ const News = () => {
             try {
                 const { data } = await getNews();
                 setNewsItems(data);
+                localStorage.setItem('cv_news_cache', JSON.stringify(data));
             } catch (error) {
                 console.error('Failed to fetch news:', error);
             } finally {
