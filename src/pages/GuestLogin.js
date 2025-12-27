@@ -39,8 +39,8 @@ const GuestLogin = () => {
       // Store guest user in localStorage without token
       loginUser(guestUser);
       
-      // Navigate to home page
-      navigate('/home');
+      // Navigate to finance page (same as regular users)
+      navigate('/finance');
     } catch (error) {
       console.error('Guest login error:', error);
       alert('Failed to login as guest. Please try again.');
