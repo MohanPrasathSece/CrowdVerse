@@ -61,7 +61,7 @@ const News = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="mb-10">
                     <h1 className="text-3xl sm:text-5xl font-semibold text-off-white mb-4">Market Intelligence</h1>
-                    <p className="text-light-gray/70 text-lg">Weekly curated insights on Crypto, Stocks, and Policy.</p>
+                    <p className="text-light-gray/70 text-lg">Weekly curated insights on Crypto, Stocks, and Policy affecting the Indian market.</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
