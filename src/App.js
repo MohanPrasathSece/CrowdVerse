@@ -21,6 +21,7 @@ import BetaSignupModal from './components/BetaSignupModal';
 import Asset from './pages/Asset';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
+import FloatingEarlyAccess from './components/FloatingEarlyAccess';
 
 // Component to handle dynamic title updates
 function TitleUpdater() {
@@ -61,6 +62,7 @@ function App() {
         <BetaSignupModal />
         <ScrollToTop />
         <TitleUpdater />
+        <FloatingEarlyAccess />
         <div className="flex flex-col min-h-screen bg-primary-black font-sans text-off-white">
           <Navbar />
           <main className="flex-1">

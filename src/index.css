@@ -135,7 +135,14 @@ button, a {
   animation: glow 2s ease-in-out infinite;
 }
 
-/* Hover effects */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 4s ease-in-out infinite;
+}
 .hover-lift:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);

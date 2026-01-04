@@ -24,14 +24,18 @@ const Predictions = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-primary-black text-off-white py-8 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-                <div className="mb-8">
-                    <h1 className="text-3xl sm:text-4xl font-semibold text-off-white mb-2">
-                        Predict what will happen this year
+        <div className="min-h-screen bg-primary-black text-off-white selection:bg-indigo-500/30">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+                <div className="mb-16 space-y-4">
+                    <div className="flex items-center gap-3 text-indigo-400">
+                        <div className="h-px w-8 bg-indigo-500/40"></div>
+                        <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.4em] font-bold">Community Consensus</span>
+                    </div>
+                    <h1 className="text-4xl sm:text-6xl font-bold text-off-white tracking-tight leading-[1.1]">
+                        What's the <span className="text-transparent bg-clip-text bg-gradient-to-r from-off-white via-indigo-200 to-indigo-400">Verdict?</span>
                     </h1>
-                    <p className="text-light-gray/60 text-base sm:text-lg">
-                        Cast your vote on the most controversial topics of 2024 and see what the community thinks.
+                    <p className="text-light-gray/60 text-lg sm:text-xl max-w-2xl leading-relaxed">
+                        Join thousands of participants in predicting the future of tech, finance, and global markets using our crowd-intelligence engine.
                     </p>
                 </div>
 
