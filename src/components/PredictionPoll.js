@@ -88,8 +88,8 @@ const PredictionPoll = ({ poll }) => {
                                     key={index}
                                     onClick={() => handleVote(index)}
                                     className={`flex-1 text-sm px-3 py-2 rounded-lg transition-all ${votedOption === index
-                                            ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500 scale-[1.01]'
-                                            : 'text-light-gray/80 hover:text-indigo-300 hover:bg-indigo-600/10 border border-transparent'
+                                        ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500 scale-[1.01]'
+                                        : 'text-light-gray/80 hover:text-indigo-300 hover:bg-indigo-600/10 border border-transparent'
                                         }`}
                                 >
                                     {opt.text}
@@ -109,8 +109,8 @@ const PredictionPoll = ({ poll }) => {
                                         <div className="h-2 w-full rounded-md bg-primary-black/60 border border-dark-gray/60 overflow-hidden">
                                             <div
                                                 className={`h-full bg-gradient-to-r ${index === 0 ? 'from-indigo-600/70 to-indigo-400/70' :
-                                                        index === 1 ? 'from-blue-600/70 to-blue-400/70' :
-                                                            'from-slate-600/70 to-slate-400/70'
+                                                    index === 1 ? 'from-blue-600/70 to-blue-400/70' :
+                                                        'from-slate-600/70 to-slate-400/70'
                                                     } transition-all duration-1000`}
                                                 style={{ width: `${percent}%` }}
                                             />
@@ -124,12 +124,40 @@ const PredictionPoll = ({ poll }) => {
                     {/* Comments - Matches Asset.js */}
                     <CommentsPanel asset={data._id} isPrediction={true} />
 
-                    {/* AI Intelligence Panel - Matches IntelligencePanel.js exactly */}
-                    <div className="space-y-6 pt-8">
+                    {/* AI Intelligence Section - Styled exactly like IntelligencePanel.js */}
+                    <div className="space-y-8">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-off-white font-semibold text-lg">Quick Intelligence Panel</h3>
+                            <h3 className="text-off-white font-semibold text-2xl">Quick Intelligence Panel</h3>
+                            <button
+                                onClick={async () => {
+                                    const btn = document.getElementById(`analyze-btn-${data._id}`);
+                                    if (btn) btn.disabled = true;
+                                    try {
+                                        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/predictions/${data._id}/analyze`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' }
+                                        });
+                                        const updatedData = await response.json();
+                                        if (updatedData._id) {
+                                            setData(updatedData);
+                                            alert('AI Analysis updated based on latest comments!');
+                                        }
+                                    } catch (err) {
+                                        console.error('Analysis failed', err);
+                                        alert('Failed to update AI analysis.');
+                                    } finally {
+                                        if (btn) btn.disabled = false;
+                                    }
+                                }}
+                                id={`analyze-btn-${data._id}`}
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-indigo-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+                            >
+                                <svg className="w-3 h-3 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                Refresh AI Insights
+                            </button>
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
                                 <div className="mb-3 flex items-center gap-2 text-light-gray/70">
