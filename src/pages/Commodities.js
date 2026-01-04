@@ -38,22 +38,38 @@ const Commodities = () => {
                 </div>
 
                 {/* Market Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate-slideInLeft">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate-slideInLeft text-sm sm:text-base">
                     <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
-                        <div className="text-base text-light-gray mb-1">Gold Spot</div>
-                        <div className="text-2xl font-bold text-off-white">₹62,500</div>
-                        <div className="text-base text-green-400">+1.25% today</div>
+                        <div className="text-light-gray mb-1 flex justify-between items-center">
+                            <span>Gold Spot <span className="text-[10px] text-light-gray/40 uppercase tracking-tighter">(1g)</span></span>
+                            <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">Bullish</span>
+                        </div>
+                        <div className="text-2xl font-bold text-off-white">₹8,460.00</div>
+                        <div className="text-sm text-green-400 font-medium">+0.42% today</div>
                     </div>
                     <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
-                        <div className="text-base text-light-gray mb-1">Silver Spot</div>
-                        <div className="text-2xl font-bold text-off-white">₹74,500</div>
-                        <div className="text-base text-green-400">+0.85% today</div>
+                        <div className="text-light-gray mb-1 flex justify-between items-center">
+                            <span>Silver Spot <span className="text-[10px] text-light-gray/40 uppercase tracking-tighter">(1g)</span></span>
+                            <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">Bullish</span>
+                        </div>
+                        <div className="text-2xl font-bold text-off-white">₹102.30</div>
+                        <div className="text-sm text-green-400 font-medium">+1.15% today</div>
                     </div>
                     <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
-                        <div className="text-base text-light-gray mb-1">Industrial Index</div>
-                        <div className="text-2xl font-bold text-off-white">4,250.80</div>
-                        <div className="text-base text-blue-400">Stable demand</div>
+                        <div className="text-light-gray mb-1 flex justify-between items-center">
+                            <span>Metals Index</span>
+                            <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded">High Demand</span>
+                        </div>
+                        <div className="text-2xl font-bold text-off-white">9,580</div>
+                        <div className="text-sm text-blue-400 font-medium tracking-tight">Real-time Synthesis</div>
                     </div>
+                </div>
+
+                <div className="mb-8 flex items-center gap-2">
+                    <div className="h-4 w-1 bg-amber-500/60 rounded-full"></div>
+                    <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-light-gray/40">
+                        Global Standard: All values displayed below are calculated <span className="text-off-white/60">Per Gram</span>
+                    </p>
                 </div>
 
             </div>
