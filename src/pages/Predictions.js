@@ -26,11 +26,11 @@ const Predictions = () => {
     return (
         <div className="min-h-screen bg-primary-black text-off-white py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-10">
-                    <h1 className="text-3xl sm:text-5xl font-semibold text-off-white mb-4">
+                <div className="mb-8">
+                    <h1 className="text-3xl sm:text-4xl font-semibold text-off-white mb-2">
                         Predict what will happen this year
                     </h1>
-                    <p className="text-light-gray/70 text-lg">
+                    <p className="text-light-gray/60 text-base sm:text-lg">
                         Cast your vote on the most controversial topics of 2024 and see what the community thinks.
                     </p>
                 </div>
@@ -45,7 +45,7 @@ const Predictions = () => {
                         {error}
                     </div>
                 ) : (
-                    <div className="max-w-4xl mx-auto space-y-8 animate-slideUp">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-slideUp">
                         {polls.length > 0 ? (
                             polls.map(poll => (
                                 <PredictionPoll key={poll._id} poll={poll} />
