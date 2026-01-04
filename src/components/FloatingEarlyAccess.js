@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import BetaSignupModal from './BetaSignupModal';
 
 const FloatingEarlyAccess = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,9 +70,14 @@ const FloatingEarlyAccess = () => {
 
                         <form className="space-y-4">
                             <input
+                                type="text"
+                                placeholder="Enter your name"
+                                className="w-full bg-primary-black border border-dark-gray/60 rounded-xl px-5 py-4 text-off-white focus:outline-none focus:border-emerald-500/50 transition-all font-medium"
+                            />
+                            <input
                                 type="email"
                                 placeholder="Enter your email"
-                                className="w-full bg-primary-black border border-dark-gray/60 rounded-xl px-5 py-4 text-off-white focus:outline-none focus:border-emerald-500/50 transition-all"
+                                className="w-full bg-primary-black border border-dark-gray/60 rounded-xl px-5 py-4 text-off-white focus:outline-none focus:border-emerald-500/50 transition-all font-medium"
                             />
                             <button
                                 type="button"
