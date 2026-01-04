@@ -60,12 +60,14 @@ const Navbar = () => {
     ? [
       { to: '/finance', label: 'Home' },
       { to: '/news', label: 'News' },
+      { to: '/predictions', label: 'Predictions' },
       { to: '/dashboard', label: 'Market' },
       { to: '/portfolio', label: 'Portfolio' },
     ]
     : [
       { to: '/', label: 'Home' },
       { to: '/news', label: 'News' },
+      { to: '/predictions', label: 'Predictions' },
       { to: '/dashboard', label: 'Market' },
       { to: '/portfolio', label: 'Portfolio' },
     ];

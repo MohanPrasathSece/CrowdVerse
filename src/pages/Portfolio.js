@@ -20,9 +20,9 @@ const positions = [
   {
     asset: 'Digital Assets Basket',
     allocation: '25%',
-    value: '₹38,120',
-    cost: '₹34,980',
-    pl: '+₹3,140',
+    value: '$38,120',
+    cost: '$34,980',
+    pl: '+$3,140',
     trend: '+6.4%',
   },
   {
@@ -79,10 +79,10 @@ const Portfolio = () => (
             <div className="text-3xl font-semibold text-off-white">{card.value}</div>
             <div
               className={`text-sm mt-2 ${card.tone === 'positive'
-                  ? 'text-green-400'
-                  : card.tone === 'negative'
-                    ? 'text-red-400'
-                    : 'text-light-gray/60'
+                ? 'text-green-400'
+                : card.tone === 'negative'
+                  ? 'text-red-400'
+                  : 'text-light-gray/60'
                 }`}
             >
               {card.delta}

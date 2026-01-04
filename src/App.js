@@ -12,9 +12,12 @@ import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import Finance from './pages/Finance';
 import News from './pages/News';
+import Predictions from './pages/Predictions';
 import Stocks from './pages/Stocks';
 import Crypto from './pages/Crypto';
+import Commodities from './pages/Commodities';
 import PrivateRoute from './components/PrivateRoute';
+import BetaSignupModal from './components/BetaSignupModal';
 import Asset from './pages/Asset';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
@@ -31,8 +34,10 @@ function TitleUpdater() {
       '/guest': 'CrowdVerse - Guest Login',
       '/finance': 'CrowdVerse - Finance',
       '/news': 'CrowdVerse - News',
+      '/predictions': 'CrowdVerse - Predictions',
       '/stocks': 'CrowdVerse - Market',
       '/crypto': 'CrowdVerse - Market',
+      '/commodities': 'CrowdVerse - Market',
       '/dashboard': 'CrowdVerse - Market',
       '/portfolio': 'CrowdVerse - Portfolio',
       '/admin': 'CrowdVerse - Admin'
@@ -53,9 +58,10 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <BetaSignupModal />
         <ScrollToTop />
         <TitleUpdater />
-        <div className="flex flex-col min-h-screen bg-primary-black">
+        <div className="flex flex-col min-h-screen bg-primary-black font-sans text-off-white">
           <Navbar />
           <main className="flex-1">
             <Routes>
@@ -81,6 +87,14 @@ function App() {
                 }
               />
               <Route
+                path="/predictions"
+                element={
+                  <PrivateRoute>
+                    <Predictions />
+                  </PrivateRoute>
+                }
+              />
+              <Route
                 path="/stocks"
                 element={
                   <PrivateRoute>
@@ -93,6 +107,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Crypto />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/commodities"
+                element={
+                  <PrivateRoute>
+                    <Commodities />
                   </PrivateRoute>
                 }
               />

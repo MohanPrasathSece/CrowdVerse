@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Stocks from './Stocks';
 import Crypto from './Crypto';
+import Commodities from './Commodities';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('stocks');
@@ -23,7 +24,9 @@ const Dashboard = () => {
       setTimeout(() => {
         const elementId = activeTab === 'stocks'
           ? 'global-equities-snapshot'
-          : 'cryptocurrency-market';
+          : activeTab === 'crypto'
+            ? 'cryptocurrency-market'
+            : 'commodities-market';
         const element = document.getElementById(elementId);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -37,8 +40,8 @@ const Dashboard = () => {
 
   const quickStats = [
     { label: 'NIFTY 50', value: '19,674.25', change: '+1.21%', tone: 'positive' },
-    { label: 'BTC/USD', value: '₹67,234', change: '+3.29%', tone: 'positive' },
-    { label: 'Crypto Market Cap', value: '₹2.85T', change: '+4.2% 24h', tone: 'positive' },
+    { label: 'BTC/USD', value: '$67,234', change: '+3.29%', tone: 'positive' },
+    { label: 'Crypto Market Cap', value: '$2.85T', change: '+4.2% 24h', tone: 'positive' },
     { label: 'Market Status', value: 'Live', change: 'Synced', tone: 'neutral' },
   ];
 
@@ -129,12 +132,21 @@ const Dashboard = () => {
             >
               Crypto
             </button>
+            <button
+              onClick={() => setActiveTab('commodities')}
+              className={`flex-1 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all hover-scale ${activeTab === 'commodities'
+                ? 'bg-off-white text-primary-black shadow-lg'
+                : 'text-light-gray hover:text-off-white hover:bg-dark-gray'
+                }`}
+            >
+              Commodities
+            </button>
           </div>
         </div>
 
         {/* Content */}
         <div className={`transition-all duration-1000 delay-900 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
-          {activeTab === 'stocks' ? <Stocks /> : <Crypto />}
+          {activeTab === 'stocks' ? <Stocks /> : activeTab === 'crypto' ? <Crypto /> : <Commodities />}
         </div>
       </div>
     </div>

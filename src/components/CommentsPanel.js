@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { getComments, addComment, editComment, deleteComment, getNewsComments, addNewsComment } from '../utils/apiEnhanced';
+import { getComments, addComment, editComment, deleteComment, getNewsComments, addNewsComment, getPredictionComments, addPredictionComment } from '../utils/apiEnhanced';
 import { AuthContext } from '../context/AuthContext';
 
-const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
+const CommentsPanel = ({ asset, isNews = false, isPrediction = false, onRefreshRef }) => {
   const { user } = useContext(AuthContext);
   const [items, setItems] = useState(() => {
     const cached = localStorage.getItem(`cv_comments_${asset}`);
@@ -55,13 +55,13 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
       if (isNews) {
         const res = await getNewsComments(asset);
         data = res.data;
+      } else if (isPrediction) {
+        const res = await getPredictionComments(asset);
+        data = res.data;
       } else {
         const res = await getComments(asset, page, 20);
         data = res.data;
       }
-      console.log('[DEBUG] Fetched comment items:', data);
-
-      // Only update state if component is still mounted/valid
       const finalData = Array.isArray(data) ? data : [];
       setItems(finalData);
       localStorage.setItem(`cv_comments_${asset}`, JSON.stringify(finalData));
@@ -76,7 +76,7 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     }
 
     return () => controller.abort();
-  }, [asset, isNews, page]);
+  }, [asset, isNews, isPrediction, page]);
 
   useEffect(() => {
     let cancelFetch;
@@ -109,6 +109,8 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
     try {
       if (isNews) {
         await addNewsComment(asset, value, parentId);
+      } else if (isPrediction) {
+        await addPredictionComment(asset, value, parentId);
       } else {
         await addComment(asset, value, parentId);
       }
@@ -246,10 +248,7 @@ const CommentsPanel = ({ asset, isNews = false, onRefreshRef }) => {
 
   return (
     <div className="border border-dark-gray/60 rounded-2xl p-4 bg-secondary-black/40 space-y-4">
-      {/* DEBUG: Remove after fixing */}
-      <div className="text-xs text-yellow-500">
-        Debug Status: {loading ? 'Loading' : 'Idle'} | Items: {items.length} | Asset: {asset}
-      </div>
+
       <div className="flex items-center justify-between">
         <h3 className="text-off-white font-semibold">{isNews ? 'Discussion' : 'Community Comments'}</h3>
         {loading && (

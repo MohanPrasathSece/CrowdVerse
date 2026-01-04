@@ -40,7 +40,6 @@ const News = () => {
             }));
         } catch (error) {
             console.error('Vote failed:', error);
-            alert('Failed to submit vote');
         }
     };
 
@@ -81,9 +80,9 @@ const News = () => {
                                     <span className="text-light-gray/50 text-sm">{new Date(item.createdAt).toLocaleDateString()}</span>
                                 </div>
 
-                                <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-3">{item.title}</h2>
+                                <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-3 leading-tight">{item.title}</h2>
                                 <p
-                                    className={`text-light-gray/80 text-sm sm:text-base leading-relaxed mb-2 ${expandedId === item._id ? '' : 'line-clamp-3'}`}
+                                    className={`text-light-gray/80 text-base sm:text-lg leading-relaxed mb-4 ${expandedId === item._id ? '' : 'line-clamp-3'}`}
                                 >
                                     {item.summary}
                                 </p>
@@ -98,8 +97,8 @@ const News = () => {
 
                                 {/* Poll Section */}
                                 {item.poll && (
-                                    <div className="mb-8 bg-primary-black/50 rounded-xl p-6 border border-dark-gray/50">
-                                        <h3 className="text-off-white font-medium mb-4 flex items-center gap-2">
+                                    <div className="mb-8 bg-primary-black/50 rounded-xl p-8 border border-dark-gray/50">
+                                        <h3 className="text-off-white font-semibold mb-4 flex items-center gap-2 text-lg sm:text-xl">
                                             <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                             </svg>
@@ -110,6 +109,16 @@ const News = () => {
                                                 const totalVotes = item.poll.options.reduce((acc, curr) => acc + curr.votes, 0);
                                                 const percentage = totalVotes === 0 ? 0 : Math.round((option.votes / totalVotes) * 100);
 
+                                                // Check if this option is the one the user voted for
+                                                const userId = user?.isGuest ? user.id : user?._id;
+                                                const isVoted = item.poll.voters?.some(v => {
+                                                    if (typeof v === 'object' && v !== null) {
+                                                        return String(v.userId) === String(userId) && v.optionIndex === idx;
+                                                    }
+                                                    // Legacy strings don't track index, so we can't reliably highlight which one was clicked
+                                                    return false;
+                                                });
+
                                                 return (
                                                     <button
                                                         key={idx}
@@ -119,12 +128,12 @@ const News = () => {
                                                     >
                                                         <div className="absolute inset-0 bg-dark-gray/30 rounded-lg overflow-hidden">
                                                             <div
-                                                                className="h-full bg-blue-600/20 transition-all duration-500"
+                                                                className={`h-full transition-all duration-500 ${isVoted ? 'bg-emerald-500/20' : 'bg-blue-600/20'}`}
                                                                 style={{ width: `${percentage}%` }}
                                                             />
                                                         </div>
-                                                        <div className="relative flex items-center justify-between p-3 rounded-lg border border-dark-gray/50 group-hover:border-off-white/30 transition-all">
-                                                            <span className="text-off-white/90 font-medium">{option.text}</span>
+                                                        <div className={`relative flex items-center justify-between p-4 rounded-lg border border-dark-gray/50 group-hover:border-off-white/30 transition-all ${isVoted ? 'border-emerald-500/50' : ''}`}>
+                                                            <span className={`font-semibold text-base sm:text-lg ${isVoted ? 'text-emerald-400' : 'text-off-white/90'}`}>{option.text}</span>
                                                             <span className="text-light-gray/60 text-sm">{percentage}% ({option.votes})</span>
                                                         </div>
                                                     </button>

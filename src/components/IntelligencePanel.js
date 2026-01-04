@@ -126,6 +126,36 @@ const IntelligencePanel = ({ asset, assetName }) => {
       user_comments_summary: 'Community excited about ZK technology implementation. Investors focused on user growth and protocol revenue.',
       market_sentiment_summary: 'Bullish at 68%. Daily active addresses growing 25% QoQ. Gas fees remain low attracting users.',
       final_summary: 'Polygon\'s multi-scaling approach and ZK technology position well for Ethereum ecosystem growth. Consider exposure to L2 scaling trends.'
+    },
+    'GOLD': {
+      global_news_summary: 'Gold prices hover near all-time highs as central banks continue record buying spree. Geopolitical tensions in Middle East drive safe-haven demand. US Federal Reserve interest rate cuts expected to boost non-yielding assets.',
+      user_comments_summary: 'Investors bullish on gold as hedge against inflation and currency devaluation. Discussions focus on breaking $2,100 resistance level. Retail interest high in sovereign gold bonds.',
+      market_sentiment_summary: 'Strongly bullish at 78%. Institutional ETF inflows positive for 3rd consecutive month. Technical indicators show solid support at $2,000 level.',
+      final_summary: 'Gold remains the premier safe-haven asset in uncertain times. Central bank demand provides strong floor. Maintain core allocation for portfolio stability.'
+    },
+    'SILVER': {
+      global_news_summary: 'Silver demand surges from solar panel manufacturing and EV industry. Supply deficit expected to widen in 2024. Industrial demand now accounts for 50% of total consumption.',
+      user_comments_summary: 'Community excited about "poor man\'s gold" catching up to gold rally. Technical analysts eye $26 breakout. Some concern about industrial slowdown in China affecting demand.',
+      market_sentiment_summary: 'Bullish at 72%. Gold-Silver ratio suggests silver is undervalued relative to gold. speculative interest rising in futures market.',
+      final_summary: 'Silver offers high beta exposure to precious metals with added industrial kick. Volatility expected to remain high. attractive for aggressive investors.'
+    },
+    'COPPER': {
+      global_news_summary: 'Copper prices stabilize as green energy transition drives long-term structural deficit. Mining supply disruptions in South America tighten market. Infrastructure spending in India and US supports demand.',
+      user_comments_summary: 'Investors debate impact of global recession fears vs green energy demand. Discussions on supply constraints from major mines. Long-term holders confident in "Dr. Copper".',
+      market_sentiment_summary: 'Moderately bullish at 65%. Inventories at historical lows on LME. Technicals show consolidation pattern before potential breakout.',
+      final_summary: 'Copper is critical for the electrification era. Supply constraints met with rising demand create a bullish long-term structural setup. Accumulate on dips.'
+    },
+    'SILICON': {
+      global_news_summary: 'Silicon prices rebound as semiconductor industry recovers from improved demand. Solar sector consumption hits record highs. Supply chain diversification away from concentration risks continues.',
+      user_comments_summary: 'Tech-focused investors discussing impact on chip makers. Interest in solar value chain. Some questions about pricing power of major producers.',
+      market_sentiment_summary: 'Neutral to bullish at 58%. Demand visibility improves with chip inventory correction ending. Solar demand remains a strong pillar.',
+      final_summary: 'Silicon is a key enabler for both digital and green transitions. Recovery in electronics sector combined with solar growth supports positive outlook.'
+    },
+    'ALUMINUM': {
+      global_news_summary: 'Aluminum demand supported by lightweighting trends in automotive and aerospace. Production costs rise due to energy prices. Green aluminum (low carbon) gaining premium pricing.',
+      user_comments_summary: 'Discussions around EV adoption driving demand. Concerns about energy-intensive production and environmental regulations. Traders watching Chinese production quotas.',
+      market_sentiment_summary: 'Neutral at 52%. Market balanced between supply surplus concerns and future demand growth. Price consolidating in narrow range.',
+      final_summary: 'Aluminum offers exposure to industrial activity and transportation modernization. Focus on low-carbon producers. Range-bound trading expected in near term.'
     }
   }), []);
 
@@ -152,7 +182,11 @@ const IntelligencePanel = ({ asset, assetName }) => {
     'LARSEN & TOUBRO': 'LT',
     'ITC LIMITED': 'ITC',
     'AXIS BANK': 'AXISBANK',
-    'KOTAK MAHINDRA BANK': 'KOTAKBANK'
+    'KOTAK MAHINDRA BANK': 'KOTAKBANK',
+    // Commodities
+    'COPPER METAL': 'COPPER',
+    'SILICON METAL': 'SILICON',
+    'ALUMINUM METAL': 'ALUMINUM'
   }), []);
 
   const clean = (txt) => {
@@ -192,11 +226,15 @@ const IntelligencePanel = ({ asset, assetName }) => {
 
       // Check for Indian stocks (add .NS suffix for Finnhub)
       const isIndianStock = ['TCS', 'RELIANCE', 'INFY', 'HDFCBANK', 'SBIN', 'ICICIBANK', 'LT', 'ITC', 'AXISBANK', 'KOTAKBANK'].includes(symbolKey);
+      const isCommodity = ['GOLD', 'SILVER', 'COPPER', 'SILICON', 'ALUMINUM'].includes(symbolKey);
       // Check for cryptocurrencies (use direct symbol for Finnhub)
       const isCrypto = ['BTC', 'ETH', 'SOL', 'DOGE', 'ADA', 'XRP', 'DOT', 'AVAX', 'LINK', 'MATIC'].includes(symbolKey);
 
-      if (isIndianStock || isCrypto) {
+      if (isIndianStock || isCrypto || isCommodity) {
         try {
+          // For commodities, we might need a different suffix or API support, assuming basic name works for now or handled by generalized Finnhub lookup if supported.
+          // Since we are mocking/using static mostly, this API call might fail for commodities if Finnhub doesn't support them freely.
+          // But kept for consistency.
           const finnhubSymbol = isIndianStock ? `${symbolKey}.NS` : symbolKey;
           console.log(`[IntelligencePanel] Fetching real-time data for ${finnhubSymbol}`);
           const response = await getMarketAnalysis(finnhubSymbol);
@@ -252,6 +290,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
 
       // General stock information based on asset type
       const isStock = symbolKey.length > 5 || ['TCS', 'RELIANCE', 'INFY', 'HDFCBANK', 'SBIN', 'ICICIBANK', 'LT', 'ITC', 'AXISBANK', 'KOTAKBANK'].includes(symbolKey);
+      const isCommodity = ['GOLD', 'SILVER', 'COPPER', 'SILICON', 'ALUMINUM'].includes(symbolKey);
       const isCrypto = ['BTC', 'ETH', 'SOL', 'DOGE', 'ADA', 'XRP', 'DOT', 'AVAX', 'LINK', 'MATIC'].includes(symbolKey);
 
       let generalInfo;
@@ -269,6 +308,13 @@ const IntelligencePanel = ({ asset, assetName }) => {
           user_comments_summary: `Crypto community actively discusses ${a} with focus on technological developments, network metrics, and market cycles. Social media sentiment and influencer opinions create short-term volatility patterns.`,
           market_sentiment_summary: `${a} exhibits high volatility characteristic of crypto assets. Sentiment swings between fear and greed based on market cycles. Monitor on-chain metrics and trading volumes for trend confirmation.`,
           final_summary: `${a} offers exposure to digital asset markets with high growth potential and significant risk. Consider portfolio allocation limits, market timing, and long-term adoption trends. Implement proper risk management strategies.`
+        };
+      } else if (isCommodity) {
+        generalInfo = {
+          global_news_summary: `${a} is a key commodity driven by global supply and demand dynamics, macroeconomic factors, and currency movements. Monitor inventory levels, geopolitical events, and industrial activity indicators.`,
+          user_comments_summary: `Commodity traders discuss ${a} with focus on technical trends, supply disruptions, and inflation hedging properties. Sentiment often correlates with the US Dollar and global growth outlook.`,
+          market_sentiment_summary: `${a} market sentiment reflects shifts in risk appetite and industrial demand expectations. Volatility can be elevated during key economic data releases.`,
+          final_summary: `${a} plays an important role in diversified portfolios as a hedge or tactical play. Consider cyclical nature and long-term structural drivers like green energy transition or monetary policy.`
         };
       } else {
         generalInfo = {
@@ -335,7 +381,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
             <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Global News Summary</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.global_news_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-base sm:text-lg">{clean(data.global_news_summary) || '—'}</div>
         </div>
 
         <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
@@ -343,7 +389,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
             <span className="inline-block w-2 h-2 rounded-full bg-sky-400" />
             <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Community Comments Summary</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.user_comments_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-base sm:text-lg">{clean(data.user_comments_summary) || '—'}</div>
         </div>
 
         <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
@@ -351,7 +397,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
             <span className="inline-block w-2 h-2 rounded-full bg-amber-400" />
             <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Market Sentiment Summary</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.market_sentiment_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-base sm:text-lg">{clean(data.market_sentiment_summary) || '—'}</div>
         </div>
 
         <div className="p-6 rounded-3xl border border-dark-gray/60 bg-primary-black/30 hover:shadow-lg hover:shadow-off-white/5 transition-all">
@@ -359,7 +405,7 @@ const IntelligencePanel = ({ asset, assetName }) => {
             <span className="inline-block w-2 h-2 rounded-full bg-fuchsia-400" />
             <div className="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold">Final AI Takeaway</div>
           </div>
-          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-sm sm:text-base">{clean(data.final_summary) || '—'}</div>
+          <div className="text-off-white/90 whitespace-pre-wrap leading-[2.25] text-base sm:text-lg">{clean(data.final_summary) || '—'}</div>
         </div>
       </div>
     </div>

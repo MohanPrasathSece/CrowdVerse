@@ -66,6 +66,12 @@ export const votePoll = (pollId, optionIndex) => API.post(`/news/vote/${pollId}`
 export const getNewsComments = (newsId) => API.get(`/news/${newsId}/comments`);
 export const addNewsComment = (newsId, text, parentId = null) => API.post(`/news/${newsId}/comments`, { text, parentId });
 
+// Prediction API
+export const getPredictionPolls = () => API.get('/predictions');
+export const votePredictionPoll = (pollId, optionIndex) => API.post(`/predictions/vote/${pollId}`, { optionIndex });
+export const getPredictionComments = (pollId) => API.get(`/predictions/${pollId}/comments`);
+export const addPredictionComment = (pollId, text, parentId = null) => API.post(`/predictions/${pollId}/comments`, { text, parentId });
+
 export const getAISummary = (assetName, recentComments = [], recentNews = [], marketSentiment = '', refresh = false) =>
   API.post('/ai-summary', { asset_name: assetName, recent_comments: recentComments, recent_news: recentNews, market_sentiment: marketSentiment, refresh });
 

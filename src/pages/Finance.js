@@ -17,20 +17,20 @@ const marketNarrative = [
   },
   {
     phase: 'Midday Momentum',
-    headline: 'Crypto joined the rally as BTC defended the ₹66K shelf and accelerated.',
+    headline: 'Crypto joined the rally as BTC defended the $66K shelf and accelerated.',
     detail:
       'Flows rotated from defensives into growth trades; desks reported stronger appetite for digital assets as volatility stayed contained.',
     metricLabel: 'BTC/USD',
-    metricValue: '₹67,234',
+    metricValue: '$67,234',
     metricDelta: '+3.29% in 24h',
   },
   {
     phase: 'Closing Narrative',
     headline: 'Market breadth stayed constructive while liquidity pockets remained deep.',
     detail:
-      'Crypto market cap reclaimed the ₹2.8T handle and equity futures held gains, hinting at follow-through if macro data cooperates overnight.',
+      'Crypto market cap reclaimed the $2.8T handle and equity futures held gains, hinting at follow-through if macro data cooperates overnight.',
     metricLabel: 'Crypto Market Cap',
-    metricValue: '₹2.85T',
+    metricValue: '$2.85T',
     metricDelta: '+4.2% across 24h',
   },
 ];
@@ -83,7 +83,6 @@ const Finance = () => {
       }));
     } catch (error) {
       console.error('Vote failed:', error);
-      alert('Failed to submit vote');
     }
   };
 
@@ -125,7 +124,7 @@ const Finance = () => {
 
 
         {/* CTA Section - Markets */}
-        <div className={`grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12 transition-all duration-700 delay-200 ${isVisible ? 'animate-slideInUp' : 'opacity-0'}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12 transition-all duration-700 delay-200 ${isVisible ? 'animate-slideInUp' : 'opacity-0'}`}>
           <Link
             to="/dashboard"
             state={{ activeView: 'stocks' }}
@@ -177,6 +176,32 @@ const Finance = () => {
               </div>
             </div>
           </Link>
+
+          <Link
+            to="/dashboard"
+            state={{ activeView: 'commodities' }}
+            className="group border border-off-white/20 rounded-xl p-8 bg-transparent hover:border-off-white/40 transition-all duration-300"
+          >
+            <div className="space-y-6">
+              <div className="w-12 h-12 border border-off-white/30 rounded-md flex items-center justify-center">
+                <svg className="w-6 h-6 text-off-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-2">Commodities</h3>
+                <p className="text-sm sm:text-base text-light-gray/60 mb-4">
+                  Precious metals and energy resources
+                </p>
+                <div className="flex items-center text-off-white/80 text-sm">
+                  <span>Explore Markets</span>
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Trending News Section */}
@@ -206,9 +231,9 @@ const Finance = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trendingNews.map((news, index) => (
-                <div key={index} className="border border-dark-gray/50 rounded-xl p-6 bg-primary-black/40 hover:border-off-white/30 transition-all duration-300 group cursor-pointer">
-                  <div className="flex items-start justify-between mb-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${news.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
+                <div key={index} className="border border-dark-gray/50 rounded-2xl p-8 bg-primary-black/40 hover:border-off-white/30 transition-all duration-300 group cursor-pointer h-full flex flex-col">
+                  <div className="flex items-start justify-between mb-4">
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${news.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
                       news.category === 'Markets' ? 'bg-purple-500/20 text-purple-400' :
                         news.category === 'Equities' ? 'bg-green-500/20 text-green-400' :
                           'bg-orange-500/20 text-orange-400'
@@ -218,27 +243,33 @@ const Finance = () => {
                     <span className="text-xs text-light-gray/50">{news.time}</span>
                   </div>
 
-                  <h3 className="text-base sm:text-lg font-semibold text-off-white mb-2 group-hover:text-white transition-colors line-clamp-2">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-3 group-hover:text-white transition-colors leading-tight line-clamp-2">
                     {news.title}
                   </h3>
 
-                  <p className="text-sm text-light-gray/70 mb-3 line-clamp-3">
-                    {news.summary}
-                  </p>
+
 
                   {/* Poll (votes) */}
                   {news.poll && (
                     <div className="mt-4 mb-4 bg-primary-black/50 rounded-xl p-4 border border-dark-gray/50">
-                      <h3 className="text-off-white font-medium mb-3 flex items-center gap-2 text-sm">
-                        <svg className="w-4 h-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <h3 className="text-off-white font-semibold mb-3 flex items-center gap-2 text-base sm:text-lg">
+                        <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a 2 2 0 002 2h2a2 2 0 002-2m0 0V5a 2 2 0 012-2h2a2 2 0 012 2v14a 2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                         {news.poll.question}
                       </h3>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {news.poll.options.map((option, idx) => {
                           const totalVotes = news.poll.options.reduce((acc, curr) => acc + curr.votes, 0);
                           const percentage = totalVotes === 0 ? 0 : Math.round((option.votes / totalVotes) * 100);
+
+                          const userId = user?.isGuest ? user.id : user?._id;
+                          const isVoted = news.poll.voters?.some(v => {
+                            if (typeof v === 'object' && v !== null) {
+                              return String(v.userId) === String(userId) && v.optionIndex === idx;
+                            }
+                            return false;
+                          });
 
                           return (
                             <button
@@ -249,13 +280,13 @@ const Finance = () => {
                             >
                               <div className="absolute inset-0 bg-dark-gray/30 rounded-lg overflow-hidden">
                                 <div
-                                  className="h-full bg-blue-600/20 transition-all duration-500"
+                                  className={`h-full transition-all duration-500 ${isVoted ? 'bg-emerald-500/20' : 'bg-blue-600/20'}`}
                                   style={{ width: `${percentage}%` }}
                                 />
                               </div>
-                              <div className="relative flex items-center justify-between p-2 rounded-lg border border-dark-gray/50 group-hover:border-off-white/30 transition-all text-xs">
-                                <span className="text-off-white/90 font-medium">{option.text}</span>
-                                <span className="text-light-gray/60">{percentage}% ({option.votes})</span>
+                              <div className={`relative flex items-center justify-between p-4 rounded-lg border border-dark-gray/50 group-hover:border-off-white/30 transition-all text-base sm:text-lg ${isVoted ? 'border-emerald-500/50' : ''}`}>
+                                <span className={`font-semibold ${isVoted ? 'text-emerald-400' : 'text-off-white/90'}`}>{option.text}</span>
+                                <span className="text-light-gray/60 text-sm">{percentage}% ({option.votes})</span>
                               </div>
                             </button>
                           );
@@ -324,7 +355,7 @@ const Finance = () => {
           </div>
         ))}
 
-        {/* Signals to Watch */ }
+        {/* Signals to Watch */}
         <div className={`bg-gradient-bg p-6 sm:p-8 rounded-3xl border border-dark-gray/70 mb-8 hover-glow transition-all duration-1000 delay-500 ${isVisible ? 'animate-slideInRight' : 'opacity-0'}`}>
           <h3 className="text-xl sm:text-2xl font-bold text-off-white mb-4">Signals on the Radar</h3>
           <p className="text-sm text-light-gray/70 mb-6 max-w-3xl">

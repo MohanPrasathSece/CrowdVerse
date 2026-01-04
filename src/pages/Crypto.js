@@ -30,21 +30,15 @@ const Crypto = () => {
           return acc;
         }, {});
 
-        // Conversion helpers - convert USD values to INR before display
-        const USD_TO_INR = 83; // Approximate conversion; adjust if you want a different rate
-
-        const toINR = (value) =>
-          typeof value === 'number' ? value * USD_TO_INR : null;
-
         const formatNumber = (value) =>
           typeof value === 'number'
-            ? `₹${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            ? `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
             : '—';
 
         const formatted = FEATURED_CRYPTOS.map((featured, idx) => {
           const raw = bySymbol[featured.symbol.toUpperCase()] || {};
 
-          const priceValue = toINR(raw.price);
+          const priceValue = raw.price;
           const changeValue = typeof raw.change === 'number' ? raw.change : null;
 
           return {
@@ -54,10 +48,10 @@ const Crypto = () => {
             symbol: featured.symbol,
             price: formatNumber(priceValue),
             change: changeValue,
-            open: formatNumber(toINR(raw.open)),
-            high: formatNumber(toINR(raw.high)),
-            low: formatNumber(toINR(raw.low)),
-            prevClose: formatNumber(toINR(raw.prevClose)),
+            open: formatNumber(raw.open),
+            high: formatNumber(raw.high),
+            low: formatNumber(raw.low),
+            prevClose: formatNumber(raw.prevClose),
           };
         });
 
@@ -133,12 +127,12 @@ const Crypto = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 animate-slideInLeft">
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
             <div className="text-sm text-light-gray mb-1">Total Market Cap</div>
-            <div className="text-2xl font-bold text-off-white">₹2.85T</div>
+            <div className="text-2xl font-bold text-off-white">$2.85T</div>
             <div className="text-green-400 text-sm">+4.2% (24h)</div>
           </div>
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">
             <div className="text-sm text-light-gray mb-1">24h Volume</div>
-            <div className="text-2xl font-bold text-off-white">₹89.5B</div>
+            <div className="text-2xl font-bold text-off-white">$89.5B</div>
             <div className="text-blue-400 text-sm">High activity</div>
           </div>
           <div className="bg-gradient-bg p-4 rounded-xl border border-dark-gray hover-lift">

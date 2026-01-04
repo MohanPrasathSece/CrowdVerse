@@ -109,25 +109,31 @@ const Landing = () => {
               <h2 className="text-2xl sm:text-3xl font-light text-off-white">Market Coverage</h2>
               <p className="text-sm sm:text-base text-light-gray/80 leading-relaxed">
                 Track the Indian stock market with real-time NSE data covering major indices and blue-chip stocks.
-                Monitor cryptocurrency markets with live pricing for Bitcoin, Ethereum, and other top digital assets.
+                Monitor cryptocurrency markets with live pricing for digital assets, and follow precious metals and energy in our new Commodities section.
               </p>
-              <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="grid grid-cols-3 gap-4 pt-4">
                 <div className="space-y-2">
                   <h4 className="text-off-white font-medium">Indian Equities</h4>
                   <ul className="text-xs sm:text-sm text-light-gray/70 space-y-1">
                     <li>• Reliance Industries</li>
                     <li>• TCS & Infosys</li>
-                    <li>• HDFC & ICICI Bank</li>
-                    <li>• ITC & L&T</li>
+                    <li>• Top Banks</li>
                   </ul>
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-off-white font-medium">Cryptocurrencies</h4>
+                  <h4 className="text-off-white font-medium">Crypto</h4>
                   <ul className="text-xs sm:text-sm text-light-gray/70 space-y-1">
                     <li>• Bitcoin (BTC)</li>
                     <li>• Ethereum (ETH)</li>
-                    <li>• Solana (SOL)</li>
                     <li>• Top Altcoins</li>
+                  </ul>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-off-white font-medium">Commodities</h4>
+                  <ul className="text-xs sm:text-sm text-light-gray/70 space-y-1">
+                    <li>• Gold & Silver</li>
+                    <li>• Copper & Silicon</li>
+                    <li>• Crude Oil</li>
                   </ul>
                 </div>
               </div>
@@ -148,11 +154,15 @@ const Landing = () => {
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-dark-gray/20">
                     <span className="text-off-white">BTC/USDT</span>
-                    <span className="text-green-400">₹43,250.00</span>
+                    <span className="text-green-400">$43,250.00</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-b border-dark-gray/20">
+                    <span className="text-off-white">ETH/USDT</span>
+                    <span className="text-red-400">$2,890.45</span>
                   </div>
                   <div className="flex items-center justify-between py-2">
-                    <span className="text-off-white">ETH/USDT</span>
-                    <span className="text-red-400">₹2,890.45</span>
+                    <span className="text-off-white">GOLD (10g)</span>
+                    <span className="text-green-400">₹62,500.00</span>
                   </div>
                 </div>
               </div>
