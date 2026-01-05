@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import newsService from '../services/newsService';
 import CommentsPanel from '../components/CommentsPanel';
+import NewsIntelligencePanel from '../components/NewsIntelligencePanel';
 import { AuthContext } from '../context/AuthContext';
 import { votePoll } from '../utils/apiEnhanced';
 
@@ -299,6 +300,10 @@ const Finance = () => {
                       {!user && <p className="text-[10px] text-red-400 mt-2 text-center">Login to vote</p>}
                     </div>
                   )}
+
+                  {/* AI Intelligence Analysis */}
+                  <NewsIntelligencePanel newsItem={news} />
+
 
                   <div className="flex items-center justify-between pt-2 border-t border-dark-gray/50 mt-2">
                     <button

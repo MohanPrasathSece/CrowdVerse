@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import newsService from '../services/newsService';
 import { votePoll } from '../utils/apiEnhanced';
 import CommentsPanel from './CommentsPanel';
+import NewsIntelligencePanel from './NewsIntelligencePanel';
 import { AuthContext } from '../context/AuthContext';
 
 const SectorNews = ({ category, title, description }) => {
@@ -122,6 +123,10 @@ const SectorNews = ({ category, title, description }) => {
                                 </div>
                             </div>
                         )}
+
+                        {/* AI Intelligence Analysis */}
+                        <NewsIntelligencePanel newsItem={item} />
+
 
                         <div className="mt-4 pt-3 flex items-center justify-between border-t border-dark-gray/30">
                             <button
