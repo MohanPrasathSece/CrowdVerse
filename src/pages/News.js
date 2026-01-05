@@ -17,7 +17,6 @@ const News = () => {
     });
     const [loading, setLoading] = useState(newsItems.length === 0);
     const [activeNewsId, setActiveNewsId] = useState(null);
-    const [expandedId, setExpandedId] = useState(null);
 
     useEffect(() => {
         let isMounted = true;
