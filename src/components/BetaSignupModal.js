@@ -30,7 +30,7 @@ const BetaSignupModal = () => {
         setMsg('');
 
         try {
-            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+            const API_URL = process.env.REACT_APP_API_URL || '/api';
             await axios.post(`${API_URL}/beta/signup`, formData);
 
             setIsSuccess(true);

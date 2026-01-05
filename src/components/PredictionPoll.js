@@ -132,7 +132,7 @@ const PredictionPoll = ({ poll, isExpanded, onToggle }) => {
                                     const btn = document.getElementById(`analyze-btn-${data._id}`);
                                     if (btn) btn.disabled = true;
                                     try {
-                                        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/predictions/${data._id}/analyze`, {
+                                        const response = await fetch(`${process.env.REACT_APP_API_URL || '/api'}/predictions/${data._id}/analyze`, {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' }
                                         });
