@@ -8,7 +8,7 @@ const API = axios.create({
 // News cache management
 const NEWS_CACHE_KEY = 'crowdverse_news_cache_v2';
 const NEWS_CACHE_TIMESTAMP_KEY = 'crowdverse_news_timestamp';
-const CACHE_DURATION = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
+const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
 
 // Sample news data as fallback
 const SAMPLE_NEWS = [
@@ -99,10 +99,19 @@ class NewsService {
       if (cachedData) {
         try {
           const parsed = JSON.parse(cachedData);
-          // If we have data, use it. If it's empty, maybe try to fetch fresh anyway.
           if (Array.isArray(parsed) && parsed.length > 0) {
-            console.log(`📰 Using cached ${category} news data (${parsed.length} items)`);
-            return parsed;
+            // Check if cached data is truncated. If top items have "..." or "[+", force a refresh anyway.
+            const isTruncated = parsed.slice(0, 10).some(item =>
+              (item.summary && (item.summary.includes('...') || item.summary.includes('[+'))) ||
+              (item.fullContent && (item.fullContent.includes('...') || item.fullContent.includes('[+')))
+            );
+
+            if (!isTruncated) {
+              console.log(`📰 Using cached ${category} news data (${parsed.length} items)`);
+              return parsed.filter(n => n.source !== 'Yahoo Entertainment');
+            } else {
+              console.log(`📰 Cached news is truncated. Forcing fresh fetch...`);
+            }
           }
         } catch (e) {
           console.error('Error parsing news cache', e);
@@ -140,6 +149,7 @@ class NewsService {
         }
 
         seenTitles.add(titleKey);
+        if (article.source === 'Yahoo Entertainment') continue;
         uniqueNews.push(article);
       }
 

@@ -111,42 +111,15 @@ const News = () => {
                                         }`}>
                                         {item.category === 'Geopolitics' ? 'Foreign Affairs' : item.category}
                                     </span>
-                                    <span className="text-light-gray/50 text-xs font-medium">{item.time || new Date(item.createdAt).toLocaleDateString()}</span>
+                                    <span className="text-light-gray/50 text-xs font-medium">{item.source} • {item.time || new Date(item.publishedAt || item.createdAt).toLocaleDateString()}</span>
                                 </div>
 
                                 <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-3 leading-tight">{item.title}</h2>
                                 <div className="text-light-gray/80 text-base sm:text-lg leading-relaxed mb-4">
-                                    {expandedId === (item._id || item.id) ? (
-                                        <div className="space-y-4">
-                                            <p>{item.fullContent}</p>
-                                            {item.url && (
-                                                <a
-                                                    href={item.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 font-medium"
-                                                >
-                                                    Read full article on {item.source}
-                                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                                    </svg>
-                                                </a>
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <p>{item.summary}</p>
-                                    )}
+                                    <div className="space-y-4">
+                                        <p>{item.fullContent || item.summary}</p>
+                                    </div>
                                 </div>
-
-                                {item.url && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setExpandedId(expandedId === (item._id || item.id) ? null : (item._id || item.id))}
-                                        className="text-xs text-blue-400 hover:text-blue-300 mb-4 self-start font-bold uppercase tracking-widest"
-                                    >
-                                        {expandedId === (item._id || item.id) ? 'Show less' : 'Read more'}
-                                    </button>
-                                )}
 
                                 {/* Poll Section */}
                                 {item.poll && (
@@ -229,7 +202,7 @@ const News = () => {
                     ))}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
