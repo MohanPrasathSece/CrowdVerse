@@ -6,9 +6,9 @@ const API = axios.create({
 });
 
 // News cache management
-const NEWS_CACHE_KEY = 'crowdverse_news_cache';
+const NEWS_CACHE_KEY = 'crowdverse_news_cache_v2';
 const NEWS_CACHE_TIMESTAMP_KEY = 'crowdverse_news_timestamp';
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const CACHE_DURATION = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
 
 // Sample news data as fallback
 const SAMPLE_NEWS = [
@@ -153,7 +153,10 @@ class NewsService {
         createdAt: article.createdAt,
         category: article.category || 'General',
         sentiment: article.sentiment || 'neutral',
-        summary: article.summary || (article.content ? `${article.content.substring(0, 150)}...` : ''),
+        summary: article.summary || '',
+        fullContent: article.content || article.summary || '',
+        imageUrl: article.imageUrl,
+        url: article.url,
         poll: article.poll || null,
       }));
 
