@@ -9,14 +9,19 @@ const SectorNews = ({ category, title, description }) => {
     const [newsItems, setNewsItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeNewsId, setActiveNewsId] = useState(null);
-    const [expandedId, setExpandedId] = useState(null);
 
     useEffect(() => {
         const fetchNews = async () => {
             try {
                 setLoading(true);
                 const data = await newsService.fetchNews(category);
-                setNewsItems(data);
+                if (data.length < 2) {
+                    // Try one force refresh if we got almost nothing
+                    const freshData = await newsService.fetchNews(category, true);
+                    setNewsItems(freshData);
+                } else {
+                    setNewsItems(data);
+                }
             } catch (error) {
                 console.error(`Failed to fetch ${category} news:`, error);
             } finally {
@@ -79,16 +84,9 @@ const SectorNews = ({ category, title, description }) => {
                             {item.title}
                         </h3>
 
-                        <p className={`text-sm text-light-gray/70 leading-relaxed mb-4 ${expandedId === item.id ? '' : 'line-clamp-3'}`}>
-                            {item.summary}
+                        <p className="text-sm text-light-gray/70 leading-relaxed mb-4">
+                            {item.fullContent || item.summary}
                         </p>
-
-                        <button
-                            onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}
-                            className="text-[10px] text-blue-400 hover:text-blue-300 mb-4 self-start font-bold uppercase tracking-widest"
-                        >
-                            {expandedId === item.id ? 'Show less' : 'Read more'}
-                        </button>
 
                         {item.poll && (
                             <div className="mt-auto pt-4 border-t border-dark-gray/30">

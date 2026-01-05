@@ -243,9 +243,13 @@ const Finance = () => {
                     <span className="text-xs text-light-gray/50">{news.time}</span>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-3 group-hover:text-white transition-colors leading-tight line-clamp-2">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-off-white mb-3 group-hover:text-white transition-colors leading-tight">
                     {news.title}
                   </h3>
+
+                  <div className="text-light-gray/70 text-sm leading-relaxed mb-4 flex-grow">
+                    <p>{news.fullContent || news.summary}</p>
+                  </div>
 
 
 

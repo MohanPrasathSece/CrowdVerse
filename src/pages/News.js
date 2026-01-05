@@ -8,7 +8,7 @@ const News = () => {
     const { user } = useContext(AuthContext);
     const [newsItems, setNewsItems] = useState(() => {
         try {
-            const cached = localStorage.getItem('crowdverse_news_cache_General');
+            const cached = localStorage.getItem('crowdverse_news_cache_v2_General');
             return cached ? JSON.parse(cached) : [];
         } catch (e) {
             console.error('Failed to parse news cache:', e);
@@ -18,47 +18,45 @@ const News = () => {
     const [loading, setLoading] = useState(newsItems.length === 0);
     const [activeNewsId, setActiveNewsId] = useState(null);
 
-    useEffect(() => {
-        let isMounted = true;
-        const fetchAllNews = async (forceRefresh = false) => {
-            try {
-                if (isMounted) setLoading(true);
-                const data = await newsService.fetchNews('General', forceRefresh);
 
-                if (!Array.isArray(data)) {
-                    console.error('News data is not an array:', data);
-                    if (isMounted) setNewsItems([]);
-                    return;
-                }
+    const fetchAllNews = async (forceRefresh = false) => {
+        try {
+            setLoading(true);
+            const data = await newsService.fetchNews('General', forceRefresh);
 
-                // Strict frontend exclusion of money news just in case
-                const filteredData = data.filter(item => {
-                    if (!item) return false;
-                    const moneyCats = ['Crypto', 'Stocks', 'Commodities', 'Markets', 'Equities'];
-                    if (moneyCats.includes(item.category)) return false;
-
-                    const moneyKeywords = /bitcoin|crypto|stock market|nifty|sensex|commodity|gold price|silver price|crude oil/i;
-                    if (item.title && moneyKeywords.test(item.title)) return false;
-
-                    return true;
-                });
-
-                if (isMounted) {
-                    setNewsItems(filteredData);
-                    // If cache was valid but returned nothing for us, try a force refresh once
-                    if (filteredData.length === 0 && !forceRefresh) {
-                        console.log('No general news in cache, forcing refresh...');
-                        fetchAllNews(true);
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch news:', error);
-            } finally {
-                if (isMounted) setLoading(false);
+            if (!Array.isArray(data)) {
+                console.error('News data is not an array:', data);
+                setNewsItems([]);
+                return;
             }
-        };
+
+            // Strict frontend exclusion of money news just in case
+            const filteredData = data.filter(item => {
+                if (!item) return false;
+                const moneyCats = ['Crypto', 'Stocks', 'Commodities', 'Markets', 'Equities'];
+                if (moneyCats.includes(item.category)) return false;
+
+                const moneyKeywords = /bitcoin|crypto|stock market|nifty|sensex|commodity|gold price|silver price|crude oil/i;
+                if (item.title && moneyKeywords.test(item.title)) return false;
+
+                return true;
+            });
+
+            setNewsItems(filteredData);
+            // If cache was valid but returned too few articles, force a real fetch
+            if (filteredData.length < 5 && !forceRefresh) {
+                console.log('Too few general news items in cache, forcing refresh...');
+                fetchAllNews(true);
+            }
+        } catch (error) {
+            console.error('Failed to fetch news:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchAllNews();
-        return () => { isMounted = false; };
     }, []);
 
     const handleVote = async (pollId, optionIndex) => {
@@ -91,9 +89,20 @@ const News = () => {
     return (
         <div className="min-h-screen bg-primary-black py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-10">
-                    <h1 className="text-3xl sm:text-5xl font-semibold text-off-white mb-4">World Intelligence</h1>
-                    <p className="text-light-gray/70 text-lg">Curated perspective on Politics, Geopolitics, and Foreign Affairs — stripped of market noise.</p>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+                    <div>
+                        <h1 className="text-3xl sm:text-5xl font-semibold text-off-white mb-4">World Intelligence</h1>
+                        <p className="text-light-gray/70 text-lg">Curated perspective on Politics, Geopolitics, and Foreign Affairs — stripped of market noise.</p>
+                    </div>
+                    <button
+                        onClick={() => fetchAllNews(true)}
+                        className="px-6 py-2 border border-off-white/20 rounded-lg text-off-white hover:bg-off-white hover:text-primary-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest font-bold"
+                    >
+                        <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        {loading ? 'Refreshing...' : 'Refresh Intelligence'}
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
