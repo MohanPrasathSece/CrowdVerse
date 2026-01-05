@@ -1,31 +1,65 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { getNews, votePoll } from '../utils/apiEnhanced';
+import newsService from '../services/newsService';
+import { votePoll } from '../utils/apiEnhanced';
 import CommentsPanel from '../components/CommentsPanel';
 import { AuthContext } from '../context/AuthContext';
 
 const News = () => {
     const { user } = useContext(AuthContext);
     const [newsItems, setNewsItems] = useState(() => {
-        const cached = localStorage.getItem('cv_news_cache');
-        return cached ? JSON.parse(cached) : [];
+        try {
+            const cached = localStorage.getItem('crowdverse_news_cache_General');
+            return cached ? JSON.parse(cached) : [];
+        } catch (e) {
+            console.error('Failed to parse news cache:', e);
+            return [];
+        }
     });
     const [loading, setLoading] = useState(newsItems.length === 0);
     const [activeNewsId, setActiveNewsId] = useState(null);
     const [expandedId, setExpandedId] = useState(null);
 
     useEffect(() => {
-        const fetchNews = async () => {
+        let isMounted = true;
+        const fetchAllNews = async (forceRefresh = false) => {
             try {
-                const { data } = await getNews();
-                setNewsItems(data);
-                localStorage.setItem('cv_news_cache', JSON.stringify(data));
+                if (isMounted) setLoading(true);
+                const data = await newsService.fetchNews('General', forceRefresh);
+
+                if (!Array.isArray(data)) {
+                    console.error('News data is not an array:', data);
+                    if (isMounted) setNewsItems([]);
+                    return;
+                }
+
+                // Strict frontend exclusion of money news just in case
+                const filteredData = data.filter(item => {
+                    if (!item) return false;
+                    const moneyCats = ['Crypto', 'Stocks', 'Commodities', 'Markets', 'Equities'];
+                    if (moneyCats.includes(item.category)) return false;
+
+                    const moneyKeywords = /bitcoin|crypto|stock market|nifty|sensex|commodity|gold price|silver price|crude oil/i;
+                    if (item.title && moneyKeywords.test(item.title)) return false;
+
+                    return true;
+                });
+
+                if (isMounted) {
+                    setNewsItems(filteredData);
+                    // If cache was valid but returned nothing for us, try a force refresh once
+                    if (filteredData.length === 0 && !forceRefresh) {
+                        console.log('No general news in cache, forcing refresh...');
+                        fetchAllNews(true);
+                    }
+                }
             } catch (error) {
                 console.error('Failed to fetch news:', error);
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
-        fetchNews();
+        fetchAllNews();
+        return () => { isMounted = false; };
     }, []);
 
     const handleVote = async (pollId, optionIndex) => {
@@ -50,7 +84,7 @@ const News = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-primary-black flex items-center justify-center">
-                <div className="text-off-white animate-pulse">Loading Market Intelligence...</div>
+                <div className="text-off-white animate-pulse">Loading Global Intelligence...</div>
             </div>
         );
     }
@@ -59,25 +93,25 @@ const News = () => {
         <div className="min-h-screen bg-primary-black py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-10">
-                    <h1 className="text-3xl sm:text-5xl font-semibold text-off-white mb-4">Market Intelligence</h1>
-                    <p className="text-light-gray/70 text-lg">Weekly curated insights on Crypto, Stocks, and Policy affecting the Indian market.</p>
+                    <h1 className="text-3xl sm:text-5xl font-semibold text-off-white mb-4">World Intelligence</h1>
+                    <p className="text-light-gray/70 text-lg">Curated perspective on Politics, Geopolitics, and Foreign Affairs — stripped of market noise.</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
                     {newsItems.map((item) => (
                         <div
-                            key={item._id}
+                            key={item._id || item.id}
                             className="bg-secondary-black/30 border border-dark-gray/60 rounded-xl overflow-hidden hover:border-off-white/20 transition-all h-full flex flex-col"
                         >
                             <div className="p-4 sm:p-5 flex flex-col h-full">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${item.category === 'Crypto' ? 'bg-blue-500/20 text-blue-400' :
-                                        item.category === 'Stocks' ? 'bg-green-500/20 text-green-400' :
-                                            'bg-purple-500/20 text-purple-400'
+                                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${item.category === 'Politics' ? 'bg-blue-500/20 text-blue-400' :
+                                        item.category === 'Geopolitics' ? 'bg-purple-500/20 text-purple-400' :
+                                            'bg-emerald-500/20 text-emerald-400'
                                         }`}>
-                                        {item.category}
+                                        {item.category === 'Geopolitics' ? 'Foreign Affairs' : item.category}
                                     </span>
-                                    <span className="text-light-gray/50 text-sm">{new Date(item.createdAt).toLocaleDateString()}</span>
+                                    <span className="text-light-gray/50 text-xs font-medium">{item.time || new Date(item.createdAt).toLocaleDateString()}</span>
                                 </div>
 
                                 <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-3 leading-tight">{item.title}</h2>

@@ -57,8 +57,8 @@ const Finance = () => {
     const fetchNews = async () => {
       try {
         setNewsLoading(true);
-        const news = await newsService.fetchNews();
-        setTrendingNews(news.slice(0, 3)); // First 3 for trending
+        const news = await newsService.fetchNews('All');
+        setTrendingNews(news.slice(0, 6)); // First 6 for trending
       } catch (error) {
         console.error('Error fetching news:', error);
       } finally {

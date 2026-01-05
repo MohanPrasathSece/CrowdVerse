@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCommodityMarkets } from '../utils/apiEnhanced';
+import SectorNews from '../components/SectorNews';
 
 const Commodities = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -188,6 +189,12 @@ const Commodities = () => {
                     <div className="text-xl text-light-gray">No commodities found matching "{searchTerm}"</div>
                 </div>
             )}
+
+            <SectorNews
+                category="Commodities"
+                title="Commodities"
+                description="Real-time updates on Gold, Silver, and industrial materials with community sentiment."
+            />
 
             {/* Removed the shared page-level comment section to ensure individuality */}
             <div className="mt-12 text-center py-10 border-t border-dark-gray/30">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getCryptoMarkets } from '../utils/api';
 import { FEATURED_CRYPTOS } from '../constants/featuredAssets';
 import CommentsPanel from '../components/CommentsPanel';
+import SectorNews from '../components/SectorNews';
 
 const Crypto = () => {
   const [crypto, setCrypto] = useState(() => {
@@ -214,6 +215,12 @@ const Crypto = () => {
           <div className="text-xl text-light-gray">No cryptocurrencies found matching "{searchTerm}"</div>
         </div>
       )}
+
+      <SectorNews
+        category="Crypto"
+        title="Cryptocurrency"
+        description="Daily digital asset insights, web3 trends, and community sentiment on top tokens."
+      />
 
       {/* Comments Section */}
       <div className="mt-12">

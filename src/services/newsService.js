@@ -13,28 +13,28 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 // Sample news data as fallback
 const SAMPLE_NEWS = [
   {
-    title: "Fed Signals Rate Pause Amid Economic Uncertainty",
-    source: "Reuters",
+    title: "Global Summit Discusses New Environmental Policies",
+    source: "World News",
     time: "2 hours ago",
-    category: "Markets",
+    category: "Geopolitics",
     sentiment: "neutral",
-    summary: "Federal Reserve officials indicate potential pause in rate hikes as economic data shows mixed signals..."
+    summary: "Diplomats from over 50 countries gather to discuss sustainable development and climate action..."
   },
   {
-    title: "Bitcoin Surges Past ₹45,00,000 as Institutional Interest Grows",
-    source: "CoinDesk",
+    title: "New Cultural Festival Celebrated Across India",
+    source: "India Today",
     time: "4 hours ago",
-    category: "Crypto",
-    sentiment: "bullish",
-    summary: "Major financial institutions announce increased crypto allocations, driving Bitcoin to new monthly highs..."
+    category: "Politics",
+    sentiment: "neutral",
+    summary: "Massive crowds join the festivities as local governments promote traditional heritage and unity..."
   },
   {
-    title: "Tech Stocks Lead Market Rally on AI Optimism",
-    source: "Bloomberg",
+    title: "Developments in International Trade Agreements",
+    source: "Global Intelligence",
     time: "5 hours ago",
-    category: "Equities",
-    sentiment: "bullish",
-    summary: "Nasdaq jumps 2% as AI-related companies report strong earnings and positive outlooks..."
+    category: "Geopolitics",
+    sentiment: "neutral",
+    summary: "New treaties aim to streamline cross-border cooperation and strengthen bilateral ties between nations..."
   }
 ];
 
@@ -86,58 +86,94 @@ class NewsService {
   }
 
   // Fetch news from API or return cached
-  async fetchNews() {
-    // Return cached news if still valid
-    if (this.isCacheValid()) {
-      const cachedNews = this.getCachedNews();
-      if (cachedNews) {
-        console.log('📰 Using cached news data');
-        return cachedNews;
+  async fetchNews(category = 'General', refresh = false) {
+    const cacheKey = `${NEWS_CACHE_KEY}_${category}`;
+    const timestampKey = `${NEWS_CACHE_TIMESTAMP_KEY}_${category}`;
+
+    // Check if cache is valid (less than 24 hours old)
+    const timestamp = localStorage.getItem(timestampKey);
+    const isValid = timestamp && (Date.now() - parseInt(timestamp) < CACHE_DURATION);
+
+    if (isValid && !refresh) {
+      const cachedData = localStorage.getItem(cacheKey);
+      if (cachedData) {
+        try {
+          const parsed = JSON.parse(cachedData);
+          // If we have data, use it. If it's empty, maybe try to fetch fresh anyway.
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            console.log(`📰 Using cached ${category} news data (${parsed.length} items)`);
+            return parsed;
+          }
+        } catch (e) {
+          console.error('Error parsing news cache', e);
+        }
       }
     }
 
     try {
-      console.log('📰 Fetching fresh news data');
+      console.log(`📰 Fetching fresh ${category} news data...`);
 
       // Try to fetch from API
-      const response = await API.get('/news');
+      const response = await API.get('/news', {
+        params: { category: category === 'All' ? undefined : category }
+      });
       const newsData = response.data;
 
+      if (!Array.isArray(newsData)) {
+        throw new Error('API returned invalid news data format');
+      }
+
+      // Deduplicate by title (client-side safety check)
+      const seenTitles = new Set();
+      const uniqueNews = [];
+
+      for (const article of newsData) {
+        // Normalize title for stricter comparison: lowercase and only alphanumeric
+        const titleKey = (article.title || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, '')
+          .trim();
+
+        if (!titleKey || seenTitles.has(titleKey)) {
+          console.log(`🚫 Skipping duplicate/noisy article: ${article.title}`);
+          continue;
+        }
+
+        seenTitles.add(titleKey);
+        uniqueNews.push(article);
+      }
+
       // Format the news data with proper time formatting and keep identifiers/polls
-      const formattedNews = newsData.map(article => ({
-        id: article._id,
+      const formattedNews = uniqueNews.map(article => ({
+        id: article._id || article.id,
+        _id: article._id || article.id,
         title: article.title,
         source: article.source || 'Market News',
         time: this.formatTimeAgo(new Date(article.createdAt).getTime()),
-        category: article.category || 'Markets',
+        createdAt: article.createdAt,
+        category: article.category || 'General',
         sentiment: article.sentiment || 'neutral',
         summary: article.summary || (article.content ? `${article.content.substring(0, 150)}...` : ''),
         poll: article.poll || null,
       }));
 
       // Cache the formatted news
-      this.setCachedNews(formattedNews);
+      localStorage.setItem(cacheKey, JSON.stringify(formattedNews));
+      localStorage.setItem(timestampKey, Date.now().toString());
 
       return formattedNews;
     } catch (error) {
-      console.error('Error fetching news:', error);
+      console.error(`Error fetching ${category} news:`, error);
 
-      // If API fails, use sample data with current timestamps
-      console.log('📰 Using sample news data as fallback');
-      const sampleNewsWithTime = SAMPLE_NEWS.map(news => ({
-        ...news,
-        time: this.formatTimeAgo(Date.now() - Math.random() * 6 * 60 * 60 * 1000) // Random time within last 6 hours
-      }));
-
-      // Cache sample data for a shorter period (1 hour)
-      try {
-        localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify(sampleNewsWithTime));
-        localStorage.setItem(NEWS_CACHE_TIMESTAMP_KEY, (Date.now() + 23 * 60 * 60 * 1000).toString()); // Cache for 23 hours
-      } catch (cacheError) {
-        console.error('Error caching sample news:', cacheError);
+      // On error, try one last check of cache even if expired
+      const lastResort = localStorage.getItem(cacheKey);
+      if (lastResort) {
+        try {
+          return JSON.parse(lastResort);
+        } catch (e) { }
       }
 
-      return sampleNewsWithTime;
+      return SAMPLE_NEWS;
     }
   }
 

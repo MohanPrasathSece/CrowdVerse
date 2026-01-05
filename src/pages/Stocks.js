@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getStockMarkets } from '../utils/api';
 import { FEATURED_STOCKS } from '../constants/featuredAssets';
 import CommentsPanel from '../components/CommentsPanel';
+import SectorNews from '../components/SectorNews';
 
 const Stocks = () => {
   const [stocks, setStocks] = useState(() => {
@@ -242,6 +243,12 @@ const Stocks = () => {
           <div className="text-xl text-light-gray">No stocks found matching "{searchTerm}"</div>
         </div>
       )}
+
+      <SectorNews
+        category="Stocks"
+        title="Stock Market"
+        description="Daily equity insights, regulatory updates, and community sentiment on global indices."
+      />
 
       {/* Comments Section */}
       <div className="mt-12">
