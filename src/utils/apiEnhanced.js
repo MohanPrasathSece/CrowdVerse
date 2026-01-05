@@ -44,6 +44,7 @@ export const login = (data) => API.post('/auth/login', data);
 export const getQuote = (symbol) => API.get('/market/quote', { params: { symbol } });
 export const getCryptoMarkets = () => API.get('/market/crypto');
 export const getStockMarkets = () => API.get('/market/stocks');
+export const getCommodityMarkets = () => API.get('/market/commodities');
 
 /* --- New Poll & Comment helpers --- */
 export const getSentiment = (asset) => API.get(`/assets/${asset}/sentiment`);

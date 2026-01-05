@@ -3,10 +3,9 @@ import { AuthContext } from '../context/AuthContext';
 import { votePredictionPoll } from '../utils/apiEnhanced';
 import CommentsPanel from './CommentsPanel';
 
-const PredictionPoll = ({ poll }) => {
+const PredictionPoll = ({ poll, isExpanded, onToggle }) => {
     const { user } = useContext(AuthContext);
     const [data, setData] = useState(poll);
-    const [showComments, setShowComments] = useState(false);
     const [votedOption, setVotedOption] = useState(() => {
         const userId = user?.isGuest ? user.id : user?._id;
         const vote = poll.voters?.find(v => {
@@ -45,7 +44,7 @@ const PredictionPoll = ({ poll }) => {
         return ((votes / totalVotes) * 100).toFixed(1);
     };
 
-    if (showComments) {
+    if (isExpanded) {
         // Expanded View - Matching Asset.js exactly
         return (
             <div className="col-span-full border border-dark-gray/40 rounded-3xl bg-secondary-black/20 shadow-2xl overflow-hidden animate-fadeIn mb-8">
@@ -63,7 +62,7 @@ const PredictionPoll = ({ poll }) => {
                                     <div className="text-sm sm:text-base text-light-gray/70">ID: PRE-{data._id.slice(-6).toUpperCase()}</div>
                                 </div>
                                 <button
-                                    onClick={() => setShowComments(false)}
+                                    onClick={onToggle}
                                     className="px-4 py-2 rounded-lg border border-dark-gray text-light-gray hover:text-off-white hover:bg-secondary-black/60 transition-all"
                                 >
                                     ← Back
@@ -199,18 +198,15 @@ const PredictionPoll = ({ poll }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="flex justify-center pt-8">
-                        <button
-                            onClick={() => {
-                                setShowComments(false);
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }}
-                            className="text-light-gray/40 hover:text-off-white text-[10px] uppercase tracking-[0.3em] font-bold transition-all"
-                        >
-                            ↑ Back to Predictions Grid
-                        </button>
+                        <div className="flex justify-center pt-8">
+                            <button
+                                onClick={onToggle}
+                                className="text-light-gray/40 hover:text-off-white text-[10px] uppercase tracking-[0.3em] font-bold transition-all"
+                            >
+                                ↑ Back to Predictions Grid
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -248,7 +244,7 @@ const PredictionPoll = ({ poll }) => {
                 </div>
 
                 <button
-                    onClick={() => setShowComments(true)}
+                    onClick={onToggle}
                     className="flex items-center gap-2 text-off-white font-bold tracking-widest text-[11px] uppercase group/btn"
                 >
                     Analyze <span className="group-hover/btn:translate-x-1 transition-transform">→</span>

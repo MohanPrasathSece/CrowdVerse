@@ -7,6 +7,8 @@ const Predictions = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const [expandedId, setExpandedId] = useState(null);
+
     useEffect(() => {
         const fetchPolls = async () => {
             try {
@@ -52,7 +54,12 @@ const Predictions = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-slideUp">
                         {polls.length > 0 ? (
                             polls.map(poll => (
-                                <PredictionPoll key={poll._id} poll={poll} />
+                                <PredictionPoll
+                                    key={poll._id}
+                                    poll={poll}
+                                    isExpanded={expandedId === poll._id}
+                                    onToggle={() => setExpandedId(expandedId === poll._id ? null : poll._id)}
+                                />
                             ))
                         ) : (
                             <div className="col-span-full text-center text-light-gray/50 py-10">
