@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL || '/api',
-  timeout: 20000, // 20 second timeout
+  timeout: 60000, // 60 second timeout for Render cold starts
 });
 
 // Add auth token to requests
