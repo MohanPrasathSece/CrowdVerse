@@ -81,13 +81,15 @@ const SectorNews = ({ category, title, description }) => {
                             <span className="text-[10px] text-light-gray/50">{item.time}</span>
                         </div>
 
-                        <h3 className="text-lg font-bold text-off-white mb-3 line-clamp-2 leading-tight">
+                        <h3 className="text-lg font-bold text-off-white mb-3 leading-tight">
                             {item.title}
                         </h3>
 
-                        <p className="text-sm text-light-gray/70 leading-relaxed mb-4">
-                            {item.fullContent || item.summary}
-                        </p>
+                        <div className="text-sm text-light-gray/70 leading-relaxed mb-4 space-y-2">
+                            {(item.fullContent || item.summary || '').split('\n').filter(p => p.trim()).map((para, i) => (
+                                <p key={i}>{para.trim()}</p>
+                            ))}
+                        </div>
 
                         {item.poll && (
                             <div className="mt-auto pt-4 border-t border-dark-gray/30">

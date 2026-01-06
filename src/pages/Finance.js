@@ -249,7 +249,11 @@ const Finance = () => {
                   </h3>
 
                   <div className="text-light-gray/70 text-sm leading-relaxed mb-4 flex-grow">
-                    <p>{news.fullContent || news.summary}</p>
+                    <div className="space-y-3">
+                      {(news.fullContent || news.summary || '').split('\n').filter(p => p.trim()).map((para, i) => (
+                        <p key={i}>{para.trim()}</p>
+                      ))}
+                    </div>
                   </div>
 
 

@@ -124,7 +124,10 @@ class NewsService {
 
       // Try to fetch from API
       const response = await API.get('/news', {
-        params: { category: category === 'All' ? undefined : category }
+        params: {
+          category: category === 'All' ? undefined : category,
+          refresh: refresh ? 'true' : undefined
+        }
       });
       const newsData = response.data;
 

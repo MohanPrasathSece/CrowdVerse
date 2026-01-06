@@ -124,9 +124,11 @@ const News = () => {
                                 </div>
 
                                 <h2 className="text-xl sm:text-2xl font-semibold text-off-white mb-3 leading-tight">{item.title}</h2>
-                                <div className="text-light-gray/80 text-base sm:text-lg leading-relaxed mb-4">
+                                <div className="text-light-gray/80 text-base sm:text-lg leading-relaxed mb-6">
                                     <div className="space-y-4">
-                                        <p>{item.fullContent || item.summary}</p>
+                                        {(item.fullContent || item.summary || '').split('\n').filter(p => p.trim()).map((para, i) => (
+                                            <p key={i}>{para.trim()}</p>
+                                        ))}
                                     </div>
                                 </div>
 
