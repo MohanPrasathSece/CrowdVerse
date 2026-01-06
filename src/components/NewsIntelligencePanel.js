@@ -7,7 +7,7 @@ const NewsIntelligencePanel = ({ newsItem }) => {
 
     // Generate AI analysis based on news category and content
     const generateAnalysis = () => {
-        const { category, sentiment, title, summary, content } = newsItem;
+        const { category, sentiment } = newsItem;
 
         let globalImpact = '';
         let crowdSentiment = '';

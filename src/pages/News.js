@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import newsService from '../services/newsService';
 import { votePoll } from '../utils/apiEnhanced';
 import CommentsPanel from '../components/CommentsPanel';
@@ -20,7 +20,7 @@ const News = () => {
     const [activeNewsId, setActiveNewsId] = useState(null);
 
 
-    const fetchAllNews = async (forceRefresh = false) => {
+    const fetchAllNews = useCallback(async (forceRefresh = false) => {
         try {
             setLoading(true);
             const data = await newsService.fetchNews('General', forceRefresh);
@@ -54,11 +54,11 @@ const News = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchAllNews();
-    }, []);
+    }, [fetchAllNews]);
 
     const handleVote = async (pollId, optionIndex) => {
         if (!user) return alert('Please login to vote');
