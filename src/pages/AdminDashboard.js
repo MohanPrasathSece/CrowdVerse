@@ -57,46 +57,63 @@ const AdminDashboard = () => {
       <h1 className="text-3xl sm:text-4xl font-bold text-off-white mb-6">Admin Dashboard</h1>
       <p className="text-sm text-light-gray/80 mb-8">Overview of user growth, engagement and AI activity.</p>
 
-      <button
-        onClick={async () => {
-          try {
-            const { data } = await API.get('/beta/export');
+      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <button
+          onClick={async () => {
+            try {
+              const { data } = await API.get('/beta/export');
 
-            // Convert to CSV
-            const headers = ['Name', 'Email', 'Phone', 'Signed Up At', 'IP Address'];
-            const csvContent = [
-              headers.join(','),
-              ...data.map(row => [
-                `"${row.name}"`,
-                `"${row.email}"`,
-                `"${row.phone || ''}"`,
-                `"${new Date(row.signedUpAt).toLocaleString()}"`,
-                `"${row.ipAddress || ''}"`
-              ].join(','))
-            ].join('\n');
+              // Convert to CSV
+              const headers = ['Name', 'Email', 'Phone', 'Signed Up At', 'IP Address'];
+              const csvContent = [
+                headers.join(','),
+                ...data.map(row => [
+                  `"${row.name}"`,
+                  `"${row.email}"`,
+                  `"${row.phone || ''}"`,
+                  `"${new Date(row.signedUpAt).toLocaleString()}"`,
+                  `"${row.ipAddress || ''}"`
+                ].join(','))
+              ].join('\n');
 
-            // Download file
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'beta_subscribers.csv');
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          } catch (err) {
-            console.error('Export failed', err);
-            alert('Failed to download subscribers');
-          }
-        }}
-        className="mb-8 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-primary-black font-bold rounded-lg transition-colors flex items-center gap-2"
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        Download Beta Subscribers (CSV)
-      </button>
+              // Download file
+              const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+              const link = document.createElement('a');
+              const url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute('download', 'beta_subscribers.csv');
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            } catch (err) {
+              console.error('Export failed', err);
+              alert('Failed to download subscribers');
+            }
+          }}
+          className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-primary-black font-bold rounded-lg transition-colors flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Download Beta Subscribers (CSV)
+        </button>
+
+        <button
+          onClick={() => {
+            const baseUrl = window.location.origin;
+            const earlyAccessUrl = `${baseUrl}/early-access`;
+            navigator.clipboard.writeText(earlyAccessUrl);
+            alert('Early Access link copied to clipboard!');
+          }}
+          className="px-6 py-3 bg-off-white hover:bg-white text-primary-black font-bold rounded-lg transition-colors flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+          Share Early Access Link
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div className="bg-secondary-black border border-dark-gray rounded-xl p-6">
