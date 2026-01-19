@@ -9,6 +9,10 @@ const BetaSignupModal = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        // Handle manual open via event
+        const handleManualOpen = () => setIsOpen(true);
+        window.addEventListener('open-beta-modal', handleManualOpen);
+
         // Check if user has already seen/signed up
         const hasSignedUp = localStorage.getItem('cv_beta_signed_up');
         if (!hasSignedUp) {
@@ -16,8 +20,12 @@ const BetaSignupModal = () => {
             const timer = setTimeout(() => {
                 setIsOpen(true);
             }, 1000);
-            return () => clearTimeout(timer);
+            return () => {
+                clearTimeout(timer);
+                window.removeEventListener('open-beta-modal', handleManualOpen);
+            };
         }
+        return () => window.removeEventListener('open-beta-modal', handleManualOpen);
     }, []);
 
     const handleChange = (e) => {

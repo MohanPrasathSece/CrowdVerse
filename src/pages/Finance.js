@@ -6,41 +6,7 @@ import NewsIntelligencePanel from '../components/NewsIntelligencePanel';
 import { AuthContext } from '../context/AuthContext';
 import { votePoll } from '../utils/apiEnhanced';
 
-const marketNarrative = [
-  {
-    phase: 'Opening Pulse',
-    headline: 'Indices shrugged off overnight weakness with a gap-up start.',
-    detail:
-      'Banking heavyweights carried the first hour as buy programs fired across high-beta names, setting the tone for a risk-on session.',
-    metricLabel: 'NIFTY 50',
-    metricValue: '19,674.25',
-    metricDelta: '+1.21% on the day',
-  },
-  {
-    phase: 'Midday Momentum',
-    headline: 'Crypto joined the rally as BTC defended the $66K shelf and accelerated.',
-    detail:
-      'Flows rotated from defensives into growth trades; desks reported stronger appetite for digital assets as volatility stayed contained.',
-    metricLabel: 'BTC/USD',
-    metricValue: '$67,234',
-    metricDelta: '+3.29% in 24h',
-  },
-  {
-    phase: 'Closing Narrative',
-    headline: 'Market breadth stayed constructive while liquidity pockets remained deep.',
-    detail:
-      'Crypto market cap reclaimed the $2.8T handle and equity futures held gains, hinting at follow-through if macro data cooperates overnight.',
-    metricLabel: 'Crypto Market Cap',
-    metricValue: '$2.85T',
-    metricDelta: '+4.2% across 24h',
-  },
-];
 
-const lookoutSignals = [
-  'Options order flow tilts bullish with weekly call skew rising 12%.',
-  'Emerging market ETFs continue to attract inflows, supporting broader risk tone.',
-  'Liquidity conditions stable; overnight funding spreads holding near one-month lows.',
-];
 
 const Finance = () => {
   const { user } = useContext(AuthContext);
@@ -345,41 +311,31 @@ const Finance = () => {
           <CommentsPanel asset="finance-overview" />
         </div>
 
-        {/* Full News with Polls and Comments - REMOVED */}
 
-        {/* Narrative Flow */}
-        {marketNarrative.map((scene) => (
-          <div
-            key={scene.phase}
-            className="p-6 sm:p-8 border border-dark-gray/60 rounded-3xl bg-primary-black/60 backdrop-blur-sm hover-enlarge transition-all"
-          >
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-4">
-              <div className="space-y-2 max-w-3xl">
-                <span className="text-[11px] sm:text-xs uppercase tracking-[0.35em] text-light-gray/60">{scene.phase}</span>
-                <h2 className="text-lg sm:text-2xl font-semibold text-off-white">{scene.headline}</h2>
-                <p className="text-sm text-light-gray/70 leading-relaxed">{scene.detail}</p>
-              </div>
-              <div className="w-full sm:w-auto sm:min-w-[220px] text-left sm:text-right">
-                <div className="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-light-gray/60">{scene.metricLabel}</div>
-                <div className="text-2xl sm:text-3xl font-semibold text-off-white">{scene.metricValue}</div>
-                <div className="text-sm text-green-400 mt-1">{scene.metricDelta}</div>
+        {/* Early Access CTA */}
+        <div className="mt-12 pb-8">
+          <div className="relative overflow-hidden rounded-3xl bg-secondary-black/30 border border-dark-gray/30 p-8 sm:p-12 text-center">
+            <div className="absolute inset-0 hero-gradient opacity-10 pointer-events-none"></div>
+            <div className="relative z-10 space-y-6">
+              <h2 className="text-2xl sm:text-3xl font-light text-off-white tracking-tight">Claim your 6 months of Premium</h2>
+              <p className="text-sm sm:text-base text-light-gray/70 max-w-2xl mx-auto">
+                Join our private beta today and help shape the future of CrowdVerse. Early supporters get full access for free.
+              </p>
+              <div className="pt-2">
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-beta-modal'))}
+                  className="px-8 py-3 bg-off-white text-primary-black font-semibold rounded-lg hover:bg-white transition-all transform hover:scale-105"
+                >
+                  Join Early Access
+                </button>
               </div>
             </div>
           </div>
-        ))}
-
-        {/* Signals to Watch */}
-        <div className={`bg-gradient-bg p-6 sm:p-8 rounded-3xl border border-dark-gray/70 mb-8 hover-glow transition-all duration-1000 delay-500 ${isVisible ? 'animate-slideInRight' : 'opacity-0'}`}>
-          <h3 className="text-xl sm:text-2xl font-bold text-off-white mb-4">Signals on the Radar</h3>
-          <p className="text-sm text-light-gray/70 mb-6 max-w-3xl">
-            These are the threads we’re following into the next session—the moves beneath the headline numbers that could steer the narrative from here.
-          </p>
-          <ul className="space-y-3 sm:space-y-4 list-disc list-inside text-light-gray/80 text-sm">
-            {lookoutSignals.map((signal) => (
-              <li key={signal}>{signal}</li>
-            ))}
-          </ul>
         </div>
+
+        {/* Full News with Polls and Comments - REMOVED */}
+
+
 
       </div>
     </div>

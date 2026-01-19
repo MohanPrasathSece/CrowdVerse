@@ -18,6 +18,8 @@ const News = () => {
     });
     const [loading, setLoading] = useState(newsItems.length === 0);
     const [activeNewsId, setActiveNewsId] = useState(null);
+    const [expandedIntelligenceId, setExpandedIntelligenceId] = useState(null);
+
 
 
     const fetchAllNews = useCallback(async (forceRefresh = false) => {
@@ -110,7 +112,7 @@ const News = () => {
                     {newsItems.map((item) => (
                         <div
                             key={item._id || item.id}
-                            className="bg-secondary-black/30 border border-dark-gray/60 rounded-xl overflow-hidden hover:border-off-white/20 transition-all h-full flex flex-col"
+                            className={`bg-secondary-black/30 border border-dark-gray/60 rounded-xl overflow-hidden hover:border-off-white/20 transition-all h-full flex flex-col ${expandedIntelligenceId === item._id ? 'lg:col-span-2 shadow-2xl shadow-blue-500/10 border-blue-500/30' : ''}`}
                         >
                             <div className="p-4 sm:p-5 flex flex-col h-full">
                                 <div className="flex items-center gap-3 mb-4">
@@ -182,7 +184,11 @@ const News = () => {
                                 )}
 
                                 {/* AI Intelligence Analysis */}
-                                <NewsIntelligencePanel newsItem={item} />
+                                <NewsIntelligencePanel
+                                    newsItem={item}
+                                    isExpanded={expandedIntelligenceId === item._id}
+                                    onToggle={() => setExpandedIntelligenceId(expandedIntelligenceId === item._id ? null : item._id)}
+                                />
 
                                 <div className="flex items-center justify-between pt-4 border-t border-dark-gray/50 mt-auto">
                                     <button

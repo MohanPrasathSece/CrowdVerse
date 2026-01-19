@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 
-const NewsIntelligencePanel = ({ newsItem }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+const NewsIntelligencePanel = ({ newsItem, isExpanded: controlledExpanded, onToggle }) => {
+    const [localExpanded, setLocalExpanded] = useState(false);
+
+    // Use controlled state if provided, otherwise local state
+    const isExpanded = controlledExpanded !== undefined ? controlledExpanded : localExpanded;
+
+    const handleToggle = () => {
+        if (onToggle) {
+            onToggle();
+        } else {
+            setLocalExpanded(!localExpanded);
+        }
+    };
 
     if (!newsItem) return null;
 
@@ -51,7 +62,7 @@ const NewsIntelligencePanel = ({ newsItem }) => {
     return (
         <div className="mt-6 border-t border-dark-gray/50 pt-6">
             <button
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={handleToggle}
                 className="w-full flex items-center justify-between text-left group"
             >
                 <div className="flex items-center gap-3">

@@ -101,70 +101,25 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Market Coverage */}
+
+
+      {/* Early Access CTA */}
       <section className="py-20 border-t border-dark-gray/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="space-y-6">
-              <h2 className="text-2xl sm:text-3xl font-light text-off-white">Market Coverage</h2>
-              <p className="text-sm sm:text-base text-light-gray/80 leading-relaxed">
-                Track the Indian stock market with real-time NSE data covering major indices and blue-chip stocks.
-                Monitor cryptocurrency markets with live pricing for digital assets, and follow precious metals and energy in our new Commodities section.
+          <div className="relative overflow-hidden rounded-3xl bg-secondary-black/30 border border-dark-gray/30 p-8 sm:p-12 md:p-16 text-center">
+            <div className="absolute inset-0 hero-gradient opacity-10 pointer-events-none"></div>
+            <div className="relative z-10 space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-light text-off-white tracking-tight">Ready to see the market differently?</h2>
+              <p className="text-base sm:text-lg text-light-gray/70 max-w-2xl mx-auto">
+                Join our private beta today and get 6 months of premium features for free when we launch.
               </p>
-              <div className="grid grid-cols-3 gap-4 pt-4">
-                <div className="space-y-2">
-                  <h4 className="text-off-white font-medium">Indian Equities</h4>
-                  <ul className="text-xs sm:text-sm text-light-gray/70 space-y-1">
-                    <li>• Reliance Industries</li>
-                    <li>• TCS & Infosys</li>
-                    <li>• Top Banks</li>
-                  </ul>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-off-white font-medium">Crypto</h4>
-                  <ul className="text-xs sm:text-sm text-light-gray/70 space-y-1">
-                    <li>• Bitcoin (BTC)</li>
-                    <li>• Ethereum (ETH)</li>
-                    <li>• Top Altcoins</li>
-                  </ul>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-off-white font-medium">Commodities</h4>
-                  <ul className="text-xs sm:text-sm text-light-gray/70 space-y-1">
-                    <li>• Gold & Silver</li>
-                    <li>• Copper & Silicon</li>
-                    <li>• Crude Oil</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="bg-secondary-black/50 rounded-2xl p-8 border border-dark-gray/30">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-light-gray/60">Market Status</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-400">Live</span>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between py-2 border-b border-dark-gray/20">
-                    <span className="text-off-white">RELIANCE</span>
-                    <span className="text-green-400">₹2,456.75</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2 border-b border-dark-gray/20">
-                    <span className="text-off-white">BTC/USDT</span>
-                    <span className="text-green-400">$43,250.00</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2 border-b border-dark-gray/20">
-                    <span className="text-off-white">ETH/USDT</span>
-                    <span className="text-red-400">$2,890.45</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2">
-                    <span className="text-off-white">GOLD (10g)</span>
-                    <span className="text-green-400">₹62,500.00</span>
-                  </div>
-                </div>
+              <div className="pt-4">
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-beta-modal'))}
+                  className="px-8 py-3 bg-off-white text-primary-black font-semibold rounded-lg hover:bg-white transition-all transform hover:scale-105"
+                >
+                  Join Early Access
+                </button>
               </div>
             </div>
           </div>
