@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const BetaSignupModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -65,6 +66,9 @@ const BetaSignupModal = () => {
         sessionStorage.setItem('cv_beta_modal_closed', 'true');
     };
 
+    const location = useLocation();
+
+    if (location.pathname === '/early-access') return null;
     if (!isOpen) return null;
 
     if (sessionStorage.getItem('cv_beta_modal_closed') && !isSuccess) return null;

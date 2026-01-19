@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const FloatingEarlyAccess = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const location = useLocation();
+
+    if (location.pathname === '/early-access') return null;
 
     return (
         <>
