@@ -5,8 +5,9 @@ const FloatingEarlyAccess = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const location = useLocation();
+    const hasSignedUp = localStorage.getItem('cv_beta_signed_up');
 
-    if (location.pathname === '/early-access') return null;
+    if (location.pathname === '/early-access' || hasSignedUp) return null;
 
     return (
         <>

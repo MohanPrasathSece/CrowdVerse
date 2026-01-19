@@ -103,28 +103,29 @@ const Landing = () => {
 
 
 
-      {/* Early Access CTA */}
-      <section className="py-20 border-t border-dark-gray/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="relative overflow-hidden rounded-3xl bg-secondary-black/30 border border-dark-gray/30 p-8 sm:p-12 md:p-16 text-center">
-            <div className="absolute inset-0 hero-gradient opacity-10 pointer-events-none"></div>
-            <div className="relative z-10 space-y-6">
-              <h2 className="text-3xl sm:text-4xl font-light text-off-white tracking-tight">Ready to see the market differently?</h2>
-              <p className="text-base sm:text-lg text-light-gray/70 max-w-2xl mx-auto">
-                Join our private beta today and get 6 months of premium features for free when we launch.
-              </p>
-              <div className="pt-4">
-                <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('open-beta-modal'))}
-                  className="px-8 py-3 bg-off-white text-primary-black font-semibold rounded-lg hover:bg-white transition-all transform hover:scale-105"
-                >
-                  Join Early Access
-                </button>
+      {!localStorage.getItem('cv_beta_signed_up') && (
+        <section className="py-20 border-t border-dark-gray/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="relative overflow-hidden rounded-3xl bg-secondary-black/30 border border-dark-gray/30 p-8 sm:p-12 md:p-16 text-center">
+              <div className="absolute inset-0 hero-gradient opacity-10 pointer-events-none"></div>
+              <div className="relative z-10 space-y-6">
+                <h2 className="text-3xl sm:text-4xl font-light text-off-white tracking-tight">Ready to see the market differently?</h2>
+                <p className="text-base sm:text-lg text-light-gray/70 max-w-2xl mx-auto">
+                  Join our private beta today and get 6 months of premium features for free when we launch.
+                </p>
+                <div className="pt-4">
+                  <button
+                    onClick={() => window.dispatchEvent(new CustomEvent('open-beta-modal'))}
+                    className="px-8 py-3 bg-off-white text-primary-black font-semibold rounded-lg hover:bg-white transition-all transform hover:scale-105"
+                  >
+                    Join Early Access
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer intentionally omitted; global layout handles site footer */}
     </div>

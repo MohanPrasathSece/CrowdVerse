@@ -312,26 +312,27 @@ const Finance = () => {
         </div>
 
 
-        {/* Early Access CTA */}
-        <div className="mt-12 pb-8">
-          <div className="relative overflow-hidden rounded-3xl bg-secondary-black/30 border border-dark-gray/30 p-8 sm:p-12 text-center">
-            <div className="absolute inset-0 hero-gradient opacity-10 pointer-events-none"></div>
-            <div className="relative z-10 space-y-6">
-              <h2 className="text-2xl sm:text-3xl font-light text-off-white tracking-tight">Claim your 6 months of Premium</h2>
-              <p className="text-sm sm:text-base text-light-gray/70 max-w-2xl mx-auto">
-                Join our private beta today and help shape the future of CrowdVerse. Early supporters get full access for free.
-              </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('open-beta-modal'))}
-                  className="px-8 py-3 bg-off-white text-primary-black font-semibold rounded-lg hover:bg-white transition-all transform hover:scale-105"
-                >
-                  Join Early Access
-                </button>
+        {!localStorage.getItem('cv_beta_signed_up') && (
+          <div className="mt-12 pb-8">
+            <div className="relative overflow-hidden rounded-3xl bg-secondary-black/30 border border-dark-gray/30 p-8 sm:p-12 text-center">
+              <div className="absolute inset-0 hero-gradient opacity-10 pointer-events-none"></div>
+              <div className="relative z-10 space-y-6">
+                <h2 className="text-2xl sm:text-3xl font-light text-off-white tracking-tight">Claim your 6 months of Premium</h2>
+                <p className="text-sm sm:text-base text-light-gray/70 max-w-2xl mx-auto">
+                  Join our private beta today and help shape the future of CrowdVerse. Early supporters get full access for free.
+                </p>
+                <div className="pt-2">
+                  <button
+                    onClick={() => window.dispatchEvent(new CustomEvent('open-beta-modal'))}
+                    className="px-8 py-3 bg-off-white text-primary-black font-semibold rounded-lg hover:bg-white transition-all transform hover:scale-105"
+                  >
+                    Join Early Access
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Full News with Polls and Comments - REMOVED */}
 
