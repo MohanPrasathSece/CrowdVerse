@@ -22,6 +22,7 @@ import Asset from './pages/Asset';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
 import FloatingEarlyAccess from './components/FloatingEarlyAccess';
+import EarlyAccess from './pages/EarlyAccess';
 
 // Component to handle dynamic title updates
 function TitleUpdater() {
@@ -41,7 +42,8 @@ function TitleUpdater() {
       '/commodities': 'CrowdVerse - Market',
       '/dashboard': 'CrowdVerse - Market',
       '/portfolio': 'CrowdVerse - Portfolio',
-      '/admin': 'CrowdVerse - Admin'
+      '/admin': 'CrowdVerse - Admin',
+      '/early-access': 'CrowdVerse - Join Early Access'
     };
 
     // Handle dynamic asset pages - always show Market for asset pages
@@ -144,6 +146,7 @@ function App() {
                   </AdminRoute>
                 }
               />
+              <Route path="/early-access" element={<EarlyAccess />} />
             </Routes>
           </main>
           <Footer />
